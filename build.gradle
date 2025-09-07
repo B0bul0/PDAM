@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id "io.github.goooler.shadow" version "8.1.2"
+}
+
+group = 'me.bruno'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
+
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
+tasks.build.dependsOn(shadowJar)

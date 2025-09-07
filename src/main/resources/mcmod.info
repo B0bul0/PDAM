@@ -1,0 +1,15 @@
+[
+{
+  "modid": "devmod",
+  "name": "Dev Mod",
+  "description": "A mod for development purposes.",
+  "version": "1.0.0",
+  "mcversion": "1.8.8-11.15.0.1655",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["B0bul0"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
