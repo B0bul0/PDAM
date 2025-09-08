@@ -1,9 +1,15 @@
 package me.bobulo.mine.devmod.feature.component;
 
+import me.bobulo.mine.devmod.feature.Feature;
+
 public interface FeatureComponent {
 
-    void onEnable();
+    void init(Feature feature);
 
-    void onDisable();
+    boolean isEnabled();
+
+    void enable();
+
+    void disable();
 
 }

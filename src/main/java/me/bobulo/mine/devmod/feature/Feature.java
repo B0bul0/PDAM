@@ -2,7 +2,11 @@ package me.bobulo.mine.devmod.feature;
 
 public interface Feature {
 
-    String getName();
+    String getId();
+
+    default String getName() {
+        return getId();
+    }
 
     boolean isEnabled();
 

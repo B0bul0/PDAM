@@ -1,8 +1,20 @@
 package me.bobulo.mine.devmod.feature.component;
 
+import me.bobulo.mine.devmod.feature.Feature;
+import org.apache.commons.lang3.Validate;
+
 public abstract class AbstractFeatureComponent implements FeatureComponent {
 
+    private Feature feature;
     private boolean enabled = false;
+
+    @Override
+    public final void init(Feature feature) {
+        Validate.notNull(feature, "Feature cannot be null");
+        Validate.isTrue(this.feature == null, "FeatureComponent is already initialized");
+
+        this.feature = feature;
+    }
 
     @Override
     public final boolean isEnabled() {
@@ -25,10 +37,8 @@ public abstract class AbstractFeatureComponent implements FeatureComponent {
         }
     }
 
-    @Override
     public abstract void onEnable();
 
-    @Override
     public abstract void onDisable();
 
 }
