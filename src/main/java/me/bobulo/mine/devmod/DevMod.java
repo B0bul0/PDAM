@@ -1,5 +1,6 @@
 package me.bobulo.mine.devmod;
 
+import me.bobulo.mine.devmod.feature.sound.SoundDebugListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -14,6 +15,8 @@ public class DevMod {
 
     @EventHandler
     public void init(FMLPreInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(new SoundDebugListener());
+
         log.info("DevMod initialized");
     }
 
