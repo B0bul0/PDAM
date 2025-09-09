@@ -1,13 +1,19 @@
 package me.bobulo.mine.devmod.feature;
 
+import me.bobulo.mine.devmod.config.ConfigInitContext;
 import me.bobulo.mine.devmod.feature.component.FeatureComponent;
+import net.minecraftforge.common.config.ConfigCategory;
 import org.apache.commons.lang3.Validate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class FeatureImpl implements Feature {
+
+    private static final Logger log = LogManager.getLogger(FeatureImpl.class);
 
     private final String id;
     private final String name;
@@ -40,18 +46,39 @@ public class FeatureImpl implements Feature {
     }
 
     @Override
+    public void initProperties(ConfigInitContext context) {
+        context.createProperty("enabled", false)
+          .comment("Enable or disable the " + name + " feature")
+          .onUpdate((newVal) -> {
+              if (newVal) {
+                  enable();
+              } else {
+                  disable();
+              }
+          });
+    }
+
+    @Override
     public void enable() {
         if (!enabled) {
+            log.info("Enabling feature {}", id);
+
             onEnable();
             enabled = true;
+
+            log.info("Feature {} enabled", id);
         }
     }
 
     @Override
     public void disable() {
         if (enabled) {
+            log.info("Disabling feature {}", id);
+
             onDisable();
             enabled = false;
+
+            log.info("Feature {} disabled", id);
         }
     }
 

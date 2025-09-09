@@ -1,5 +1,7 @@
 package me.bobulo.mine.devmod;
 
+import me.bobulo.mine.devmod.config.ConfigListener;
+import me.bobulo.mine.devmod.config.ConfigurationService;
 import me.bobulo.mine.devmod.feature.FeatureImpl;
 import me.bobulo.mine.devmod.feature.FeatureService;
 import me.bobulo.mine.devmod.feature.sound.SoundDebugFeatureComponent;
@@ -11,24 +13,46 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "devmod", useMetadata = true)
+@Mod(
+  modid = DevMod.MOD_ID,
+  useMetadata = true,
+  guiFactory = "me.bobulo.mine.devmod.gui.DefaultGuiFactory"
+)
 public class DevMod {
 
     private static final Logger log = LogManager.getLogger(DevMod.class);
+    public static final String MOD_ID = "devmod";
 
+    private static DevMod instance;
+
+    public static FeatureService getFeatureService() {
+        return instance.featureService;
+    }
+
+    public static ConfigurationService getConfigService() {
+        return instance.config;
+    }
+
+    /* Instance */
+
+    private ConfigurationService config;
     private FeatureService featureService;
 
     @EventHandler
     public void init(FMLPreInitializationEvent event) {
+        instance = this;
+
+        this.config = new ConfigurationService();
+        this.config.init(event.getSuggestedConfigurationFile());
+
         this.featureService = new FeatureService();
+
         MinecraftForge.EVENT_BUS.register(new NBTTagTooltipListener());
+        MinecraftForge.EVENT_BUS.register(new ConfigListener());
 
         registerFeatures();
-        log.info("DevMod initialized");
-    }
 
-    public FeatureService getFeatureService() {
-        return featureService;
+        log.info("DevMod initialized");
     }
 
     private void registerFeatures() {

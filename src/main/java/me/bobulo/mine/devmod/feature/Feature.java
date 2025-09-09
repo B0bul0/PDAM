@@ -1,6 +1,8 @@
 package me.bobulo.mine.devmod.feature;
 
-public interface Feature {
+import me.bobulo.mine.devmod.config.PropertyDeclarer;
+
+public interface Feature extends PropertyDeclarer {
 
     String getId();
 
