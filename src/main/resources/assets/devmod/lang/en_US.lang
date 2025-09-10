@@ -1,11 +1,11 @@
-devmod.nbt_tooltip=Show NBTTag in Tooltip
+nbt_tooltip=Show NBTTag in Tooltip
 devmod.nbt_tooltip.enabled=Enabled
 
-devmod.sound_debug=Sound Debug
+sound_debug=Sound Debug
 devmod.sound_debug.enabled=Enabled
 devmod.sound_debug.blacklist=Blacklist
 devmod.sound_debug.whitelist=Filter
 devmod.sound_debug.debug_message=Sound: %1$s | Pitch: %2$s | Volume: %3$s
 
-devmod.show_invisible_entities=Show Invisible Entities
+show_invisible_entities=Show Invisible Entities
 devmod.show_invisible_entities.enabled=Enabled
