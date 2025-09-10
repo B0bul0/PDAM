@@ -1,5 +1,6 @@
 package me.bobulo.mine.devmod.config;
 
+import me.bobulo.mine.devmod.DevMod;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.apache.commons.lang3.ArrayUtils;
@@ -70,8 +71,8 @@ public class PropertyFactory {
             prop.setMaxValue((Float) maxValue);
         }
 
-        // Define uma chave de linguagem padronizada
-        prop.setLanguageKey(category + "." + name);
+        // Define language key for localization
+        prop.setLanguageKey(DevMod.MOD_ID + "." + category + "." + name);
 
         return prop;
     }
