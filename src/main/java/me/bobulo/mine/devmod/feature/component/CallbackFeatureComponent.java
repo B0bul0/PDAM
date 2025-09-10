@@ -1,0 +1,54 @@
+package me.bobulo.mine.devmod.feature.component;
+
+import me.bobulo.mine.devmod.feature.Feature;
+
+import java.util.function.Consumer;
+
+public class CallbackFeatureComponent extends AbstractFeatureComponent {
+
+    public static CallbackFeatureComponent of(Runnable onEnable, Runnable onDisable) {
+        return new CallbackFeatureComponent(feature -> onEnable.run(), feature -> onDisable.run());
+    }
+
+    public static CallbackFeatureComponent of(Consumer<Feature> onEnable, Consumer<Feature> onDisable) {
+        return new CallbackFeatureComponent(onEnable, onDisable);
+    }
+
+    public static CallbackFeatureComponent enableOnly(Runnable onEnable) {
+        return new CallbackFeatureComponent(feature -> onEnable.run(), null);
+    }
+
+    public static CallbackFeatureComponent enableOnly(Consumer<Feature> onEnable) {
+        return new CallbackFeatureComponent(onEnable, null);
+    }
+
+    public static CallbackFeatureComponent disableOnly(Runnable onDisable) {
+        return new CallbackFeatureComponent(null, feature -> onDisable.run());
+    }
+
+    public static CallbackFeatureComponent disableOnly(Consumer<Feature> onDisable) {
+        return new CallbackFeatureComponent(null, onDisable);
+    }
+
+    private final Consumer<Feature> onEnableCallback;
+    private final Consumer<Feature> onDisableCallback;
+
+    CallbackFeatureComponent(Consumer<Feature> onEnable, Consumer<Feature> onDisable) {
+        this.onEnableCallback = onEnable;
+        this.onDisableCallback = onDisable;
+    }
+
+    @Override
+    public void onEnable() {
+        if (this.onEnableCallback != null) {
+            this.onEnableCallback.accept(this.getFeature());
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        if (this.onDisableCallback != null) {
+            this.onDisableCallback.accept(this.getFeature());
+        }
+    }
+}

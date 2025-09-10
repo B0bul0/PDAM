@@ -2,7 +2,6 @@ package me.bobulo.mine.devmod.feature;
 
 import me.bobulo.mine.devmod.config.ConfigInitContext;
 import me.bobulo.mine.devmod.feature.component.FeatureComponent;
-import net.minecraftforge.common.config.ConfigCategory;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,9 +17,6 @@ public class FeatureImpl implements Feature {
     private final String id;
     private final String name;
     private boolean enabled = false;
-
-    private final List<Runnable> onEnable = new ArrayList<>();
-    private final List<Runnable> onDisable = new ArrayList<>();
 
     private final List<FeatureComponent> components = new ArrayList<>();
 
@@ -83,42 +79,18 @@ public class FeatureImpl implements Feature {
     }
 
     private void onEnable() {
-        for (Runnable r : onEnable) {
-            r.run();
-        }
-
         for (FeatureComponent component : components) {
             component.enable();
         }
     }
 
     private void onDisable() {
-        for (Runnable r : onDisable) {
-            r.run();
-        }
-
         for (FeatureComponent component : components) {
             component.disable();
         }
     }
 
-    /* Register listeners */
-
-    public void registerOnEnable(Runnable r) {
-        onEnable.add(r);
-    }
-
-    public void unregisterOnEnable(Runnable r) {
-        onEnable.remove(r);
-    }
-
-    public void registerOnDisable(Runnable r) {
-        onDisable.add(r);
-    }
-
-    public void unregisterOnDisable(Runnable r) {
-        onDisable.remove(r);
-    }
+    /* Register Components */
 
     public void addComponent(FeatureComponent component) {
         component.init(this);
@@ -137,6 +109,7 @@ public class FeatureImpl implements Feature {
         }
     }
 
+    /* Builder */
 
     public static FeatureBuilder builder() {
         return new FeatureBuilder();
