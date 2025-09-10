@@ -2,6 +2,7 @@ package me.bobulo.mine.devmod.feature;
 
 import me.bobulo.mine.devmod.DevMod;
 import me.bobulo.mine.devmod.config.ConfigBinder;
+import me.bobulo.mine.devmod.config.ConfigInitContext;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +27,9 @@ public class FeatureService {
         features.put(feature.getId(), feature);
         log.debug("Registered feature: {}", feature.getId());
 
-        DevMod.getConfigService().registerBinder(new ConfigBinder(feature, feature.getId()));
+        ConfigBinder configBinder = new ConfigBinder(feature.getId());
+        DevMod.getConfigService().registerBinder(configBinder);
+        configBinder.initialize(feature);
     }
 
     public Feature getFeature(String name) {

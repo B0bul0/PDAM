@@ -19,10 +19,7 @@ public class ConfigurationService {
 
     public void registerBinder(ConfigBinder initializer) {
         this.configBinders.add(initializer);
-
-        initializer.initialize(mainConfig);
-
-        initializer.sync(mainConfig);
+        initializer.setConfiguration(mainConfig);
     }
 
     public void unregisterBinder(ConfigBinder initializer) {
@@ -31,7 +28,7 @@ public class ConfigurationService {
 
     public void syncAll() {
         for (ConfigBinder initializer : this.configBinders) {
-            initializer.sync(mainConfig);
+            initializer.sync();
         }
 
         if (mainConfig.hasChanged()) {

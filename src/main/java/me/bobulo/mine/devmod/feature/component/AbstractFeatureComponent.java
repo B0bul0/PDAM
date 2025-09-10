@@ -16,6 +16,10 @@ public abstract class AbstractFeatureComponent implements FeatureComponent {
         this.feature = feature;
     }
 
+    public Feature getFeature() {
+        return feature;
+    }
+
     @Override
     public final boolean isEnabled() {
         return enabled;

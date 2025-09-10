@@ -10,18 +10,29 @@ import java.util.function.Consumer;
 
 public class ConfigBinder {
 
-    private final PropertyDeclarer propertyDeclarer;
     private final String categoryName;
-
     private final List<PropertySpec<?>> properties = new ArrayList<>();
 
-    public ConfigBinder(PropertyDeclarer propertyDeclarer, String categoryName) {
-        this.propertyDeclarer = propertyDeclarer;
+    private Configuration configuration;
+
+    public ConfigBinder(String categoryName) {
         this.categoryName = categoryName;
     }
 
-    public void initialize(Configuration configuration) {
-        ConfigInitContext configInitContext = new ConfigInitContext(categoryName);
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        if (this.configuration != null) {
+            throw new IllegalStateException("Configuration is already set");
+        }
+
+        this.configuration = configuration;
+    }
+
+    public void initialize(PropertyDeclarer propertyDeclarer) {
+        ConfigInitContext configInitContext = new ConfigInitContext(this);
         PropertyFactory propertyFactory = new PropertyFactory(configuration);
 
         propertyDeclarer.initProperties(configInitContext);
@@ -33,11 +44,11 @@ public class ConfigBinder {
             this.properties.add(property);
         }
 
-        sync(configuration);
+        sync();
     }
 
     @SuppressWarnings("unchecked")
-    public void sync(Configuration configuration) {
+    public void sync() {
         ConfigCategory configCategory = configuration.getCategory(categoryName);
         for (PropertySpec<?> spec : properties) {
             Consumer<?> onUpdateCallback = spec.getOnUpdateCallback();

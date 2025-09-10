@@ -1,5 +1,6 @@
 package me.bobulo.mine.devmod.feature;
 
+import me.bobulo.mine.devmod.config.ConfigBinder;
 import me.bobulo.mine.devmod.config.ConfigInitContext;
 import me.bobulo.mine.devmod.feature.component.FeatureComponent;
 import org.apache.commons.lang3.Validate;
@@ -19,6 +20,8 @@ public class FeatureImpl implements Feature {
     private boolean enabled = false;
 
     private final List<FeatureComponent> components = new ArrayList<>();
+
+    private ConfigBinder configBinder;
 
     public FeatureImpl(String id) {
         Validate.notBlank(id, "Feature id cannot be null or blank");
@@ -43,6 +46,8 @@ public class FeatureImpl implements Feature {
 
     @Override
     public void initProperties(ConfigInitContext context) {
+        this.configBinder = context.getConfigBinder();
+
         context.createProperty("enabled", false)
           .comment("Enable or disable the " + name + " feature")
           .onUpdate((newVal) -> {
@@ -52,6 +57,10 @@ public class FeatureImpl implements Feature {
                   disable();
               }
           });
+
+        for (FeatureComponent component : components) {
+            component.initProperties(context);
+        }
     }
 
     @Override
@@ -95,6 +104,12 @@ public class FeatureImpl implements Feature {
     public void addComponent(FeatureComponent component) {
         component.init(this);
         components.add(component);
+
+        if (configBinder != null) {
+            ConfigInitContext context = new ConfigInitContext(configBinder);
+            component.initProperties(context);
+            configBinder.initialize(component);
+        }
 
         if (enabled) {
             component.enable();

@@ -5,15 +5,19 @@ import java.util.List;
 
 public class ConfigInitContext {
 
-    private final String categoryName;
+    private final ConfigBinder configBinder;
     private final List<PropertySpec<?>> properties = new ArrayList<>();
 
-    public ConfigInitContext(String categoryName) {
-        this.categoryName = categoryName;
+    public ConfigInitContext(ConfigBinder configBinder) {
+        this.configBinder = configBinder;
+    }
+
+    public ConfigBinder getConfigBinder() {
+        return configBinder;
     }
 
     public String getCategoryName() {
-        return categoryName;
+        return configBinder.getCategoryName();
     }
 
     public void addProperty(PropertySpec<?> property) {
