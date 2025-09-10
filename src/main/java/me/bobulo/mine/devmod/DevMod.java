@@ -7,6 +7,7 @@ import me.bobulo.mine.devmod.feature.FeatureService;
 import me.bobulo.mine.devmod.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.devmod.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.devmod.feature.tooltop.NBTTagTooltipListener;
+import me.bobulo.mine.devmod.gui.MenuListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -48,7 +49,7 @@ public class DevMod {
 
         this.featureService = new FeatureService();
 
-        MinecraftForge.EVENT_BUS.register(new NBTTagTooltipListener());
+        MinecraftForge.EVENT_BUS.register(new MenuListener());
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
 
         registerFeatures();
