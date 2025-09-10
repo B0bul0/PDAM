@@ -1,5 +1,6 @@
 package me.bobulo.mine.devmod.mixin;
 
+import me.bobulo.mine.devmod.feature.entity.ShowInvisibleEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,8 +20,10 @@ public class MixinEntity {
             return;
         }
 
-        cir.setReturnValue(false);
-        cir.cancel();
+        if (ShowInvisibleEntities.showInvisibleEntities) {
+            cir.setReturnValue(false);
+            cir.cancel();
+        }
     }
 
 }
