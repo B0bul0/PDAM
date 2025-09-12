@@ -1,11 +1,40 @@
+# Recurso de Tooltip NBT
 nbt_tooltip=Exibir NBTTag na Tooltip
 devmod.nbt_tooltip.enabled=Ativado
 
+# Recurso de Depuração de Som
 sound_debug=Debug do Som
 devmod.sound_debug.enabled=Ativado
 devmod.sound_debug.blacklist=Filtro de Bloqueio
 devmod.sound_debug.whitelist=Filtro
 devmod.sound_debug.debug_message=Som: %1$s | Pitch: %2$s | Volume: %3$s
 
+# Recurso de Exibir Entidades Invisíveis
 show_invisible_entities=Exibir Entidades Invisíveis
 devmod.show_invisible_entities.enabled=Ativado
+
+# Recurso de Informações de Entidade
+entity_info_overlay=Exibir Informações de Entidade
+devmod.entity_info_overlay.enabled=Ativado
+
+# Informações da Entidade
+devmod.entity.info_title=Informações da Entidade
+devmod.entity.id=ID
+devmod.entity.name=Nome
+devmod.entity.uuid=UUID
+devmod.entity.position=Posição
+
+# Informações do ArmorStand
+devmod.armorstand.info_title=Informações do Suporte de Armadura
+devmod.armorstand.invisible=Invisível
+devmod.armorstand.small=Pequeno
+devmod.armorstand.no_base_plate=Sem Placa de Base
+devmod.armorstand.marker=Marcador
+devmod.armorstand.show_arms=Mostrar Braços
+devmod.armorstand.rotations_title=Rotações
+devmod.armorstand.head=Cabeça
+devmod.armorstand.body=Corpo
+devmod.armorstand.left_arm=Braço Esquerdo
+devmod.armorstand.right_arm=Braço Direito
+devmod.armorstand.left_leg=Perna Esquerda
+devmod.armorstand.right_leg=Perna Direita

@@ -1,11 +1,40 @@
+# NBT Tooltip Feature
 nbt_tooltip=Show NBTTag in Tooltip
 devmod.nbt_tooltip.enabled=Enabled
 
+# Sound Debug Feature
 sound_debug=Sound Debug
 devmod.sound_debug.enabled=Enabled
 devmod.sound_debug.blacklist=Blacklist
 devmod.sound_debug.whitelist=Filter
 devmod.sound_debug.debug_message=Sound: %1$s | Pitch: %2$s | Volume: %3$s
 
+# Show Invisible Entities Feature
 show_invisible_entities=Show Invisible Entities
 devmod.show_invisible_entities.enabled=Enabled
+
+# Entity Info Overlay Feature
+entity_info_overlay=Show Entity Info
+devmod.entity_info_overlay.enabled=Enabled
+
+# Entity Info
+devmod.entity.info_title=Entity Info
+devmod.entity.id=ID
+devmod.entity.name=Name
+devmod.entity.uuid=UUID
+devmod.entity.position=Position
+
+# ArmorStand Info
+devmod.armorstand.info_title=Armor Stand Info
+devmod.armorstand.invisible=Invisible
+devmod.armorstand.small=Small
+devmod.armorstand.no_base_plate=No Base Plate
+devmod.armorstand.marker=Marker
+devmod.armorstand.show_arms=Show Arms
+devmod.armorstand.rotations_title=Rotations
+devmod.armorstand.head=Head
+devmod.armorstand.body=Body
+devmod.armorstand.left_arm=Left Arm
+devmod.armorstand.right_arm=Right Arm
+devmod.armorstand.left_leg=Left Leg
+devmod.armorstand.right_leg=Right Leg

@@ -6,10 +6,12 @@ import me.bobulo.mine.devmod.feature.FeatureImpl;
 import me.bobulo.mine.devmod.feature.FeatureService;
 import me.bobulo.mine.devmod.feature.component.CallbackFeatureComponent;
 import me.bobulo.mine.devmod.feature.component.ForgerListenerFeatureComponent;
+import me.bobulo.mine.devmod.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.devmod.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.devmod.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.devmod.feature.tooltop.NBTTagTooltipListener;
 import me.bobulo.mine.devmod.gui.MenuListener;
+import me.bobulo.mine.devmod.ui.UIManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -37,10 +39,15 @@ public class DevMod {
         return instance.config;
     }
 
+    public static UIManager getUIManager() {
+        return instance.uiManager;
+    }
+
     /* Instance */
 
     private ConfigurationService config;
     private FeatureService featureService;
+    private UIManager uiManager;
 
     @EventHandler
     public void init(FMLPreInitializationEvent event) {
@@ -49,10 +56,12 @@ public class DevMod {
         this.config = new ConfigurationService();
         this.config.init(event.getSuggestedConfigurationFile());
 
+        this.uiManager = new UIManager();
         this.featureService = new FeatureService();
 
         MinecraftForge.EVENT_BUS.register(new MenuListener());
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
+        MinecraftForge.EVENT_BUS.register(uiManager);
 
         registerFeatures();
 
@@ -76,6 +85,11 @@ public class DevMod {
             () -> ShowInvisibleEntities.showInvisibleEntities = true,
             () -> ShowInvisibleEntities.showInvisibleEntities = false)
           ).build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("entity_info_overlay")
+          .component(ForgerListenerFeatureComponent.of(new EntityOverlayInfoListener()))
+          .build());
     }
 
 }
