@@ -50,7 +50,6 @@ loom {
             accessTransformer(transformerFile)
         }
     }
-    // If you don't want mixins, remove these lines
     mixin {
         defaultRefmapName.set("mixins.$modid.refmap.json")
     }
@@ -78,7 +77,6 @@ dependencies {
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
 
-    // If you don't want mixins, remove these lines
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         isTransitive = false
     }
@@ -100,7 +98,6 @@ tasks.withType(org.gradle.jvm.tasks.Jar::class) {
         this["FMLCorePluginContainsFMLMod"] = "true"
         this["ForceLoadAsMod"] = "true"
 
-        // If you don't want mixins, remove these lines
         this["TweakClass"] = "org.spongepowered.asm.launch.MixinTweaker"
         this["MixinConfigs"] = "mixins.$modid.json"
         if (transformerFile.exists())
@@ -120,7 +117,6 @@ tasks.processResources {
 
     rename("accesstransformer.cfg", "META-INF/${modid}_at.cfg")
 }
-
 
 val remapJar by tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
     archiveClassifier.set("")
@@ -143,7 +139,6 @@ tasks.shadowJar {
         }
     }
 
-    // If you want to include other dependencies and shadow them, you can relocate them in here
     fun relocate(name: String) = relocate(name, "$baseGroup.deps.$name")
 }
 
