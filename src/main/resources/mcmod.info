@@ -1,7 +1,7 @@
 [
 {
   "modid": "${modid}",
-  "name": "Dev Mod",
+  "name": "PDAM",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "description": "Minecraft mod to assist in the development of plugins for servers",

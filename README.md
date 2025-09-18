@@ -1,4 +1,4 @@
-# Minecraft Plugin Development Helper
+# Plugin Development Assistance Minecraft Mod (PDAM)
 
 A mod for Minecraft 1.8.9, designed to assist with server plugin development and configuration.
 

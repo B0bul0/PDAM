@@ -1,40 +1,40 @@
 # Recurso de Tooltip NBT
 nbt_tooltip=Exibir NBTTag na Tooltip
-devmod.nbt_tooltip.enabled=Ativado
+pdam.nbt_tooltip.enabled=Ativado
 
 # Recurso de Depuração de Som
 sound_debug=Debug do Som
-devmod.sound_debug.enabled=Ativado
-devmod.sound_debug.blacklist=Filtro de Bloqueio
-devmod.sound_debug.whitelist=Filtro
-devmod.sound_debug.debug_message=Som: %1$s | Pitch: %2$s | Volume: %3$s
+pdam.sound_debug.enabled=Ativado
+pdam.sound_debug.blacklist=Filtro de Bloqueio
+pdam.sound_debug.whitelist=Filtro
+pdam.sound_debug.debug_message=Som: %1$s | Pitch: %2$s | Volume: %3$s
 
 # Recurso de Exibir Entidades Invisíveis
 show_invisible_entities=Exibir Entidades Invisíveis
-devmod.show_invisible_entities.enabled=Ativado
+pdam.show_invisible_entities.enabled=Ativado
 
 # Recurso de Informações de Entidade
 entity_info_overlay=Exibir Informações de Entidade
-devmod.entity_info_overlay.enabled=Ativado
+pdam.entity_info_overlay.enabled=Ativado
 
 # Informações da Entidade
-devmod.entity.info_title=Informações da Entidade
-devmod.entity.id=ID
-devmod.entity.name=Nome
-devmod.entity.uuid=UUID
-devmod.entity.position=Posição
+pdam.entity.info_title=Informações da Entidade
+pdam.entity.id=ID
+pdam.entity.name=Nome
+pdam.entity.uuid=UUID
+pdam.entity.position=Posição
 
 # Informações do ArmorStand
-devmod.armorstand.info_title=Informações do Suporte de Armadura
-devmod.armorstand.invisible=Invisível
-devmod.armorstand.small=Pequeno
-devmod.armorstand.no_base_plate=Sem Placa de Base
-devmod.armorstand.marker=Marcador
-devmod.armorstand.show_arms=Mostrar Braços
-devmod.armorstand.rotations_title=Rotações
-devmod.armorstand.head=Cabeça
-devmod.armorstand.body=Corpo
-devmod.armorstand.left_arm=Braço Esquerdo
-devmod.armorstand.right_arm=Braço Direito
-devmod.armorstand.left_leg=Perna Esquerda
-devmod.armorstand.right_leg=Perna Direita
+pdam.armorstand.info_title=Informações do Suporte de Armadura
+pdam.armorstand.invisible=Invisível
+pdam.armorstand.small=Pequeno
+pdam.armorstand.no_base_plate=Sem Placa de Base
+pdam.armorstand.marker=Marcador
+pdam.armorstand.show_arms=Mostrar Braços
+pdam.armorstand.rotations_title=Rotações
+pdam.armorstand.head=Cabeça
+pdam.armorstand.body=Corpo
+pdam.armorstand.left_arm=Braço Esquerdo
+pdam.armorstand.right_arm=Braço Direito
+pdam.armorstand.left_leg=Perna Esquerda
+pdam.armorstand.right_leg=Perna Direita
