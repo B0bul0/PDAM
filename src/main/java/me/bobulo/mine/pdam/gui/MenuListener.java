@@ -27,9 +27,7 @@ public class MenuListener {
     @SubscribeEvent
     public void onActionPerformed(GuiScreenEvent.ActionPerformedEvent.Post event) {
         if (event.gui instanceof GuiIngameMenu && event.button.id == PDAM_BUTTON_ID) {
-            Minecraft.getMinecraft().displayGuiScreen(new InteractiveListGui(event.gui));
-
-//            Minecraft.getMinecraft().displayGuiScreen(new FeaturesMenuGui(event.gui));
+            Minecraft.getMinecraft().displayGuiScreen(new FeaturesMenuGui(event.gui));
         }
     }
 
