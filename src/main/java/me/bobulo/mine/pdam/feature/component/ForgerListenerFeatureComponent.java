@@ -26,7 +26,7 @@ public class ForgerListenerFeatureComponent extends AbstractFeatureComponent {
     }
 
     @Override
-    public void onEnable() {
+    protected void onEnable() {
         if (this.listeners == null || this.listeners.isEmpty()) {
             return;
         }
@@ -41,7 +41,7 @@ public class ForgerListenerFeatureComponent extends AbstractFeatureComponent {
     }
 
     @Override
-    public void onDisable() {
+    protected void onDisable() {
         if (this.listeners == null || this.listeners.isEmpty()) {
             return;
         }

@@ -41,8 +41,8 @@ public abstract class AbstractFeatureComponent implements FeatureComponent {
         }
     }
 
-    public abstract void onEnable();
+    protected abstract void onEnable();
 
-    public abstract void onDisable();
+    protected abstract void onDisable();
 
 }

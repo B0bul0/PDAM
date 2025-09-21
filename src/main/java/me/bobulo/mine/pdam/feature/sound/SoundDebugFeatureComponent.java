@@ -15,7 +15,7 @@ public class SoundDebugFeatureComponent extends AbstractFeatureComponent {
     private String[] blacklist;
 
     @Override
-    public void onEnable() {
+    protected void onEnable() {
         if (this.listener == null) {
             this.listener = new SoundDebugListener(this);
         }
@@ -24,7 +24,7 @@ public class SoundDebugFeatureComponent extends AbstractFeatureComponent {
     }
 
     @Override
-    public void onDisable() {
+    protected void onDisable() {
         if (this.listener == null) {
             return;
         }

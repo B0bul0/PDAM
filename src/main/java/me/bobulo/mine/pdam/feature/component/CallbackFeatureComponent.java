@@ -39,14 +39,14 @@ public class CallbackFeatureComponent extends AbstractFeatureComponent {
     }
 
     @Override
-    public void onEnable() {
+    protected void onEnable() {
         if (this.onEnableCallback != null) {
             this.onEnableCallback.accept(this.getFeature());
         }
     }
 
     @Override
-    public void onDisable() {
+    protected void onDisable() {
         if (this.onDisableCallback != null) {
             this.onDisableCallback.accept(this.getFeature());
         }
