@@ -20,6 +20,7 @@ public class MixinEntity {
             return;
         }
 
+        // force show invisible entities
         if (ShowInvisibleEntities.showInvisibleEntities) {
             cir.setReturnValue(false);
             cir.cancel();

@@ -10,6 +10,9 @@ import net.minecraftforge.fml.client.config.IConfigElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The main configuration GUI screen.
+ */
 public class FeaturesMenuGui extends GuiConfig {
 
     public FeaturesMenuGui(GuiScreen parent) {

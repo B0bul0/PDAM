@@ -5,6 +5,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.apache.commons.lang3.ArrayUtils;
 
+/**
+ * A factory class responsible for creating Forger {@link Property} instances from {@link PropertySpec} definitions.
+ */
 public class PropertyFactory {
 
     private final Configuration config;
@@ -13,11 +16,20 @@ public class PropertyFactory {
         this.config = config;
     }
 
+    /**
+     * Creates and registers a Forge {@link Property} based on a given {@link PropertySpec}.
+     *
+     * @param <T>      The type of the property's value.
+     * @param category The name of the configuration category for this property.
+     * @param spec     The specification object defining the property's characteristics.
+     * @return The newly created and configured {@link Property} instance.
+     */
     public <T> Property create(String category, PropertySpec<T> spec) {
         T defaultValue = spec.getDefaultValue();
         String name = spec.getName();
         Property prop;
 
+        // create and register property based on type of default value
         if (defaultValue instanceof Boolean) {
             prop = config.get(category, name, (Boolean) defaultValue);
         } else if (defaultValue instanceof boolean[]) {

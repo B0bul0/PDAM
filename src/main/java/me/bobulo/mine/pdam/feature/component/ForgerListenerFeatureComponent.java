@@ -5,6 +5,11 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A {@link FeatureComponent} that automatically registers and unregisters Forge event listeners.
+ * When the component is enabled, it registers all provided listener objects to the {@link MinecraftForge#EVENT_BUS}.
+ * When disabled, it unregisters them.
+ */
 public class ForgerListenerFeatureComponent extends AbstractFeatureComponent {
 
     public static ForgerListenerFeatureComponent of(Object... listeners) {

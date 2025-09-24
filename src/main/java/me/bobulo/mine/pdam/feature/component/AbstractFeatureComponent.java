@@ -3,6 +3,9 @@ package me.bobulo.mine.pdam.feature.component;
 import me.bobulo.mine.pdam.feature.Feature;
 import org.apache.commons.lang3.Validate;
 
+/**
+ * Base implementation of a FeatureComponent.
+ */
 public abstract class AbstractFeatureComponent implements FeatureComponent {
 
     private Feature feature;

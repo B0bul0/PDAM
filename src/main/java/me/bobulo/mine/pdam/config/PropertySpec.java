@@ -2,8 +2,21 @@ package me.bobulo.mine.pdam.config;
 
 import java.util.function.Consumer;
 
+/**
+ * Defines the specification for a single configuration property.
+ * <p>
+ * Instances are created using the static factory method {@link #create(String, Object)}.
+ */
 public class PropertySpec<T> {
 
+    /**
+     * Creates a new {@link PropertySpec} with a given name and default value.
+     *
+     * @param name         The unique name of the property within its category.
+     * @param defaultValue The default value for the property.
+     * @param <T>          The type of the property's value.
+     * @return A new {@link PropertySpec} instance.
+     */
     public static <T> PropertySpec<T> create(String name, T defaultValue) {
         return new PropertySpec<>(name, defaultValue);
     }

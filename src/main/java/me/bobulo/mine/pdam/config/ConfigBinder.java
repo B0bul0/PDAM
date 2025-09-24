@@ -8,6 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Manages a specific category within a Forge {@link Configuration} file.
+ * <p>
+ * This class is responsible for binding a {@link PropertyDeclarer} to the configuration system.
+ * It orchestrates the process of property initialization by calling the declarer, creating
+ * the properties using a {@link PropertyFactory}, and synchronizing the values from the
+ * configuration file back to the application via update callbacks.
+ */
 public class ConfigBinder {
 
     private final String categoryName;
@@ -47,6 +55,9 @@ public class ConfigBinder {
         sync();
     }
 
+    /**
+     * Synchronizes the current configuration values with the application logic.
+     */
     @SuppressWarnings("unchecked")
     public void sync() {
         ConfigCategory configCategory = configuration.getCategory(categoryName);

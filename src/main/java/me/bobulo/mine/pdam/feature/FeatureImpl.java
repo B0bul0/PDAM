@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Default implementation of a Feature.
+ */
 public class FeatureImpl implements Feature {
 
     private static final Logger log = LogManager.getLogger(FeatureImpl.class);
