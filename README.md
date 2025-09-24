@@ -9,5 +9,19 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Invisible Entity Highlighter**: Makes invisible entities visible for easier debugging.
 - **Entity Information Panel**: Displays an on-screen panel with real-time information about the entity you are looking at.
 
+## Installation
+1. Ensure you have Minecraft Forge for version 1.8.9 installed.
+2. Download the latest version of the mod from the GitHub Releases page.
+3. Place the downloaded `.jar` file into your `.minecraft/mods` folder.
+4. Launch Minecraft using the Forge profile.
+
+## Building from Source
+1. Clone this repository to your local machine.
+2. Navigate to the project's root directory.
+3. Run the appropriate command for your operating system to build the project:
+   - **Windows**: `gradlew clean build`
+   - **Linux/Mac**: `./gradlew clean build`
+4. The compiled `.jar` file will be located in the `build/libs/` directory.
+
 ---
 *Project template: [Forge1.8.9Template](https://github.com/nea89o/Forge1.8.9Template)*
