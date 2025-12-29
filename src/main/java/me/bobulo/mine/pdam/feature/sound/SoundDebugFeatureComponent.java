@@ -2,9 +2,6 @@ package me.bobulo.mine.pdam.feature.sound;
 
 import me.bobulo.mine.pdam.config.ConfigInitContext;
 import me.bobulo.mine.pdam.feature.component.AbstractFeatureComponent;
-import me.bobulo.mine.pdam.util.LocaleUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.common.MinecraftForge;
 
 public final class SoundDebugFeatureComponent extends AbstractFeatureComponent {
@@ -81,24 +78,6 @@ public final class SoundDebugFeatureComponent extends AbstractFeatureComponent {
         }
 
         return true;
-    }
-
-    public void sendDebugMessage(String sound, float pitch, float volume) {
-        if (!filter(sound)) {
-            return;
-        }
-
-        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-        if (player == null) {
-            return;
-        }
-
-        LocaleUtils.sendMessage(
-          "pdam.sound_debug.debug_message",
-          sound,
-          String.format("%.2f", pitch),
-          String.format("%.2f", volume)
-        );
     }
 
 }
