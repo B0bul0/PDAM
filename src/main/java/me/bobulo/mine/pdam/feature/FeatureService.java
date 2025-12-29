@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Manages the registration and lifecycle of features within the mod.
  * This service acts as a central registry for all {@link Feature} instances.
  */
-public class FeatureService {
+public final class FeatureService {
 
     private static final Logger log = LogManager.getLogger(FeatureService.class);
 

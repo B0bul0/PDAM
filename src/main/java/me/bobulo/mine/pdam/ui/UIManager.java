@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Manages and renders all display elements (DisplayElement).
  */
 @SideOnly(Side.CLIENT)
-public class UIManager {
+public final class UIManager {
 
     private final List<DisplayElement> elements = new CopyOnWriteArrayList<>();
 

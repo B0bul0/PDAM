@@ -7,7 +7,7 @@ import java.util.function.Consumer;
  * <p>
  * Instances are created using the static factory method {@link #create(String, Object)}.
  */
-public class PropertySpec<T> {
+public final class PropertySpec<T> {
 
     /**
      * Creates a new {@link PropertySpec} with a given name and default value.

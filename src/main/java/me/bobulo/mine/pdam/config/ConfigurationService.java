@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConfigurationService {
+public final class ConfigurationService {
 
     private Configuration mainConfig;
 

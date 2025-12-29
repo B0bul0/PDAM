@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  * the properties using a {@link PropertyFactory}, and synchronizing the values from the
  * configuration file back to the application via update callbacks.
  */
-public class ConfigBinder {
+public final class ConfigBinder {
 
     private final String categoryName;
     private final List<PropertySpec<?>> properties = new ArrayList<>();

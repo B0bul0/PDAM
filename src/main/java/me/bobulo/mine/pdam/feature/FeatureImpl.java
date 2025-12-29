@@ -53,7 +53,7 @@ public class FeatureImpl implements Feature {
 
         context.createProperty("enabled", false)
           .comment("Enable or disable the " + name + " feature")
-          .onUpdate((newVal) -> {
+          .onUpdate(newVal -> {
               if (newVal) {
                   enable();
               } else {

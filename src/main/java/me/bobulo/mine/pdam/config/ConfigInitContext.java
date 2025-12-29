@@ -11,7 +11,7 @@ import java.util.List;
  * container for {@link PropertySpec}s before they are formally registered with the
  * configuration system. It also provides convenience methods for creating properties.
  */
-public class ConfigInitContext {
+public final class ConfigInitContext {
 
     private final ConfigBinder configBinder;
     private final List<PropertySpec<?>> properties = new ArrayList<>();

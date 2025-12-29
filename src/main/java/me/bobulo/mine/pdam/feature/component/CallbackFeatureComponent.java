@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  * This provides a convenient way to define component logic using lambda expressions or method references
  * without creating a new class for simple tasks.
  */
-public class CallbackFeatureComponent extends AbstractFeatureComponent {
+public final class CallbackFeatureComponent extends AbstractFeatureComponent {
 
     public static CallbackFeatureComponent of(Runnable onEnable, Runnable onDisable) {
         return new CallbackFeatureComponent(feature -> onEnable.run(), feature -> onDisable.run());

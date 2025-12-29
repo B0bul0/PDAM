@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.common.MinecraftForge;
 
-public class SoundDebugFeatureComponent extends AbstractFeatureComponent {
+public final class SoundDebugFeatureComponent extends AbstractFeatureComponent {
 
     private SoundDebugListener listener;
 

@@ -10,7 +10,7 @@ import java.util.List;
  * When the component is enabled, it registers all provided listener objects to the {@link MinecraftForge#EVENT_BUS}.
  * When disabled, it unregisters them.
  */
-public class ForgerListenerFeatureComponent extends AbstractFeatureComponent {
+public final class ForgerListenerFeatureComponent extends AbstractFeatureComponent {
 
     public static ForgerListenerFeatureComponent of(Object... listeners) {
         return new ForgerListenerFeatureComponent(listeners);

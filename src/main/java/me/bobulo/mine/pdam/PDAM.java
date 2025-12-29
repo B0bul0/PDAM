@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
   useMetadata = true,
   guiFactory = "me.bobulo.mine.pdam.gui.DefaultGuiFactory"
 )
-public class PDAM {
+public final class PDAM {
 
     private static final Logger log = LogManager.getLogger(PDAM.class);
     public static final String MOD_ID = "pdam";
@@ -51,6 +51,10 @@ public class PDAM {
 
     @EventHandler
     public void init(FMLPreInitializationEvent event) {
+        if (instance != null) {
+            throw new IllegalStateException("PDAM instance already initialized");
+        }
+
         instance = this;
 
         this.config = new ConfigurationService();

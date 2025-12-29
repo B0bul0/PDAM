@@ -20,7 +20,7 @@ import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 import static net.minecraft.util.EnumChatFormatting.AQUA;
 
 @SideOnly(Side.CLIENT)
-public class EntityOverlayInfoListener {
+public final class EntityOverlayInfoListener {
 
     private final InfoBox infoBox = new InfoBox(5, 5, 5);
     private boolean isInfoBoxActive = false;
