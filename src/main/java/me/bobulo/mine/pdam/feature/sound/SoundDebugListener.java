@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.sound;
 
+import me.bobulo.mine.pdam.util.TextComponentBuilder;
 import net.minecraftforge.client.event.sound.PlaySoundSourceEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,11 +17,20 @@ public class SoundDebugListener {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onPlayerSoundEvent(PlaySoundSourceEvent event) {
-        String name = event.name;
+        String soundName = event.name;
         float pitch = event.sound.getPitch();
         float volume = event.sound.getVolume();
 
-        soundDebugFeatureComponent.sendDebugMessage(name, pitch, volume);
+        if (!soundDebugFeatureComponent.filter(soundName)) {
+            return;
+        }
+
+        TextComponentBuilder
+          .createTranslated("pdam.sound_debug.debug_message",
+            soundName, String.format("%.2f", pitch), String.format("%.2f", volume))
+          .withHoverTranslated("pdam.sound_debug.debug_message_hover_location",
+            event.sound.getXPosF(), event.sound.getYPosF(), event.sound.getZPosF()
+          ).sendToClient();
     }
 
 }
