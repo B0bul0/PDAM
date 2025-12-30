@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.chat;
 
+import me.bobulo.mine.pdam.ui.notification.NotificationManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiChat;
@@ -14,6 +15,8 @@ import org.lwjgl.input.Mouse;
 
 import java.lang.reflect.Field;
 import java.util.List;
+
+import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 
 public class ChatCopyListener {
 
@@ -60,6 +63,7 @@ public class ChatCopyListener {
                     GuiScreen.setClipboardString(chatLine.getChatComponent().getUnformattedText());
                     event.setCanceled(true);
                     log.info("Copied chat line to clipboard: {}", chatLine.getChatComponent().getUnformattedText());
+                    NotificationManager.showSuccess(translateToLocal("pdam.general.copied_to_clipboard"));
                     return;
                 }
             }

@@ -17,6 +17,7 @@ import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.tooltop.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.gui.MenuListener;
 import me.bobulo.mine.pdam.ui.UIManager;
+import me.bobulo.mine.pdam.ui.notification.NotificationDisplayElement;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -68,6 +69,8 @@ public final class PDAM {
 
         this.uiManager = new UIManager();
         this.featureService = new FeatureService();
+
+        uiManager.addElement(new NotificationDisplayElement());
 
         MinecraftForge.EVENT_BUS.register(new MenuListener());
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
