@@ -1,5 +1,6 @@
 # Geral
 pdam.general.copy_to_clipboard=Copiar para a Área de Transferência
+pdam.general.copied_to_clipboard=Copiado para a Área de Transferência!
 
 # Recurso de Tooltip NBT
 nbt_tooltip=Exibir NBTTag na Tooltip
@@ -50,3 +51,4 @@ pdam.skin_extraction.skin_not_found=Nenhuma skin foi encontrada.
 pdam.skin_extraction.message.title=Informações da Skin de %1$s
 pdam.skin_extraction.message.value_data=Value
 pdam.skin_extraction.message.signature_data=Signature
+pdam.skin_extraction.message.url=URL

@@ -24,10 +24,9 @@ public final class SkinExtractionUtils {
         String value = skinProperty.getValue();
         String signature = skinProperty.getSignature();
 
-        String valueBase64 = value == null ? "" : Base64.getEncoder().encodeToString(value.getBytes());
-        String signatureBase64 = signature == null ? "" : Base64.getEncoder().encodeToString(signature.getBytes());
+        String url = value == null ? "" : extractSkinUrlFromValue(value);
 
-        return new SkinExtracted(gameProfile.getName(), valueBase64, signatureBase64);
+        return new SkinExtracted(gameProfile.getName(), value, signature, url);
     }
 
     public static void sendSkinInfoMessage(GameProfile gameProfile) {
@@ -43,6 +42,7 @@ public final class SkinExtractionUtils {
 
         String valueBase64 = skinExtracted.getValueBase64();
         String signatureBase64 = skinExtracted.getSignatureBase64();
+        String url = skinExtracted.getUrl();
 
         TextComponentBuilder.createTranslated("pdam.skin_extraction.message.title",
             skinExtracted.getName()
@@ -53,7 +53,7 @@ public final class SkinExtractionUtils {
           .appendTranslated("pdam.skin_extraction.message.value_data")
           .withHoverTranslated("pdam.general.copy_to_clipboard")
           .withClickCopyToClipboard(valueBase64)
-          .withColor(EnumChatFormatting.BLUE)
+          .withColor(EnumChatFormatting.AQUA)
 
           .append(" | ")
           .withColor(EnumChatFormatting.WHITE)
@@ -61,9 +61,35 @@ public final class SkinExtractionUtils {
           .appendTranslated("pdam.skin_extraction.message.signature_data")
           .withHoverTranslated("pdam.general.copy_to_clipboard")
           .withClickCopyToClipboard(signatureBase64)
-          .withColor(EnumChatFormatting.BLUE)
+          .withColor(EnumChatFormatting.AQUA)
+
+          .append(" | ")
+          .withColor(EnumChatFormatting.WHITE)
+
+          .appendTranslated("pdam.skin_extraction.message.url")
+          .withHoverTranslated("pdam.general.copy_to_clipboard")
+          .withClickCopyToClipboard(url)
+          .withColor(EnumChatFormatting.AQUA)
 
           .sendToClient();
+    }
+
+    public static String extractSkinUrlFromValue(String valueBase64) {
+        byte[] decodedBytes = Base64.getDecoder().decode(valueBase64);
+        String json = new String(decodedBytes);
+        try {
+            int urlStartIndex = json.indexOf("http");
+            if (urlStartIndex == -1) {
+                return "";
+            }
+            int urlEndIndex = json.indexOf("\"", urlStartIndex);
+            if (urlEndIndex == -1) {
+                return "";
+            }
+            return json.substring(urlStartIndex, urlEndIndex);
+        } catch (IllegalArgumentException e) {
+            return "";
+        }
     }
 
 }

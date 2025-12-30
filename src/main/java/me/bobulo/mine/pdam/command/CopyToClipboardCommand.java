@@ -1,14 +1,15 @@
 package me.bobulo.mine.pdam.command;
 
+import com.google.common.base.Joiner;
 import me.bobulo.mine.pdam.util.ClipboardUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Base64;
 
 @SideOnly(Side.CLIENT)
 public class CopyToClipboardCommand extends CommandBase {
@@ -41,17 +42,13 @@ public class CopyToClipboardCommand extends CommandBase {
             return;
         }
 
-        try {
-            byte[] decodedBytes = Base64.getDecoder().decode(args[0]);
-            String decodedText = new String(decodedBytes);
-            ClipboardUtils.copyToClipboard(decodedText);
-            sender.addChatMessage(
-              new ChatComponentText(EnumChatFormatting.GREEN + "Texto copiado para a área de transferência!")
-            );
-        } catch (IllegalArgumentException e) {
-            sender.addChatMessage(
-              new ChatComponentText(EnumChatFormatting.RED + "Erro ao decodificar o texto.")
-            );
-        }
+        Joiner joiner = Joiner.on(" ");
+        ClipboardUtils.copyToClipboard(joiner.join(args));
+
+        sender.addChatMessage(
+          new ChatComponentTranslation("pdam.general.copied_to_clipboard")
+            .setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN))
+        );
+
     }
 }
