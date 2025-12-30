@@ -3,6 +3,7 @@ package me.bobulo.mine.pdam;
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
 import me.bobulo.mine.pdam.config.ConfigListener;
 import me.bobulo.mine.pdam.config.ConfigurationService;
+import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.component.CallbackFeatureComponent;
@@ -16,6 +17,7 @@ import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.tooltop.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.gui.MenuListener;
 import me.bobulo.mine.pdam.ui.UIManager;
+import me.bobulo.mine.pdam.ui.notification.NotificationDisplayElement;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -68,9 +70,12 @@ public final class PDAM {
         this.uiManager = new UIManager();
         this.featureService = new FeatureService();
 
+        uiManager.addElement(new NotificationDisplayElement());
+
         MinecraftForge.EVENT_BUS.register(new MenuListener());
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
         MinecraftForge.EVENT_BUS.register(uiManager);
+        MinecraftForge.EVENT_BUS.register(new ChatCopyListener());
 
         // Register client commands
         ClientCommandHandler.instance.registerCommand(new CopyToClipboardCommand());
