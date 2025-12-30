@@ -44,7 +44,7 @@ pdam.armorstand.left_leg=Perna Esquerda
 pdam.armorstand.right_leg=Perna Direita
 
 # Informações da Skin
-skin_info.enabled=Informações de Skin
+skin_info=Informações de Skin
 pdam.skin_info.enabled=Ativado
 pdam.skin_info.skin_not_found=Nenhuma skin foi encontrada.
 pdam.skin_info.message.title=Informações da Skin de %1$s
