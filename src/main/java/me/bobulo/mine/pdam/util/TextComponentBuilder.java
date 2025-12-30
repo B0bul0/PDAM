@@ -1,17 +1,18 @@
 package me.bobulo.mine.pdam.util;
 
+import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.*;
 
 public final class TextComponentBuilder {
 
-    private final IChatComponent component;
+    private final IChatComponent mainComponent;
+    private IChatComponent component;
 
     private TextComponentBuilder(IChatComponent component) {
+        this.mainComponent = component;
         this.component = component;
     }
 
@@ -24,17 +25,37 @@ public final class TextComponentBuilder {
     }
 
     public TextComponentBuilder append(String text) {
-        component.appendSibling(new ChatComponentText(text));
+        append(new ChatComponentText(text));
         return this;
     }
 
     public TextComponentBuilder appendTranslated(String translationKey, Object... args) {
-        component.appendSibling(new ChatComponentTranslation(translationKey, args));
+        append(new ChatComponentTranslation(translationKey, args));
         return this;
     }
 
     public TextComponentBuilder append(TextComponentBuilder builder) {
-        component.appendSibling(builder.build());
+        return append(builder.build());
+    }
+
+    public TextComponentBuilder appendNewLine() {
+        append(new ChatComponentText("\n"));
+        return this;
+    }
+
+    public TextComponentBuilder append(IChatComponent chatComponent) {
+        component.appendSibling(chatComponent);
+        component = chatComponent;
+        return this;
+    }
+
+    public TextComponentBuilder withChatStyle(ChatStyle chatStyle) {
+        component.setChatStyle(chatStyle);
+        return this;
+    }
+
+    public TextComponentBuilder withColor(EnumChatFormatting color) {
+        component.getChatStyle().setColor(color);
         return this;
     }
 
@@ -47,6 +68,15 @@ public final class TextComponentBuilder {
     public TextComponentBuilder withHoverTranslated(String translationKey, Object... args) {
         IChatComponent hoverText = new ChatComponentTranslation(translationKey, args);
         component.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
+        return this;
+    }
+
+    public TextComponentBuilder withHover(TextComponentBuilder builder) {
+        return withHover(builder.build());
+    }
+
+    public TextComponentBuilder withHover(IChatComponent chatComponent) {
+        component.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, chatComponent));
         return this;
     }
 
@@ -63,8 +93,12 @@ public final class TextComponentBuilder {
         return withClick(ClickEvent.Action.SUGGEST_COMMAND, command);
     }
 
-    public  TextComponentBuilder withClickOpenURL(String url) {
+    public TextComponentBuilder withClickOpenURL(String url) {
         return withClick(ClickEvent.Action.OPEN_URL, url);
+    }
+
+    public TextComponentBuilder withClickCopyToClipboard(String text) {
+        return withClick(ClickEvent.Action.RUN_COMMAND, "/" + CopyToClipboardCommand.COMMAND_NAME + " " + text);
     }
 
     public void sendToPlayer(EntityPlayerSP player) {
@@ -79,7 +113,7 @@ public final class TextComponentBuilder {
     }
 
     public IChatComponent build() {
-        return component;
+        return mainComponent;
     }
 
 }

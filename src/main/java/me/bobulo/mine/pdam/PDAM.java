@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam;
 
+import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
 import me.bobulo.mine.pdam.config.ConfigListener;
 import me.bobulo.mine.pdam.config.ConfigurationService;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
@@ -8,10 +9,14 @@ import me.bobulo.mine.pdam.feature.component.CallbackFeatureComponent;
 import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
+import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
+import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
+import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.tooltop.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.gui.MenuListener;
 import me.bobulo.mine.pdam.ui.UIManager;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -67,6 +72,9 @@ public final class PDAM {
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
         MinecraftForge.EVENT_BUS.register(uiManager);
 
+        // Register client commands
+        ClientCommandHandler.instance.registerCommand(new CopyToClipboardCommand());
+
         registerFeatures();
 
         log.info("PDAM initialized");
@@ -93,6 +101,15 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id("entity_info_overlay")
           .component(ForgerListenerFeatureComponent.of(new EntityOverlayInfoListener()))
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("skin_extraction")
+          .component(ForgerListenerFeatureComponent.of(
+            new PlayerSkinExtractionListener(),
+            new HeadWorldSkinExtractionListener(),
+            new HotBarSkinExtractionListener()
+          ))
           .build());
     }
 

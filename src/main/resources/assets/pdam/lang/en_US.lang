@@ -1,3 +1,7 @@
+# Geral
+pdam.general.copy_to_clipboard=Copy to Clipboard
+pdam.general.copied_to_clipboard=Copied to Clipboard!
+
 # NBT Tooltip Feature
 nbt_tooltip=Show NBTTag in Tooltip
 pdam.nbt_tooltip.enabled=Enabled
@@ -39,3 +43,12 @@ pdam.armorstand.left_arm=Left Arm
 pdam.armorstand.right_arm=Right Arm
 pdam.armorstand.left_leg=Left Leg
 pdam.armorstand.right_leg=Right Leg
+
+# Skin Info
+skin_extraction=Skin Extraction
+pdam.skin_extraction.enabled=Enabled
+pdam.skin_extraction.skin_not_found=No skin was found.
+pdam.skin_extraction.message.title=Info for %1$s's Skin
+pdam.skin_extraction.message.value_data=Value
+pdam.skin_extraction.message.signature_data=Signature
+pdam.skin_extraction.message.url=URL
