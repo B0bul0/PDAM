@@ -67,6 +67,9 @@ public final class PDAM {
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
         MinecraftForge.EVENT_BUS.register(uiManager);
 
+        // Register client commands
+        ClientCommandHandler.instance.registerCommand(new CopyToClipboardCommand());
+
         registerFeatures();
 
         log.info("PDAM initialized");

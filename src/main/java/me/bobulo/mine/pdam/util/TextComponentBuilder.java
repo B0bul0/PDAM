@@ -63,8 +63,12 @@ public final class TextComponentBuilder {
         return withClick(ClickEvent.Action.SUGGEST_COMMAND, command);
     }
 
-    public  TextComponentBuilder withClickOpenURL(String url) {
+    public TextComponentBuilder withClickOpenURL(String url) {
         return withClick(ClickEvent.Action.OPEN_URL, url);
+    }
+
+    public TextComponentBuilder withClickCopyToClipboard(String text) {
+        return withClick(ClickEvent.Action.RUN_COMMAND, "/" + CopyToClipboardCommand.COMMAND_NAME + " " + text);
     }
 
     public void sendToPlayer(EntityPlayerSP player) {
