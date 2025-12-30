@@ -8,6 +8,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Sound Debugger**: Shows the name of sounds in chat as they are played.
 - **Invisible Entity Highlighter**: Makes invisible entities visible for easier debugging.
 - **Entity Information Panel**: Displays an on-screen panel with real-time information about the entity you are looking at.
+- **Skin Extraction**: Extract skins from players and heads.
 
 ## Installation
 1. Ensure you have Minecraft Forge for version 1.8.9 installed.
