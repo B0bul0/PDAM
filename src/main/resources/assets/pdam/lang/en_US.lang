@@ -44,7 +44,7 @@ pdam.armorstand.left_leg=Left Leg
 pdam.armorstand.right_leg=Right Leg
 
 # Skin Info
-skin_extraction=Skin Info
+skin_extraction=Skin Extraction
 pdam.skin_extraction.enabled=Enabled
 pdam.skin_extraction.skin_not_found=No skin was found.
 pdam.skin_extraction.message.title=Info for %1$s's Skin
