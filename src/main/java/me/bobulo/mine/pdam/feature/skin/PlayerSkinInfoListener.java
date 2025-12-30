@@ -9,6 +9,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Listener for right-clicking on players to retrieve skin information.
+ */
 public class PlayerSkinInfoListener {
 
     @SideOnly(Side.CLIENT)

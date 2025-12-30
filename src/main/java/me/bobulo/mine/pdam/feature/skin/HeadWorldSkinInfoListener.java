@@ -11,6 +11,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Listener for right-clicking on player heads in the world to retrieve skin information.
+ */
 public class HeadWorldSkinInfoListener {
 
     @SideOnly(Side.CLIENT)
