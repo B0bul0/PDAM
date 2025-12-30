@@ -18,6 +18,9 @@ import java.util.List;
 
 import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 
+/**
+ * Listens for chat clicks while holding CTRL and copies the clicked chat line to clipboard.
+ */
 public class ChatCopyListener {
 
     private static final Logger log = LogManager.getLogger(ChatCopyListener.class);
