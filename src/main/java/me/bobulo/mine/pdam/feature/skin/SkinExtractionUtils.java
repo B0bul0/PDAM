@@ -14,23 +14,38 @@ public final class SkinExtractionUtils {
     private SkinExtractionUtils() {
     }
 
-    public static void sendSkinInfoMessage(GameProfile profile) {
-        Collection<Property> textures = profile.getProperties().get("textures");
-
+    public static SkinExtracted extracted(GameProfile gameProfile) {
+        Collection<Property> textures = gameProfile.getProperties().get("textures");
         if (textures.isEmpty()) {
-            LocaleUtils.sendMessage("pdam.skin_extraction.skin_not_found");
-            return;
+            return null;
         }
 
         Property skinProperty = textures.iterator().next();
         String value = skinProperty.getValue();
         String signature = skinProperty.getSignature();
 
-        String valueBase64 = Base64.getEncoder().encodeToString(value.getBytes());
-        String signatureBase64 = signature == null ? "null" : Base64.getEncoder().encodeToString(signature.getBytes());
+        String valueBase64 = value == null ? "" : Base64.getEncoder().encodeToString(value.getBytes());
+        String signatureBase64 = signature == null ? "" : Base64.getEncoder().encodeToString(signature.getBytes());
+
+        return new SkinExtracted(gameProfile.getName(), valueBase64, signatureBase64);
+    }
+
+    public static void sendSkinInfoMessage(GameProfile gameProfile) {
+        SkinExtracted skinExtracted = extracted(gameProfile);
+        sendSkinInfoMessage(skinExtracted);
+    }
+
+    public static void sendSkinInfoMessage(SkinExtracted skinExtracted) {
+        if (skinExtracted == null || skinExtracted.isEmpty()) {
+            LocaleUtils.sendMessage("pdam.skin_extraction.skin_not_found");
+            return;
+        }
+
+        String valueBase64 = skinExtracted.getValueBase64();
+        String signatureBase64 = skinExtracted.getSignatureBase64();
 
         TextComponentBuilder.createTranslated("pdam.skin_extraction.message.title",
-            profile.getName()
+            skinExtracted.getName()
           )
 
           .withColor(EnumChatFormatting.YELLOW)
@@ -49,7 +64,6 @@ public final class SkinExtractionUtils {
           .withColor(EnumChatFormatting.BLUE)
 
           .sendToClient();
-
     }
 
 }
