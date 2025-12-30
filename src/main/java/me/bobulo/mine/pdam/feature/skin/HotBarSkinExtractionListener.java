@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class HotBarSkinExtractionListener {
 
-    private static final long INTERACTION_COOLDOWN_MS = 500;
+    private static final long INTERACTION_COOLDOWN_MS = 1000;
     private long lastInteractionTime = 0;
 
     @SideOnly(Side.CLIENT)
@@ -34,6 +34,8 @@ public class HotBarSkinExtractionListener {
             return;
         }
 
+        event.setCanceled(true);
+
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastInteractionTime < INTERACTION_COOLDOWN_MS) {
             // Ignore interaction if within cooldown period
@@ -42,7 +44,6 @@ public class HotBarSkinExtractionListener {
 
         lastInteractionTime = currentTime;
 
-        event.setCanceled(true);
         NBTTagCompound skullOwnerTag = heldItem.getTagCompound().getCompoundTag("SkullOwner");
         GameProfile gameProfile = NBTUtil.readGameProfileFromNBT(skullOwnerTag);
 
