@@ -2,25 +2,19 @@ package me.bobulo.mine.pdam.feature.skin;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import me.bobulo.mine.pdam.feature.component.AbstractFeatureComponent;
-import me.bobulo.mine.pdam.feature.sound.SoundDebugListener;
 import me.bobulo.mine.pdam.util.LocaleUtils;
 import me.bobulo.mine.pdam.util.TextComponentBuilder;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Base64;
 import java.util.Collection;
 
-public final class SkinInfoFeatureComponent extends AbstractFeatureComponent {
+public final class SkinInfoUtils {
 
-    @Override
-    protected void onEnable() {}
+    private SkinInfoUtils() {
+    }
 
-    @Override
-    protected void onDisable() {}
-
-    public void sendSkinInfoMessage(GameProfile profile) {
+    public static void sendSkinInfoMessage(GameProfile profile) {
         Collection<Property> textures = profile.getProperties().get("textures");
 
         if (textures.isEmpty()) {

@@ -11,12 +11,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PlayerSkinInfoListener {
 
-    private final SkinInfoFeatureComponent component;
-
-    public PlayerSkinInfoListener(SkinInfoFeatureComponent component) {
-        this.component = component;
-    }
-
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onEntityInteract(EntityInteractEvent event) {
@@ -31,7 +25,7 @@ public class PlayerSkinInfoListener {
 
         EntityPlayer targetPlayer = (EntityPlayer) target;
         GameProfile gameProfile = targetPlayer.getGameProfile();
-        component.sendSkinInfoMessage(gameProfile);
+        SkinInfoUtils.sendSkinInfoMessage(gameProfile);
     }
 
 }
