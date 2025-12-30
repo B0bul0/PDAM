@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Listener for right-clicking on player heads in the world to retrieve skin information.
  */
-public class HeadWorldSkinInfoListener {
+public class HeadWorldSkinExtractionListener {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
@@ -43,7 +43,7 @@ public class HeadWorldSkinInfoListener {
         }
 
         event.setCanceled(true);
-        SkinInfoUtils.sendSkinInfoMessage(gameProfile);
+        SkinExtractionUtils.sendSkinInfoMessage(gameProfile);
     }
 
 }

@@ -44,9 +44,9 @@ pdam.armorstand.left_leg=Perna Esquerda
 pdam.armorstand.right_leg=Perna Direita
 
 # Informações da Skin
-skin_info=Informações de Skin
-pdam.skin_info.enabled=Ativado
-pdam.skin_info.skin_not_found=Nenhuma skin foi encontrada.
-pdam.skin_info.message.title=Informações da Skin de %1$s
-pdam.skin_info.message.value_data=Value
-pdam.skin_info.message.signature_data=Signature
+skin_extraction=Informações de Skin
+pdam.skin_extraction.enabled=Ativado
+pdam.skin_extraction.skin_not_found=Nenhuma skin foi encontrada.
+pdam.skin_extraction.message.title=Informações da Skin de %1$s
+pdam.skin_extraction.message.value_data=Value
+pdam.skin_extraction.message.signature_data=Signature

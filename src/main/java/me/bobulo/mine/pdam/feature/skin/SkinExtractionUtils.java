@@ -9,16 +9,16 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.Base64;
 import java.util.Collection;
 
-public final class SkinInfoUtils {
+public final class SkinExtractionUtils {
 
-    private SkinInfoUtils() {
+    private SkinExtractionUtils() {
     }
 
     public static void sendSkinInfoMessage(GameProfile profile) {
         Collection<Property> textures = profile.getProperties().get("textures");
 
         if (textures.isEmpty()) {
-            LocaleUtils.sendMessage("pdam.skin_info.skin_not_found");
+            LocaleUtils.sendMessage("pdam.skin_extraction.skin_not_found");
             return;
         }
 
@@ -29,13 +29,13 @@ public final class SkinInfoUtils {
         String valueBase64 = Base64.getEncoder().encodeToString(value.getBytes());
         String signatureBase64 = signature == null ? "null" : Base64.getEncoder().encodeToString(signature.getBytes());
 
-        TextComponentBuilder.createTranslated("pdam.skin_info.message.title",
+        TextComponentBuilder.createTranslated("pdam.skin_extraction.message.title",
             profile.getName()
           )
 
           .withColor(EnumChatFormatting.YELLOW)
           .appendNewLine()
-          .appendTranslated("pdam.skin_info.message.value_data")
+          .appendTranslated("pdam.skin_extraction.message.value_data")
           .withHoverTranslated("pdam.general.copy_to_clipboard")
           .withClickCopyToClipboard(valueBase64)
           .withColor(EnumChatFormatting.BLUE)
@@ -43,7 +43,7 @@ public final class SkinInfoUtils {
           .append(" | ")
           .withColor(EnumChatFormatting.WHITE)
 
-          .appendTranslated("pdam.skin_info.message.signature_data")
+          .appendTranslated("pdam.skin_extraction.message.signature_data")
           .withHoverTranslated("pdam.general.copy_to_clipboard")
           .withClickCopyToClipboard(signatureBase64)
           .withColor(EnumChatFormatting.BLUE)

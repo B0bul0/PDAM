@@ -44,9 +44,9 @@ pdam.armorstand.left_leg=Left Leg
 pdam.armorstand.right_leg=Right Leg
 
 # Skin Info
-skin_info=Skin Info
-pdam.skin_info.enabled=Enabled
-pdam.skin_info.skin_not_found=No skin was found.
-pdam.skin_info.message.title=Info for %1$s's Skin
-pdam.skin_info.message.value_data=Value
-pdam.skin_info.message.signature_data=Signature
+skin_extraction=Skin Info
+pdam.skin_extraction.enabled=Enabled
+pdam.skin_extraction.skin_not_found=No skin was found.
+pdam.skin_extraction.message.title=Info for %1$s's Skin
+pdam.skin_extraction.message.value_data=Value
+pdam.skin_extraction.message.signature_data=Signature

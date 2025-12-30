@@ -9,9 +9,9 @@ import me.bobulo.mine.pdam.feature.component.CallbackFeatureComponent;
 import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
-import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinInfoListener;
-import me.bobulo.mine.pdam.feature.skin.HotBarSkinInfoListener;
-import me.bobulo.mine.pdam.feature.skin.PlayerSkinInfoListener;
+import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
+import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
+import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.tooltop.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.gui.MenuListener;
@@ -104,11 +104,11 @@ public final class PDAM {
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
-          .id("skin_info")
+          .id("skin_extraction")
           .component(ForgerListenerFeatureComponent.of(
-            new PlayerSkinInfoListener(),
-            new HeadWorldSkinInfoListener(),
-            new HotBarSkinInfoListener()
+            new PlayerSkinExtractionListener(),
+            new HeadWorldSkinExtractionListener(),
+            new HotBarSkinExtractionListener()
           ))
           .build());
     }

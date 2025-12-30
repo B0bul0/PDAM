@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Listener for right-clicking with a player skull in hand to retrieve skin information.
  */
-public class HotBarSkinInfoListener {
+public class HotBarSkinExtractionListener {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
@@ -36,7 +36,7 @@ public class HotBarSkinInfoListener {
         NBTTagCompound skullOwnerTag = heldItem.getTagCompound().getCompoundTag("SkullOwner");
         GameProfile gameProfile = NBTUtil.readGameProfileFromNBT(skullOwnerTag);
 
-        SkinInfoUtils.sendSkinInfoMessage(gameProfile);
+        SkinExtractionUtils.sendSkinInfoMessage(gameProfile);
     }
 
 }

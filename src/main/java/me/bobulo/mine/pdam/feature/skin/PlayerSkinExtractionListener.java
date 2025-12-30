@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Listener for right-clicking on players to retrieve skin information.
  */
-public class PlayerSkinInfoListener {
+public class PlayerSkinExtractionListener {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
@@ -28,7 +28,7 @@ public class PlayerSkinInfoListener {
 
         EntityPlayer targetPlayer = (EntityPlayer) target;
         GameProfile gameProfile = targetPlayer.getGameProfile();
-        SkinInfoUtils.sendSkinInfoMessage(gameProfile);
+        SkinExtractionUtils.sendSkinInfoMessage(gameProfile);
     }
 
 }
