@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.ui.notification;
+package me.bobulo.mine.pdam.notification;
 
 import java.awt.Color;
 

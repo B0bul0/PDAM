@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.ui.notification;
+package me.bobulo.mine.pdam.notification;
 
 import me.bobulo.mine.pdam.ui.DisplayElement;
 import net.minecraft.client.Minecraft;

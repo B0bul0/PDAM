@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature.chat;
 
-import me.bobulo.mine.pdam.ui.notification.NotificationManager;
+import me.bobulo.mine.pdam.notification.NotificationManager;
+import me.bobulo.mine.pdam.notification.Notifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiChat;
@@ -66,7 +67,7 @@ public class ChatCopyListener {
                     GuiScreen.setClipboardString(chatLine.getChatComponent().getUnformattedText());
                     event.setCanceled(true);
                     log.info("Copied chat line to clipboard: {}", chatLine.getChatComponent().getUnformattedText());
-                    NotificationManager.showSuccess(translateToLocal("pdam.general.copied_to_clipboard"));
+                    Notifier.showSuccess(translateToLocal("pdam.general.copied_to_clipboard"));
                     return;
                 }
             }

@@ -17,7 +17,7 @@ import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.tooltop.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.gui.MenuListener;
 import me.bobulo.mine.pdam.ui.UIManager;
-import me.bobulo.mine.pdam.ui.notification.NotificationDisplayElement;
+import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
