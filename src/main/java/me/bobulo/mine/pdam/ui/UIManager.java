@@ -4,6 +4,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,6 +15,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @SideOnly(Side.CLIENT)
 public final class UIManager {
+
+    private static final Logger log = LogManager.getLogger(UIManager.class);
 
     private final List<DisplayElement> elements = new CopyOnWriteArrayList<>();
 
@@ -36,7 +40,12 @@ public final class UIManager {
         }
 
         for (DisplayElement element : elements) {
-            element.render(event);
+            try {
+                element.render(event);
+            } catch (Exception exception) {
+                log.error("Error while rendering display element: {}",
+                  element.getClass().getName(), exception);
+            }
         }
     }
 }
