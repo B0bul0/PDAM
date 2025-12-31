@@ -10,6 +10,7 @@ import me.bobulo.mine.pdam.feature.component.CallbackFeatureComponent;
 import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
+import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
@@ -115,6 +116,11 @@ public final class PDAM {
             new HeadWorldSkinExtractionListener(),
             new HotBarSkinExtractionListener()
           ))
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("packet_monitor")
+          .component(new PacketMonitorFeatureComponent())
           .build());
     }
 
