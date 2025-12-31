@@ -2,6 +2,7 @@ package me.bobulo.mine.pdam.feature.component;
 
 import me.bobulo.mine.pdam.config.PropertyDeclarer;
 import me.bobulo.mine.pdam.feature.Feature;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a modular component of a {@link Feature}.
@@ -17,7 +18,7 @@ public interface FeatureComponent extends PropertyDeclarer {
      *
      * @param feature The parent feature that this component belongs to.
      */
-    void init(Feature feature);
+    void init(@NotNull Feature feature);
 
     /**
      * Checks if the component is currently enabled.

@@ -6,15 +6,17 @@ import me.bobulo.mine.pdam.feature.component.FeatureComponent;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Default implementation of a Feature.
  */
-public class FeatureImpl implements Feature {
+public class FeatureImpl implements Feature, ComponentableFeature {
 
     private static final Logger log = LogManager.getLogger(FeatureImpl.class);
 
@@ -104,7 +106,8 @@ public class FeatureImpl implements Feature {
 
     /* Register Components */
 
-    public void addComponent(FeatureComponent component) {
+    @Override
+    public void addComponent(@NotNull FeatureComponent component) {
         component.init(this);
         components.add(component);
 
@@ -119,12 +122,23 @@ public class FeatureImpl implements Feature {
         }
     }
 
-    public void removeComponent(FeatureComponent component) {
+    @Override
+    public void removeComponent(@NotNull FeatureComponent component) {
         components.remove(component);
 
         if (enabled) {
             component.disable();
         }
+    }
+
+    @Override
+    public boolean hasComponent(@NotNull FeatureComponent component) {
+        return components.contains(component);
+    }
+
+    @Override
+    public List<FeatureComponent> getComponents() {
+        return Collections.unmodifiableList(components);
     }
 
     /* Builder */
