@@ -11,8 +11,9 @@ import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import static java.util.Collections.synchronizedList;
 
 public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
 
@@ -22,7 +23,7 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
 
     private int maxLogLimit = MAX_LOGS;
 
-    private List<DisplayPacketLogEntry> packetEntries = Collections.synchronizedList(new ArrayList<>());
+    private List<DisplayPacketLogEntry> packetEntries = synchronizedList(new ArrayList<>());
 
     @Override
     protected void onInit() {
@@ -49,7 +50,7 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
         packetEntries.add(display);
 
         if (packetEntries.size() > maxLogLimit + (maxLogLimit / 3)) {
-            packetEntries = new ArrayList<>(packetEntries.subList(packetEntries.size() - maxLogLimit, packetEntries.size()));
+            packetEntries = synchronizedList(new ArrayList<>(packetEntries.subList(packetEntries.size() - maxLogLimit, packetEntries.size())));
         }
 
         GuiScreen currentScreen = Minecraft.getMinecraft().currentScreen;
