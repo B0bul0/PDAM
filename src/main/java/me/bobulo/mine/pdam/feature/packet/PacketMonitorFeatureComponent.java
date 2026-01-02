@@ -5,7 +5,7 @@ import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.packet.interceptor.PacketDataInterceptor;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry;
-import me.bobulo.mine.pdam.gui.log.PacketGuiScreen;
+import me.bobulo.mine.pdam.feature.packet.gui.PacketLogGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +53,8 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
         }
 
         GuiScreen currentScreen = Minecraft.getMinecraft().currentScreen;
-        if (currentScreen instanceof PacketGuiScreen) {
-            ((PacketGuiScreen) currentScreen).refreshLogs();
+        if (currentScreen instanceof PacketLogGuiScreen) {
+            ((PacketLogGuiScreen) currentScreen).refreshLogs();
         }
     }
 

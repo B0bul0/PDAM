@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.gui.log;
+package me.bobulo.mine.pdam.feature.packet.gui;
 
 import com.google.common.collect.Lists;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PacketGuiScreen extends GuiScreen {
+public class PacketLogGuiScreen extends GuiScreen {
 
     private List<DisplayPacketLogEntry> allLogs;
     private List<DisplayPacketLogEntry> filteredLogs = Lists.newArrayList();
@@ -29,7 +29,7 @@ public class PacketGuiScreen extends GuiScreen {
 
     private final Object logsLock = new Object();
 
-    public PacketGuiScreen(List<DisplayPacketLogEntry> allLogs) {
+    public PacketLogGuiScreen(List<DisplayPacketLogEntry> allLogs) {
         this.allLogs = allLogs;
     }
 
@@ -37,7 +37,7 @@ public class PacketGuiScreen extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.searchField = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 150, 40, 150, 20);
+        this.searchField = new GuiTextField(0, this.fontRendererObj, 72, 40, 150, 20);
         this.searchField.setMaxStringLength(50);
         this.searchField.setFocused(true);
 
@@ -158,7 +158,7 @@ public class PacketGuiScreen extends GuiScreen {
         drawCenteredString(this.fontRendererObj, "Packet Log Viewer", this.width / 2, 20, 0xFFFFFF);
 
         // Search Field
-        drawString(this.fontRendererObj, "Search:", this.width / 2 - 200, 45, 0xA0A0A0);
+        drawString(this.fontRendererObj, "Search:", searchField.xPosition - 45, 45, 0xA0A0A0);
         this.searchField.drawTextBox();
 
         // Headers

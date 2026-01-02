@@ -1,7 +1,7 @@
 package me.bobulo.mine.pdam.gui;
 
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
-import me.bobulo.mine.pdam.gui.log.PacketGuiScreen;
+import me.bobulo.mine.pdam.feature.packet.gui.PacketLogGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -44,7 +44,7 @@ public class MenuListener {
         if (event.gui instanceof GuiIngameMenu && event.button.id == PDAM_BUTTON_ID) {
             Minecraft.getMinecraft().displayGuiScreen(new FeaturesMenuGui(event.gui));
         } else if (event.gui instanceof GuiIngameMenu && event.button.id == PACKET_BUTTON_ID) {
-            Minecraft.getMinecraft().displayGuiScreen(new PacketGuiScreen(PacketMonitorFeatureComponent.INSTANCE.getPacketEntries()));
+            Minecraft.getMinecraft().displayGuiScreen(new PacketLogGuiScreen(PacketMonitorFeatureComponent.INSTANCE.getPacketEntries()));
         }
     }
 
