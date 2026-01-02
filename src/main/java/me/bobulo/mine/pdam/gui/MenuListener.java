@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.gui;
 
+import me.bobulo.mine.pdam.PDAM;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.packet.gui.PacketLogGuiScreen;
 import net.minecraft.client.Minecraft;
@@ -27,7 +28,8 @@ public class MenuListener {
             ));
         }
 
-        if (event.gui instanceof GuiIngameMenu) {
+        if (PDAM.getFeatureService().isFeatureEnabled("packet_monitor") &&
+          event.gui instanceof GuiIngameMenu) {
             event.buttonList.add(new GuiButton(
               PACKET_BUTTON_ID,
               5 + 105,
