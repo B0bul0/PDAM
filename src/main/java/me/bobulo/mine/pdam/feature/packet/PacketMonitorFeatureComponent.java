@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
@@ -21,7 +22,7 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
 
     private int maxLogLimit = MAX_LOGS;
 
-    private List<DisplayPacketLogEntry> packetEntries = new ArrayList<>();
+    private List<DisplayPacketLogEntry> packetEntries = Collections.synchronizedList(new ArrayList<>());
 
     @Override
     protected void onInit() {
