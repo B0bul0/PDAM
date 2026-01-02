@@ -3,15 +3,13 @@ package me.bobulo.mine.pdam.feature;
 import me.bobulo.mine.pdam.config.ConfigBinder;
 import me.bobulo.mine.pdam.config.ConfigInitContext;
 import me.bobulo.mine.pdam.feature.component.FeatureComponent;
+import me.bobulo.mine.pdam.util.ThreadUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Default implementation of a Feature.
@@ -24,7 +22,7 @@ public class FeatureImpl implements Feature, ComponentableFeature {
     private final String name;
     private boolean enabled = false;
 
-    private final List<FeatureComponent> components = new ArrayList<>();
+    private final Map<Class<? extends FeatureComponent>, FeatureComponent> components = new HashMap<>();
 
     private ConfigBinder configBinder;
 
@@ -63,13 +61,15 @@ public class FeatureImpl implements Feature, ComponentableFeature {
               }
           });
 
-        for (FeatureComponent component : components) {
+        for (FeatureComponent component : components.values()) {
             component.initProperties(context);
         }
     }
 
     @Override
     public void enable() {
+        Validate.isTrue(ThreadUtils.isMainThread(), "Features can only be enabled from the main thread");
+
         if (!enabled) {
             log.info("Enabling feature {}", id);
 
@@ -82,6 +82,8 @@ public class FeatureImpl implements Feature, ComponentableFeature {
 
     @Override
     public void disable() {
+        Validate.isTrue(ThreadUtils.isMainThread(), "Features can only be disabled from the main thread");
+
         if (enabled) {
             log.info("Disabling feature {}", id);
 
@@ -93,13 +95,13 @@ public class FeatureImpl implements Feature, ComponentableFeature {
     }
 
     private void onEnable() {
-        for (FeatureComponent component : components) {
+        for (FeatureComponent component : components.values()) {
             component.enable();
         }
     }
 
     private void onDisable() {
-        for (FeatureComponent component : components) {
+        for (FeatureComponent component : components.values()) {
             component.disable();
         }
     }
@@ -108,8 +110,12 @@ public class FeatureImpl implements Feature, ComponentableFeature {
 
     @Override
     public void addComponent(@NotNull FeatureComponent component) {
+        Validate.isTrue(ThreadUtils.isMainThread(), "Components can only be added from the main thread");
+        Validate.isTrue(!components.containsValue(component),
+          "Component instance " + component + " is already registered in feature " + id);
+
         component.init(this);
-        components.add(component);
+        components.put(component.getClass(), component);
 
         if (configBinder != null) {
             ConfigInitContext context = new ConfigInitContext(configBinder);
@@ -124,7 +130,12 @@ public class FeatureImpl implements Feature, ComponentableFeature {
 
     @Override
     public void removeComponent(@NotNull FeatureComponent component) {
-        components.remove(component);
+        Validate.isTrue(ThreadUtils.isMainThread(), "Components can only be removed from the main thread");
+
+        FeatureComponent removed = components.remove(component.getClass());
+        Validate.isTrue(removed != null,
+          "Component instance " + component + " is not registered in feature " + id);
+
 
         if (enabled) {
             component.disable();
@@ -133,12 +144,23 @@ public class FeatureImpl implements Feature, ComponentableFeature {
 
     @Override
     public boolean hasComponent(@NotNull FeatureComponent component) {
-        return components.contains(component);
+        return components.get(component.getClass()) == component;
     }
 
     @Override
-    public List<FeatureComponent> getComponents() {
-        return Collections.unmodifiableList(components);
+    public boolean hasComponent(@NotNull Class<? extends FeatureComponent> component) {
+        return components.containsKey(component);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends FeatureComponent> T getComponent(@NotNull Class<T> componentClass) {
+        return (T) components.get(componentClass);
+    }
+
+    @Override
+    public @NotNull Collection<FeatureComponent> getComponents() {
+        return Collections.unmodifiableCollection(components.values());
     }
 
     /* Builder */

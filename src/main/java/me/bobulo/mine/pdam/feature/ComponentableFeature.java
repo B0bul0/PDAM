@@ -3,7 +3,7 @@ package me.bobulo.mine.pdam.feature;
 import me.bobulo.mine.pdam.feature.component.FeatureComponent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * An interface representing a feature that can have components added to it.
@@ -16,6 +16,10 @@ public interface ComponentableFeature {
 
     boolean hasComponent(@NotNull FeatureComponent component);
 
-    List<FeatureComponent> getComponents();
+    boolean hasComponent(@NotNull Class<? extends FeatureComponent> component);
+
+    <T extends FeatureComponent> T getComponent(@NotNull Class<T> componentClass);
+
+    @NotNull Collection<FeatureComponent> getComponents();
 
 }
