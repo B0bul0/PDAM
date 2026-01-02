@@ -1,12 +1,17 @@
 package me.bobulo.mine.pdam.feature.packet.metadata;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class UnknownPacketMetadata implements PacketMetadata {
 
-    private String packetClassName;
-    private String data;
+    private final String packetClassName;
 
-    public UnknownPacketMetadata(String packetClassName, String data) {
+    public UnknownPacketMetadata(String packetClassName) {
         this.packetClassName = packetClassName;
-        this.data = data;
+    }
+
+    @Override
+    public @NotNull String getPacketName() {
+        return packetClassName;
     }
 }

@@ -1,19 +1,14 @@
 package me.bobulo.mine.pdam.feature.packet.interceptor;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import me.bobulo.mine.pdam.feature.packet.metadata.PacketMetadata;
 import me.bobulo.mine.pdam.feature.packet.metadata.ChatMessagePacketMetadata;
 import me.bobulo.mine.pdam.feature.packet.metadata.SpawnPlayerPacketMetadata;
+import me.bobulo.mine.pdam.feature.packet.metadata.UnknownPacketMetadata;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
 
 public final class PacketDataMapper {
-
-    private static final Gson gson = new GsonBuilder()
-      .setPrettyPrinting()
-      .create();
 
     public static PacketMetadata map(Packet<?> packet) {
         if (packet instanceof S02PacketChat) {
@@ -38,9 +33,7 @@ public final class PacketDataMapper {
             return metadata;
         }
 
-        return null;
-//        return new UnknownPacketMetadata(packet.getClass().getSimpleName(),
-//          gson.toJson(gson));
+        return new UnknownPacketMetadata(packet.getClass().getSimpleName());
     }
 
 }

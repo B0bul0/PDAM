@@ -1,6 +1,10 @@
 package me.bobulo.mine.pdam.feature.packet.metadata;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class ChatMessagePacketMetadata implements PacketMetadata {
+
+    private static final String PACKET_NAME = "ChatMessage";
 
     private final String plainMessage;
     private final ChatMessageType type;
@@ -8,6 +12,11 @@ public final class ChatMessagePacketMetadata implements PacketMetadata {
     public ChatMessagePacketMetadata(String plainMessage, ChatMessageType type) {
         this.plainMessage = plainMessage;
         this.type = type;
+    }
+
+    @Override
+    public @NotNull String getPacketName() {
+        return PACKET_NAME;
     }
 
     public String getPlainMessage() {

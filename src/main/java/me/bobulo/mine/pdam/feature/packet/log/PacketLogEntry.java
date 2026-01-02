@@ -29,7 +29,7 @@ public class PacketLogEntry {
     }
 
     public String getPacketName() {
-        return packetMetadata.getClass().getSimpleName();
+        return packetMetadata.getPacketName();
     }
 
     public enum PacketDirection {

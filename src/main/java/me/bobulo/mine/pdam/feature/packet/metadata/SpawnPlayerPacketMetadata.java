@@ -1,8 +1,12 @@
 package me.bobulo.mine.pdam.feature.packet.metadata;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 public final class SpawnPlayerPacketMetadata implements PacketMetadata {
+
+    private static final String PACKET_NAME = "SpawnPlayer";
 
     public int entityId;
     public UUID playerId;
@@ -13,4 +17,8 @@ public final class SpawnPlayerPacketMetadata implements PacketMetadata {
     public byte pitch;
     public int currentItem;
 
+    @Override
+    public @NotNull String getPacketName() {
+        return PACKET_NAME;
+    }
 }
