@@ -1,6 +1,5 @@
 package me.bobulo.mine.pdam.feature.packet.gui;
 
-import com.google.common.collect.Lists;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -9,13 +8,14 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PacketLogGuiScreen extends GuiScreen {
 
     private List<DisplayPacketLogEntry> allLogs;
-    private List<DisplayPacketLogEntry> filteredLogs = Lists.newArrayList();
+    private List<DisplayPacketLogEntry> filteredLogs = Collections.emptyList();
 
     private GuiTextField searchField;
 
@@ -268,13 +268,9 @@ public class PacketLogGuiScreen extends GuiScreen {
 
         synchronized (logsLock) {
             filteredLogs = allLogs.stream()
-              .filter(log -> {
-                  boolean matchesSearch = searchText.isEmpty() ||
-                    log.getPacketName().toLowerCase().contains(searchText) ||
-                    log.getPacketData().toLowerCase().contains(searchText);
-
-                  return matchesSearch;
-              })
+              .filter(log -> searchText.isEmpty() ||
+                log.getPacketName().toLowerCase().contains(searchText) ||
+                log.getPacketData().toLowerCase().contains(searchText))
               .collect(Collectors.toList());
         }
 

@@ -7,14 +7,12 @@ import me.bobulo.mine.pdam.feature.packet.gui.PacketLogGuiScreen;
 import me.bobulo.mine.pdam.feature.packet.interceptor.PacketDataInterceptor;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry;
+import me.bobulo.mine.pdam.util.BoundedConcurrentList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Collections.synchronizedList;
 
 public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
 
@@ -24,11 +22,12 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
 
     private int maxLogLimit = MAX_LOGS;
 
-    private List<DisplayPacketLogEntry> packetEntries = synchronizedList(new ArrayList<>());
+    private BoundedConcurrentList<DisplayPacketLogEntry> packetEntries;
 
     @Override
     protected void onInit() {
         INSTANCE = this;
+        this.packetEntries = new BoundedConcurrentList<>(maxLogLimit);
 
         addChildComponent(ForgerListenerFeatureComponent.of(
           new PacketDataInterceptor(this)
@@ -57,10 +56,6 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
 
         packetEntries.add(display);
 
-        if (packetEntries.size() > maxLogLimit + (maxLogLimit / 3)) {
-            packetEntries = synchronizedList(new ArrayList<>(packetEntries.subList(packetEntries.size() - maxLogLimit, packetEntries.size())));
-        }
-
         GuiScreen currentScreen = Minecraft.getMinecraft().currentScreen;
         if (currentScreen instanceof PacketLogGuiScreen) {
             ((PacketLogGuiScreen) currentScreen).refreshLogs();
@@ -75,6 +70,18 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
         }
 
         this.maxLogLimit = maxLogLimit;
+
+        // Recreate with new capacity
+        BoundedConcurrentList<DisplayPacketLogEntry> newList = new BoundedConcurrentList<>(maxLogLimit);
+        List<DisplayPacketLogEntry> snapshot = packetEntries.snapshot();
+
+        // Copy recent entries
+        int start = Math.max(0, snapshot.size() - maxLogLimit);
+        for (int i = start; i < snapshot.size(); i++) {
+            newList.add(snapshot.get(i));
+        }
+
+        this.packetEntries = newList;
     }
 
     @NotNull
