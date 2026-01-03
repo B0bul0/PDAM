@@ -1,11 +1,12 @@
 package me.bobulo.mine.pdam.feature.packet;
 
+import me.bobulo.mine.pdam.config.ConfigInitContext;
 import me.bobulo.mine.pdam.feature.component.AbstractFeatureComponent;
 import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
+import me.bobulo.mine.pdam.feature.packet.gui.PacketLogGuiScreen;
 import me.bobulo.mine.pdam.feature.packet.interceptor.PacketDataInterceptor;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry;
-import me.bobulo.mine.pdam.feature.packet.gui.PacketLogGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,13 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
     }
 
     @Override
+    public void initProperties(ConfigInitContext context) {
+        context.createProperty("maxLogLimit", MAX_LOGS)
+          .comment("Maximum number of packet log entries to keep in memory (default: " + MAX_LOGS + ")")
+          .onUpdate(this::setMaxLogLimit);
+    }
+
+    @Override
     protected void onEnable() {
 
     }
@@ -57,6 +65,16 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
         if (currentScreen instanceof PacketLogGuiScreen) {
             ((PacketLogGuiScreen) currentScreen).refreshLogs();
         }
+    }
+
+    public void setMaxLogLimit(int maxLogLimit) {
+        if (maxLogLimit < 1) {
+            maxLogLimit = 1;
+        } else if (maxLogLimit > MAX_LOGS) {
+            maxLogLimit = MAX_LOGS;
+        }
+
+        this.maxLogLimit = maxLogLimit;
     }
 
     @NotNull
