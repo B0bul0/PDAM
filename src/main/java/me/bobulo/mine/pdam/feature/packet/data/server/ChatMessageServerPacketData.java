@@ -1,30 +1,20 @@
 package me.bobulo.mine.pdam.feature.packet.data.server;
 
+import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.util.IChatComponent;
 import org.jetbrains.annotations.NotNull;
 
 public final class ChatMessageServerPacketData implements ServerPacketData {
 
     private static final String PACKET_NAME = "ChatMessage";
 
-    private final String plainMessage;
-    private final ChatMessageType type;
-
-    public ChatMessageServerPacketData(String plainMessage, ChatMessageType type) {
-        this.plainMessage = plainMessage;
-        this.type = type;
-    }
+    private IChatComponent message;
+    private ChatMessageType type;
 
     @Override
     public @NotNull String getPacketName() {
         return PACKET_NAME;
-    }
-
-    public String getPlainMessage() {
-        return plainMessage;
-    }
-
-    public ChatMessageType getType() {
-        return type;
     }
 
     public enum ChatMessageType {
@@ -49,6 +39,19 @@ public final class ChatMessageServerPacketData implements ServerPacketData {
                 }
             }
             return null;
+        }
+    }
+
+    public static class Extractor implements PacketDataExtractor<ChatMessageServerPacketData, S02PacketChat> {
+
+        @Override
+        public @NotNull ChatMessageServerPacketData extract(@NotNull S02PacketChat packet) {
+            ChatMessageServerPacketData data = new ChatMessageServerPacketData();
+
+            data.message = packet.getChatComponent();
+            data.type = ChatMessageType.fromByte(packet.getType());
+
+            return data;
         }
     }
 
