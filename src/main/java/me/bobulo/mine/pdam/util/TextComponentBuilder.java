@@ -20,6 +20,18 @@ public final class TextComponentBuilder {
         return new TextComponentBuilder(new ChatComponentText(text));
     }
 
+    public static TextComponentBuilder create(IChatComponent chatComponent) {
+        return new TextComponentBuilder(chatComponent);
+    }
+
+    public static TextComponentBuilder create(TextComponentBuilder builder) {
+        return new TextComponentBuilder(builder.build());
+    }
+
+    public static TextComponentBuilder createEmpty() {
+        return new TextComponentBuilder(new ChatComponentText(""));
+    }
+
     public static TextComponentBuilder createTranslated(String translationKey, Object... args) {
         return new TextComponentBuilder(new ChatComponentTranslation(translationKey, args));
     }
