@@ -96,12 +96,12 @@ public class PacketLogGuiScreen extends GuiScreen {
 
         // Line click
         if (mouseX > left && mouseX < right - 10 && mouseY > top && mouseY < bottom) {
-            int yPos = top;
-            for (int i = scrollPos; i < filteredLogs.size() && yPos < bottom; i++) {
+            int yPos = top - scrollPos;
+            for (int i = 0; i < filteredLogs.size(); i++) {
                 DisplayPacketLogEntry entry = filteredLogs.get(i);
                 int slotHeight = calculateEntryHeight(entry);
 
-                if (mouseY >= yPos && mouseY < yPos + slotHeight) {
+                if (mouseY >= Math.max(yPos, top) && mouseY < Math.min(yPos + slotHeight, bottom) && yPos + slotHeight > top) {
                     entry.setExpanded(!entry.isExpanded());
                     selectedLine = i;
                     updateMaxScroll();
@@ -109,6 +109,7 @@ public class PacketLogGuiScreen extends GuiScreen {
                 }
 
                 yPos += slotHeight;
+                if (yPos > bottom) break;
             }
         }
     }
@@ -142,10 +143,11 @@ public class PacketLogGuiScreen extends GuiScreen {
         super.handleMouseInput();
         int dWheel = Mouse.getEventDWheel();
         if (dWheel != 0) {
+            int scrollAmount = fontRendererObj.FONT_HEIGHT * 3;
             if (dWheel > 0) {
-                scrollPos = Math.max(0, scrollPos - 1);
+                scrollPos = Math.max(0, scrollPos - scrollAmount);
             } else {
-                scrollPos = Math.min(maxScroll, scrollPos + 1);
+                scrollPos = Math.min(maxScroll, scrollPos + scrollAmount);
             }
         }
     }
@@ -171,40 +173,50 @@ public class PacketLogGuiScreen extends GuiScreen {
         int top = 90;
         int bottom = this.height - 40;
         int right = this.width - 20;
-        int yPos = top;
+
+        int yPos = top - scrollPos;
 
         // Entries
-        for (int i = scrollPos; i < filteredLogs.size() && yPos < bottom; i++) {
+        for (int i = 0; i < filteredLogs.size(); i++) {
             DisplayPacketLogEntry entry = filteredLogs.get(i);
             int slotHeight = calculateEntryHeight(entry);
 
-            if (yPos + slotHeight > bottom) break;
+            if (yPos + slotHeight > top && yPos < bottom) {
+                int bgColor = (i == selectedLine) ? 0x40FFFFFF : (i % 2 == 0 ? 0x20000000 : 0x10000000);
+                drawRect(left, Math.max(yPos, top), right - 10, Math.min(yPos + slotHeight, bottom), bgColor);
 
-            int bgColor = (i == selectedLine) ? 0x40FFFFFF : (i % 2 == 0 ? 0x20000000 : 0x10000000);
-            drawRect(left, yPos, right - 10, yPos + slotHeight, bgColor);
+                int textColor = (i == selectedLine) ? 0xFFFFE0 : 0xFFFFFF;
 
-            int textColor = (i == selectedLine) ? 0xFFFFE0 : 0xFFFFFF;
-
-            // Time
-            drawString(this.fontRendererObj, entry.getFormattedTime(), left + 5, yPos + 2, textColor);
-
-            // Packet Name
-            drawString(this.fontRendererObj, entry.getPacketName(), left + 80, yPos + 2, textColor);
-
-            // Packet Data Info
-            if (entry.isExpanded()) {
-                List<String> lines = fontRendererObj.listFormattedStringToWidth(entry.getPacketData(), 280);
-                int lineY = yPos + 2;
-                for (String line : lines) {
-                    drawString(this.fontRendererObj, line, left + 200, lineY, textColor);
-                    lineY += fontRendererObj.FONT_HEIGHT;
+                // Time
+                if (yPos + 2 >= top && yPos + 2 < bottom) {
+                    drawString(this.fontRendererObj, entry.getFormattedTime(), left + 5, yPos + 2, textColor);
                 }
-            } else {
-                String abbreviated = entry.getPacketDataShort();
-                drawString(this.fontRendererObj, abbreviated, left + 200, yPos + 2, textColor);
+
+                // Packet Name
+                if (yPos + 2 >= top && yPos + 2 < bottom) {
+                    drawString(this.fontRendererObj, entry.getPacketName(), left + 80, yPos + 2, textColor);
+                }
+
+                // Packet Data Info
+                if (entry.isExpanded()) {
+                    List<String> lines = fontRendererObj.listFormattedStringToWidth(entry.getPacketData(), 280);
+                    int lineY = yPos + 2;
+                    for (String line : lines) {
+                        if (lineY >= top && lineY + fontRendererObj.FONT_HEIGHT <= bottom) {
+                            drawString(this.fontRendererObj, line, left + 200, lineY, textColor);
+                        }
+                        lineY += fontRendererObj.FONT_HEIGHT;
+                    }
+                } else {
+                    if (yPos + 2 >= top && yPos + 2 < bottom) {
+                        String abbreviated = entry.getPacketDataShort();
+                        drawString(this.fontRendererObj, abbreviated, left + 200, yPos + 2, textColor);
+                    }
+                }
             }
 
             yPos += slotHeight;
+            if (yPos > bottom + 100) break;
         }
 
         // Scrollbar
@@ -222,7 +234,7 @@ public class PacketLogGuiScreen extends GuiScreen {
             int totalContentHeight = getTotalContentHeight();
             int visibleContentHeight = bottom - top;
             int handleHeight = Math.max(10, (int) ((float) visibleContentHeight / totalContentHeight * scrollbarHeight));
-            int handleTop = top + (int) ((float) getScrollPosInPixels() / (totalContentHeight - visibleContentHeight) * (scrollbarHeight - handleHeight));
+            int handleTop = top + (int) ((float) scrollPos / maxScroll * (scrollbarHeight - handleHeight));
             drawRect(scrollbarLeft, handleTop, right, handleTop + handleHeight, 0xFFC0C0C0);
         }
     }
@@ -242,14 +254,6 @@ public class PacketLogGuiScreen extends GuiScreen {
             height += calculateEntryHeight(entry);
         }
         return Math.max(height, 1);
-    }
-
-    private int getScrollPosInPixels() {
-        int pixels = 0;
-        for (int i = 0; i < scrollPos && i < filteredLogs.size(); i++) {
-            pixels += calculateEntryHeight(filteredLogs.get(i));
-        }
-        return pixels;
     }
 
     public void refreshLogs(List<DisplayPacketLogEntry> newLogs) {
@@ -280,7 +284,9 @@ public class PacketLogGuiScreen extends GuiScreen {
 
     private void updateMaxScroll() {
         int visibleHeight = this.height - 130;
-        maxScroll = Math.max(0, filteredLogs.size() - Math.max(1, visibleHeight / (fontRendererObj.FONT_HEIGHT + 4)));
+        int totalContentHeight = getTotalContentHeight();
+
+        maxScroll = Math.max(0, totalContentHeight - visibleHeight);
     }
 
 }
