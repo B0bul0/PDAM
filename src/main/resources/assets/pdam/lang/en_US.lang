@@ -24,7 +24,7 @@ pdam.entity_info_overlay.enabled=Enabled
 
 # Entity Info
 pdam.entity.info_title=Entity Info
-pdam.entity.id=ID
+pdam.entity.id=Entity ID
 pdam.entity.name=Name
 pdam.entity.uuid=UUID
 pdam.entity.position=Position
