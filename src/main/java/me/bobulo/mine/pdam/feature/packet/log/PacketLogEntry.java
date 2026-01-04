@@ -1,18 +1,18 @@
 package me.bobulo.mine.pdam.feature.packet.log;
 
-import me.bobulo.mine.pdam.feature.packet.metadata.PacketMetadata;
+import me.bobulo.mine.pdam.feature.packet.data.PacketData;
 
 import java.time.Instant;
 
 public class PacketLogEntry {
 
     private final Instant timestamp;
-    private final PacketMetadata packetMetadata;
+    private final PacketData packetData;
     private final PacketDirection direction;
 
-    public PacketLogEntry(Instant timestamp, PacketMetadata packetMetadata, PacketDirection packetDirection) {
+    public PacketLogEntry(Instant timestamp, PacketData packetData, PacketDirection packetDirection) {
         this.timestamp = timestamp;
-        this.packetMetadata = packetMetadata;
+        this.packetData = packetData;
         this.direction = packetDirection;
     }
 
@@ -20,8 +20,8 @@ public class PacketLogEntry {
         return timestamp;
     }
 
-    public PacketMetadata getPacketData() {
-        return packetMetadata;
+    public PacketData getPacketData() {
+        return packetData;
     }
 
     public PacketDirection getDirection() {
@@ -29,7 +29,7 @@ public class PacketLogEntry {
     }
 
     public String getPacketName() {
-        return packetMetadata.getPacketName();
+        return packetData.getPacketName();
     }
 
     public enum PacketDirection {

@@ -1,10 +1,10 @@
 package me.bobulo.mine.pdam.feature.packet.interceptor;
 
-import me.bobulo.mine.pdam.feature.packet.metadata.PacketMetadata;
-import me.bobulo.mine.pdam.feature.packet.metadata.ChatMessagePacketMetadata;
-import me.bobulo.mine.pdam.feature.packet.metadata.SpawnPlayerPacketMetadata;
-import me.bobulo.mine.pdam.feature.packet.metadata.entity.factory.EntityMetadataFactory;
-import me.bobulo.mine.pdam.feature.packet.metadata.entity.PlayerMetadata;
+import me.bobulo.mine.pdam.feature.packet.data.PacketData;
+import me.bobulo.mine.pdam.feature.packet.data.ChatMessagePacketData;
+import me.bobulo.mine.pdam.feature.packet.data.SpawnPlayerPacketData;
+import me.bobulo.mine.pdam.feature.packet.data.entity.factory.EntityMetadataFactory;
+import me.bobulo.mine.pdam.feature.packet.data.entity.PlayerMetadata;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
@@ -13,18 +13,18 @@ import org.jetbrains.annotations.Nullable;
 public final class PacketDataMapper {
 
     @Nullable
-    public static PacketMetadata map(Packet<?> packet) {
+    public static PacketData map(Packet<?> packet) {
         if (packet instanceof S02PacketChat) {
             S02PacketChat chatPacket = (S02PacketChat) packet;
-            return new ChatMessagePacketMetadata(
+            return new ChatMessagePacketData(
               chatPacket.getChatComponent().getUnformattedText(),
-              ChatMessagePacketMetadata.ChatMessageType.fromByte(chatPacket.getType())
+              ChatMessagePacketData.ChatMessageType.fromByte(chatPacket.getType())
             );
         }
 
         if (packet instanceof S0CPacketSpawnPlayer) {
             S0CPacketSpawnPlayer spawnPlayer = (S0CPacketSpawnPlayer) packet;
-            SpawnPlayerPacketMetadata metadata = new SpawnPlayerPacketMetadata();
+            SpawnPlayerPacketData metadata = new SpawnPlayerPacketData();
             metadata.entityId = spawnPlayer.getEntityID();
             metadata.playerId = spawnPlayer.getPlayer();
             metadata.x = spawnPlayer.getX();
@@ -38,7 +38,7 @@ public final class PacketDataMapper {
         }
 
         return null;
-//        return new UnknownPacketMetadata(packet.getClass().getSimpleName());
+//        return new UnknownPacketData(packet.getClass().getSimpleName());
     }
 
 }
