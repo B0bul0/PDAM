@@ -1,8 +1,8 @@
 package me.bobulo.mine.pdam.feature.packet.interceptor;
 
 import me.bobulo.mine.pdam.feature.packet.data.PacketData;
-import me.bobulo.mine.pdam.feature.packet.data.ChatMessagePacketData;
-import me.bobulo.mine.pdam.feature.packet.data.SpawnPlayerPacketData;
+import me.bobulo.mine.pdam.feature.packet.data.server.ChatMessageServerPacketData;
+import me.bobulo.mine.pdam.feature.packet.data.server.SpawnPlayerServerPacketData;
 import me.bobulo.mine.pdam.feature.packet.data.entity.factory.EntityMetadataFactory;
 import me.bobulo.mine.pdam.feature.packet.data.entity.PlayerMetadata;
 import net.minecraft.network.Packet;
@@ -16,15 +16,15 @@ public final class PacketDataMapper {
     public static PacketData map(Packet<?> packet) {
         if (packet instanceof S02PacketChat) {
             S02PacketChat chatPacket = (S02PacketChat) packet;
-            return new ChatMessagePacketData(
+            return new ChatMessageServerPacketData(
               chatPacket.getChatComponent().getUnformattedText(),
-              ChatMessagePacketData.ChatMessageType.fromByte(chatPacket.getType())
+              ChatMessageServerPacketData.ChatMessageType.fromByte(chatPacket.getType())
             );
         }
 
         if (packet instanceof S0CPacketSpawnPlayer) {
             S0CPacketSpawnPlayer spawnPlayer = (S0CPacketSpawnPlayer) packet;
-            SpawnPlayerPacketData metadata = new SpawnPlayerPacketData();
+            SpawnPlayerServerPacketData metadata = new SpawnPlayerServerPacketData();
             metadata.entityId = spawnPlayer.getEntityID();
             metadata.playerId = spawnPlayer.getPlayer();
             metadata.x = spawnPlayer.getX();

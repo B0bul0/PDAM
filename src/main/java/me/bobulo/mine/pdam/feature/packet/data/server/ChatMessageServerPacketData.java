@@ -1,15 +1,15 @@
-package me.bobulo.mine.pdam.feature.packet.data;
+package me.bobulo.mine.pdam.feature.packet.data.server;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class ChatMessagePacketData implements PacketData {
+public final class ChatMessageServerPacketData implements ServerPacketData {
 
     private static final String PACKET_NAME = "ChatMessage";
 
     private final String plainMessage;
     private final ChatMessageType type;
 
-    public ChatMessagePacketData(String plainMessage, ChatMessageType type) {
+    public ChatMessageServerPacketData(String plainMessage, ChatMessageType type) {
         this.plainMessage = plainMessage;
         this.type = type;
     }
