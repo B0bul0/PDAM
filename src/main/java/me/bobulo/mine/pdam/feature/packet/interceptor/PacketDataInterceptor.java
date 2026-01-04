@@ -7,11 +7,14 @@ import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.data.PacketData;
 import net.minecraft.network.Packet;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.Instant;
 
 public class PacketDataInterceptor {
 
+    private static final Logger log = LogManager.getLogger(PacketDataInterceptor.class);
     private final PacketMonitorFeatureComponent packetMonitor;
 
     public PacketDataInterceptor(PacketMonitorFeatureComponent packetMonitor) {
@@ -34,11 +37,19 @@ public class PacketDataInterceptor {
     }
 
     private void registerIncomingPacket(PacketData packetData) {
-        packetMonitor.addPacketEntry(new PacketLogEntry(Instant.now(), packetData, PacketDirection.SERVER));
+        try {
+            packetMonitor.addPacketEntry(new PacketLogEntry(Instant.now(), packetData, PacketDirection.SERVER));
+        } catch (Exception exception) {
+            log.warn("Failed to register incoming packet: {}", packetData.getClass().getSimpleName(), exception);
+        }
     }
 
     private void registerOutgoingPacket(PacketData packetData) {
-        packetMonitor.addPacketEntry(new PacketLogEntry(Instant.now(), packetData, PacketDirection.CLIENT));
+        try {
+            packetMonitor.addPacketEntry(new PacketLogEntry(Instant.now(), packetData, PacketDirection.CLIENT));
+        } catch (Exception exception) {
+            log.warn("Failed to register outgoing packet: {}", packetData.getClass().getSimpleName(), exception);
+        }
     }
 
 }
