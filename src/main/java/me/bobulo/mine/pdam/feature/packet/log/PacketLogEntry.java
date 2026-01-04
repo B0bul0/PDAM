@@ -33,8 +33,8 @@ public class PacketLogEntry {
     }
 
     public enum PacketDirection {
-        INCOMING,
-        OUTGOING
+        SERVER,
+        CLIENT
     }
 
 }

@@ -34,11 +34,11 @@ public class PacketDataInterceptor {
     }
 
     private void registerIncomingPacket(PacketData packetData) {
-        packetMonitor.addPacketEntry(new PacketLogEntry(Instant.now(), packetData, PacketDirection.INCOMING));
+        packetMonitor.addPacketEntry(new PacketLogEntry(Instant.now(), packetData, PacketDirection.SERVER));
     }
 
     private void registerOutgoingPacket(PacketData packetData) {
-        packetMonitor.addPacketEntry(new PacketLogEntry(Instant.now(), packetData, PacketDirection.OUTGOING));
+        packetMonitor.addPacketEntry(new PacketLogEntry(Instant.now(), packetData, PacketDirection.CLIENT));
     }
 
 }
