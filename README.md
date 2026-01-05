@@ -20,9 +20,8 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 ## Building from Source
 1. Clone this repository to your local machine.
 2. Navigate to the project's root directory.
-3. Run the appropriate command for your operating system to build the project:
-   - **Windows**: `gradlew clean build`
-   - **Linux/Mac**: `./gradlew clean build`
+3. Run the appropriate command for your operating system to build the project: 
+`./gradlew clean build`
 4. The compiled `.jar` file will be located in the `build/libs/` directory.
 
 ---
