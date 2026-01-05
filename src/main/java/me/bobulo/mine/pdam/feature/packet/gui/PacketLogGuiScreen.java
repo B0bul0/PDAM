@@ -4,6 +4,7 @@ import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.StringUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -189,17 +190,17 @@ public class PacketLogGuiScreen extends GuiScreen {
 
                 // Time
                 if (yPos + 2 >= top && yPos + 2 < bottom) {
-                    drawString(this.fontRendererObj, entry.getFormattedTime(), left + 5, yPos + 2, textColor);
+                    drawString(this.fontRendererObj, entry.getFormattedTime().replace('§', '&'), left + 5, yPos + 2, textColor);
                 }
 
                 // Packet Name
                 if (yPos + 2 >= top && yPos + 2 < bottom) {
-                    drawString(this.fontRendererObj, entry.getPacketName(), left + 80, yPos + 2, textColor);
+                    drawString(this.fontRendererObj, entry.getPacketName().replace('§', '&'), left + 80, yPos + 2, textColor);
                 }
 
                 // Packet Data Info
                 if (entry.isExpanded()) {
-                    List<String> lines = fontRendererObj.listFormattedStringToWidth(entry.getPacketData(), 280);
+                    List<String> lines = fontRendererObj.listFormattedStringToWidth(entry.getPacketData().replace('§', '&'), 280);
                     int lineY = yPos + 2;
                     for (String line : lines) {
                         if (lineY >= top && lineY + fontRendererObj.FONT_HEIGHT <= bottom) {
@@ -209,7 +210,7 @@ public class PacketLogGuiScreen extends GuiScreen {
                     }
                 } else {
                     if (yPos + 2 >= top && yPos + 2 < bottom) {
-                        String abbreviated = entry.getPacketDataShort();
+                        String abbreviated = entry.getPacketDataShort().replace('§', '&');
                         drawString(this.fontRendererObj, abbreviated, left + 200, yPos + 2, textColor);
                     }
                 }
@@ -242,7 +243,7 @@ public class PacketLogGuiScreen extends GuiScreen {
     private int calculateEntryHeight(DisplayPacketLogEntry entry) {
         int baseHeight = fontRendererObj.FONT_HEIGHT + 4;
         if (entry.isExpanded()) {
-            List<String> lines = fontRendererObj.listFormattedStringToWidth(entry.getPacketData(), 280);
+            List<String> lines = fontRendererObj.listFormattedStringToWidth(entry.getPacketData().replace('§', '&'), 280);
             return lines.size() * fontRendererObj.FONT_HEIGHT + 4;
         }
         return baseHeight;
@@ -290,3 +291,4 @@ public class PacketLogGuiScreen extends GuiScreen {
     }
 
 }
+
