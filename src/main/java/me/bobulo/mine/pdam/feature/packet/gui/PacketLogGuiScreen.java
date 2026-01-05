@@ -37,8 +37,8 @@ public class PacketLogGuiScreen extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.searchField = new GuiTextField(0, this.fontRendererObj, 72, 40, 150, 20);
-        this.searchField.setMaxStringLength(50);
+        this.searchField = new GuiTextField(0, this.fontRendererObj, 72, 40, this.width / 2 - 82, 20);
+        this.searchField.setMaxStringLength(100);
         this.searchField.setFocused(true);
 
         this.buttonList.add(new GuiButton(0, this.width - 80, this.height - 30, 60, 20, "Close"));
