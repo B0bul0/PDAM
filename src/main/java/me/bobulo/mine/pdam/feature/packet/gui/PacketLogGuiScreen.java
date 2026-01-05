@@ -3,7 +3,7 @@ package me.bobulo.mine.pdam.feature.packet.gui;
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
-import me.bobulo.mine.pdam.util.ClipboardUtils;
+import me.bobulo.mine.pdam.notification.Notifier;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 
 public class PacketLogGuiScreen extends GuiScreen {
 
@@ -42,13 +44,13 @@ public class PacketLogGuiScreen extends GuiScreen {
         this.searchField.setMaxStringLength(100);
         this.searchField.setFocused(true);
 
-        this.buttonList.add(new GuiButton(0, this.width - 80, this.height - 30, 60, 20, "Close"));
-        this.buttonList.add(new GuiButton(1, this.width - 150, this.height - 30, 60, 20, "Clear"));
+        this.buttonList.add(new GuiButton(0, this.width - 80, this.height - 30, 60, 20, translate("close")));
+        this.buttonList.add(new GuiButton(1, this.width - 150, this.height - 30, 60, 20, translate("clear")));
 
-        String pauseResumeText = PacketMonitorFeatureComponent.INSTANCE.isLoggingPaused() ? "Resume" : "Pause";
+        String pauseResumeText = PacketMonitorFeatureComponent.INSTANCE.isLoggingPaused() ? translate("resume") : translate("pause");
         this.buttonList.add(new GuiButton(2, this.width - 220, this.height - 30, 60, 20, pauseResumeText));
 
-        this.buttonList.add(new GuiButton(3, this.width - 290, this.height - 30, 60, 20, "Copy"));
+        this.buttonList.add(new GuiButton(3, this.width - 290, this.height - 30, 60, 20, translate("copy")));
 
         filterLogs();
     }
@@ -67,10 +69,11 @@ public class PacketLogGuiScreen extends GuiScreen {
             filterLogs();
         } else if (button.id == 2) { // pause/resume
             PacketMonitorFeatureComponent.INSTANCE.pauseLogging(!PacketMonitorFeatureComponent.INSTANCE.isLoggingPaused());
-            button.displayString = PacketMonitorFeatureComponent.INSTANCE.isLoggingPaused() ? "Resume" : "Pause";
+            button.displayString = PacketMonitorFeatureComponent.INSTANCE.isLoggingPaused() ? translate("resume") : translate("pause");
         } else if (button.id == 3) { // pause/resume
             if (selectedLine != -1 && selectedLine < filteredLogs.size()) {
                 setClipboardString(filteredLogs.get(selectedLine).getPacketData());
+                Notifier.showSuccess(translateToLocal("pdam.general.copied_to_clipboard"));
             }
         }
     }
@@ -170,18 +173,18 @@ public class PacketLogGuiScreen extends GuiScreen {
         drawDefaultBackground();
 
         // Title
-        drawCenteredString(this.fontRendererObj, "Packet Log Viewer", this.width / 2, 20, 0xFFFFFF);
+        drawCenteredString(this.fontRendererObj, translate("title"), this.width / 2, 20, 0xFFFFFF);
 
         // Search Field
-        drawString(this.fontRendererObj, "Search:", searchField.xPosition - 45, 45, 0xA0A0A0);
+        drawString(this.fontRendererObj, translate("search") + ":", searchField.xPosition - 45, 45, 0xA0A0A0);
         this.searchField.drawTextBox();
 
         // Headers
         int headerY = 70;
         int left = 20;
-        drawString(this.fontRendererObj, "Time", left + 5, headerY, 0xFFFFFF);
-        drawString(this.fontRendererObj, "Packet Name", left + 80, headerY, 0xFFFFFF);
-        drawString(this.fontRendererObj, "Packet Data", left + 200, headerY, 0xFFFFFF);
+        drawString(this.fontRendererObj, translate("time"), left + 5, headerY, 0xFFFFFF);
+        drawString(this.fontRendererObj, translate("packet_name"), left + 80, headerY, 0xFFFFFF);
+        drawString(this.fontRendererObj, translate("packet_data"), left + 200, headerY, 0xFFFFFF);
 
         int top = 90;
         int bottom = this.height - 40;
@@ -312,6 +315,10 @@ public class PacketLogGuiScreen extends GuiScreen {
         int totalContentHeight = getTotalContentHeight();
 
         maxScroll = Math.max(0, totalContentHeight - visibleHeight);
+    }
+
+    private String translate(String key) {
+        return translateToLocal("pdam.gui.packet_log." + key);
     }
 
 }
