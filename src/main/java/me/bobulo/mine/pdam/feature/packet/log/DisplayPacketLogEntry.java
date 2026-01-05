@@ -27,7 +27,12 @@ public class DisplayPacketLogEntry {
           DATE_TIME_FORMATTER.format(packetLogEntry.getTimestamp()),
           packetLogEntry.getPacketName().replaceFirst("PacketMetadata", ""),
           shortData,
-          json
+          json,
+          new String[]{
+            packetLogEntry.getPacketName().toLowerCase(),
+            packetLogEntry.getDirection().name().toLowerCase(),
+            json.toLowerCase()
+          }
         );
     }
 
@@ -38,13 +43,15 @@ public class DisplayPacketLogEntry {
     private final String packetDataShort;
     private final String packetData;
     private boolean expanded;
+    private String[] searchTerms;
 
-    private DisplayPacketLogEntry(PacketLogEntry packetLogEntry, String formattedTime, String packetName, String packetDataShort, String packetData) {
+    private DisplayPacketLogEntry(PacketLogEntry packetLogEntry, String formattedTime, String packetName, String packetDataShort, String packetData, String[] searchTerms) {
         this.packetLogEntry = packetLogEntry;
         this.formattedTime = formattedTime;
         this.packetName = packetName;
         this.packetDataShort = packetDataShort;
         this.packetData = packetData;
+        this.searchTerms = searchTerms;
     }
 
     public PacketLogEntry getPacketLogEntry() {
@@ -75,4 +82,7 @@ public class DisplayPacketLogEntry {
         this.expanded = expanded;
     }
 
+    public String[] getSearchTerms() {
+        return searchTerms;
+    }
 }

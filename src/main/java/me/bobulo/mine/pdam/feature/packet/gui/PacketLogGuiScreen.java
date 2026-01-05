@@ -4,15 +4,13 @@ import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PacketLogGuiScreen extends GuiScreen {
 
@@ -28,8 +26,6 @@ public class PacketLogGuiScreen extends GuiScreen {
     private boolean isDraggingScrollbar = false;
     private int dragStartY = 0;
     private int dragStartScrollPos = 0;
-
-    private final Object logsLock = new Object();
 
     public PacketLogGuiScreen(List<DisplayPacketLogEntry> allLogs) {
         this.allLogs = allLogs;
@@ -259,9 +255,7 @@ public class PacketLogGuiScreen extends GuiScreen {
     }
 
     public void refreshLogs(List<DisplayPacketLogEntry> newLogs) {
-        synchronized (logsLock) {
-            this.allLogs = newLogs;
-        }
+        this.allLogs = newLogs;
         filterLogs();
     }
 
@@ -272,12 +266,24 @@ public class PacketLogGuiScreen extends GuiScreen {
     private void filterLogs() {
         String searchText = searchField.getText().toLowerCase();
 
-        synchronized (logsLock) {
-            filteredLogs = allLogs.stream()
-              .filter(log -> searchText.isEmpty() ||
-                log.getPacketName().contains(searchText) ||
-                log.getPacketData().contains(searchText))
-              .collect(Collectors.toList());
+        if (searchText.isEmpty()) {
+            filteredLogs = allLogs;
+        } else {
+            List<DisplayPacketLogEntry> filtered = new ArrayList<>(allLogs.size());
+
+            for (DisplayPacketLogEntry log : allLogs) {
+                if (log.getSearchTerms() != null) {
+                    for (String searchTerm : log.getSearchTerms()) {
+                        if (searchTerm.contains(searchText)) {
+                            filtered.add(log);
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+            filteredLogs = filtered;
         }
 
         updateMaxScroll();
