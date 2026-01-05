@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature.packet.gui;
 
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -43,6 +44,9 @@ public class PacketLogGuiScreen extends GuiScreen {
         this.buttonList.add(new GuiButton(0, this.width - 80, this.height - 30, 60, 20, "Close"));
         this.buttonList.add(new GuiButton(1, this.width - 150, this.height - 30, 60, 20, "Clear"));
 
+        String pauseResumeText = PacketMonitorFeatureComponent.INSTANCE.isLoggingPaused() ? "Resume" : "Pause";
+        this.buttonList.add(new GuiButton(2, this.width - 220, this.height - 30, 60, 20, pauseResumeText));
+
         filterLogs();
     }
 
@@ -53,11 +57,14 @@ public class PacketLogGuiScreen extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.id == 0) {
+        if (button.id == 0) { // close
             this.mc.displayGuiScreen(null);
-        } else if (button.id == 1) {
+        } else if (button.id == 1) { // clear
             allLogs.clear();
             filterLogs();
+        } else if (button.id == 2) { // pause/resume
+            PacketMonitorFeatureComponent.INSTANCE.pauseLogging(!PacketMonitorFeatureComponent.INSTANCE.isLoggingPaused());
+            button.displayString = PacketMonitorFeatureComponent.INSTANCE.isLoggingPaused() ? "Resume" : "Pause";
         }
     }
 

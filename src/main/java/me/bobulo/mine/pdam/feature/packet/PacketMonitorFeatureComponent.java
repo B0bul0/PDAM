@@ -21,6 +21,7 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
     private static final int MAX_LOGS = 2_000_000;
 
     private int maxLogLimit = MAX_LOGS;
+    private boolean pauseLogging = false;
 
     private BoundedConcurrentList<DisplayPacketLogEntry> packetEntries;
 
@@ -41,6 +42,10 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
           .max(MAX_LOGS)
           .min(1)
           .onUpdate(this::setMaxLogLimit);
+
+        context.createProperty("pauseLogging", false)
+          .comment("Pause packet logging (default: false)")
+          .onUpdate(this::pauseLogging);
     }
 
     @Override
@@ -54,6 +59,10 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
     }
 
     public void addPacketEntry(@NotNull PacketLogEntry packetLogEntry) {
+        if (isLoggingPaused()) {
+            return;
+        }
+
         DisplayPacketLogEntry display = DisplayPacketLogEntry.create(packetLogEntry);
 
         packetEntries.add(display);
@@ -84,6 +93,14 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
         }
 
         this.packetEntries = newList;
+    }
+
+    public void pauseLogging(boolean pauseLogging) {
+        this.pauseLogging = pauseLogging;
+    }
+
+    public boolean isLoggingPaused() {
+        return pauseLogging;
     }
 
     @NotNull
