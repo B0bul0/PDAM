@@ -18,7 +18,7 @@ public final class MapsServerPacketData implements ServerPacketData {
 
     private int mapId;
     private byte mapScale;
-    private List<Vec4b> mapVisiblePlayerIcons;
+    private List<MapIcon> mapVisiblePlayerIcons;
     private int mapMinX;
     private int mapMinY;
     private int mapMaxX;
@@ -28,6 +28,20 @@ public final class MapsServerPacketData implements ServerPacketData {
     @Override
     public @NotNull String getPacketName() {
         return PACKET_NAME;
+    }
+
+    public static class MapIcon {
+        private byte type;
+        private byte x;
+        private byte y;
+        private byte direction;
+
+        public MapIcon(byte type, byte x, byte y, byte direction) {
+            this.type = type;
+            this.x = x;
+            this.y = y;
+            this.direction = direction;
+        }
     }
 
     public static class Serializer implements PacketDataSerializer<MapsServerPacketData> {
@@ -50,7 +64,7 @@ public final class MapsServerPacketData implements ServerPacketData {
                 byte x = buf.readByte();
                 byte y = buf.readByte();
                 byte direction = (byte) (type & 15);
-                data.mapVisiblePlayerIcons.add(new Vec4b((byte) (type >> 4 & 15), x, y, direction));
+                data.mapVisiblePlayerIcons.add(new MapIcon((byte) (type >> 4 & 15), x, y, direction));
             }
 
             int columns = buf.readUnsignedByte();
@@ -67,4 +81,3 @@ public final class MapsServerPacketData implements ServerPacketData {
 
     }
 }
-

@@ -30,6 +30,22 @@ public final class EntityMetadataFactory {
     }
 
     /**
+     * Creates EntityMetadata of specific entity type from DataWatcher.
+     */
+    public static EntityMetadata create(DataWatcher dataWatcher, int entityType) {
+        Class<? extends EntityMetadata> entityMetadataClass = EntityMetadataRegistry.getMetadataClassById(entityType);
+        return create(dataWatcher, entityMetadataClass);
+    }
+
+    /**
+     * Creates EntityMetadata of specific entity type from WatchableObject list.
+     */
+    public static EntityMetadata create(List<DataWatcher.WatchableObject> watchableObjects, int entityType) {
+        Class<? extends EntityMetadata> entityMetadataClass = EntityMetadataRegistry.getMetadataClassById(entityType);
+        return create(watchableObjects, entityMetadataClass);
+    }
+
+    /**
      * Creates base EntityMetadata from DataWatcher.
      */
     public static EntityMetadata create(DataWatcher dataWatcher) {

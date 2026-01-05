@@ -46,11 +46,10 @@ public final class SpawnMobServerPacketData implements ServerPacketData {
             data.yaw = packet.getYaw();
             data.pitch = packet.getPitch();
             data.headPitch = packet.getHeadPitch();
-            data.metadata = EntityMetadataFactory.create(packet.func_149027_c());
+            data.metadata = EntityMetadataFactory.create(packet.func_149027_c(), data.type);
             return data;
         }
 
     }
 
 }
-
