@@ -2,10 +2,12 @@ package me.bobulo.mine.pdam.feature.packet.data;
 
 import me.bobulo.mine.pdam.feature.packet.ConnectionState;
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.data.client.*;
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
 import me.bobulo.mine.pdam.feature.packet.data.server.*;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.*;
 
 import java.io.IOException;
@@ -22,6 +24,7 @@ public final class PacketCodecRegistry {
     }
 
     public static void registerDefaults() {
+        // Server
         registerExtractor(S00PacketKeepAlive.class, new KeepAliveServerPacketData.Extractor());
         registerExtractor(S01PacketJoinGame.class, new JoinGameServerPacketData.Extractor());
         registerExtractor(S02PacketChat.class, new ChatMessageServerPacketData.Extractor());
@@ -95,6 +98,34 @@ public final class PacketCodecRegistry {
         registerExtractor(S47PacketPlayerListHeaderFooter.class, new PlayerListHeaderFooterServerPacketData.Extractor());
         registerExtractor(S48PacketResourcePackSend.class, new ResourcePackSendServerPacketData.Extractor());
         registerSerializer(new UpdateEntityNBTServerPacketData.Serializer());
+
+        // Client
+        registerExtractor(C00PacketKeepAlive.class, new KeepAliveClientPacketData.Extractor());
+        registerExtractor(C01PacketChatMessage.class, new ChatMessageClientPacketData.Extractor());
+        registerExtractor(C02PacketUseEntity.class, new UseEntityClientPacketData.Extractor());
+        registerExtractor(C03PacketPlayer.class, new PlayerClientPacketData.Extractor());
+        registerExtractor(C03PacketPlayer.C04PacketPlayerPosition.class, new PlayerPositionClientPacketData.PositionExtractor());
+        registerExtractor(C03PacketPlayer.C05PacketPlayerLook.class, new PlayerLookClientPacketData.LookExtractor());
+        registerExtractor(C03PacketPlayer.C06PacketPlayerPosLook.class, new PlayerPositionLookClientPacketData.PositionLookExtractor());
+        registerExtractor(C07PacketPlayerDigging.class, new PlayerDiggingClientPacketData.Extractor());
+        registerExtractor(C08PacketPlayerBlockPlacement.class, new PlayerBlockPlacementClientPacketData.Extractor());
+        registerExtractor(C09PacketHeldItemChange.class, new HeldItemChangeClientPacketData.Extractor());
+        registerExtractor(C0APacketAnimation.class, new AnimationClientPacketData.Extractor());
+        registerExtractor(C0BPacketEntityAction.class, new EntityActionClientPacketData.Extractor());
+        registerExtractor(C0CPacketInput.class, new SteerVehicleClientPacketData.Extractor());
+        registerExtractor(C0DPacketCloseWindow.class, new CloseWindowClientPacketData.Extractor());
+        registerExtractor(C0EPacketClickWindow.class, new ClickWindowClientPacketData.Extractor());
+        registerExtractor(C0FPacketConfirmTransaction.class, new ConfirmTransactionClientPacketData.Extractor());
+        registerExtractor(C10PacketCreativeInventoryAction.class, new CreativeInventoryActionClientPacketData.Extractor());
+        registerExtractor(C11PacketEnchantItem.class, new EnchantItemClientPacketData.Extractor());
+        registerExtractor(C12PacketUpdateSign.class, new UpdateSignClientPacketData.Extractor());
+        registerExtractor(C13PacketPlayerAbilities.class, new PlayerAbilitiesClientPacketData.Extractor());
+        registerExtractor(C14PacketTabComplete.class, new TabCompleteClientPacketData.Extractor());
+        registerExtractor(C15PacketClientSettings.class, new ClientSettingsClientPacketData.Extractor());
+        registerExtractor(C16PacketClientStatus.class, new ClientStatusClientPacketData.Extractor());
+        registerExtractor(C17PacketCustomPayload.class, new PluginMessageClientPacketData.Extractor());
+        registerExtractor(C18PacketSpectate.class, new SpectateClientPacketData.Extractor());
+        registerExtractor(C19PacketResourcePackStatus.class, new ResourcePackStatusClientPacketData.Extractor());
     }
 
     /* Extractor */
