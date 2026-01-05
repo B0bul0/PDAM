@@ -2,8 +2,11 @@ package me.bobulo.mine.pdam.mixin;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import me.bobulo.mine.pdam.feature.packet.ConnectionState;
 import me.bobulo.mine.pdam.feature.packet.event.CompressPacketEvent;
+import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.NettyCompressionEncoder;
+import net.minecraft.network.NetworkManager;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,10 +21,18 @@ public class MixinNettyCompressionEncoder {
     private void onEncodeHead(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out, CallbackInfo ci) {
         int readerIndex = msg.readerIndex();
 
+
         try {
             if (msg.readableBytes() > 0) {
+                EnumConnectionState nmsState = ctx.channel().attr(NetworkManager.attrKeyConnectionState).get();
+                ConnectionState state = ConnectionState.fromNMS(nmsState);
+
+                if (state == null) {
+                    return;
+                }
+
                 int packetId = pdam$readVarInt(msg);
-                MinecraftForge.EVENT_BUS.post(new CompressPacketEvent(packetId, msg.slice()));
+                MinecraftForge.EVENT_BUS.post(new CompressPacketEvent(state, packetId, msg.slice()));
             }
         } finally {
             msg.readerIndex(readerIndex);

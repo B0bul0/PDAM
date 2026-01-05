@@ -2,6 +2,7 @@ package me.bobulo.mine.pdam.feature.packet.data.reader;
 
 import me.bobulo.mine.pdam.feature.packet.data.PacketData;
 import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
+import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -19,12 +20,7 @@ import java.io.IOException;
  */
 public interface PacketDataSerializer<T extends PacketData> extends PacketDataReader<T> {
 
-    /**
-     * Gets the unique packet ID for this serializer.
-     *
-     * @return the packet ID
-     */
-    int getPacketId();
+    SerializerKey getKey();
 
     /**
      * Reads and deserializes packet data from the provided buffer.

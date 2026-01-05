@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.packet.log;
 
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.data.PacketData;
 
 import java.time.Instant;
@@ -30,11 +31,6 @@ public class PacketLogEntry {
 
     public String getPacketName() {
         return packetData.getPacketName();
-    }
-
-    public enum PacketDirection {
-        SERVER,
-        CLIENT
     }
 
 }

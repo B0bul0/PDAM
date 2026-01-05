@@ -1,14 +1,11 @@
 package me.bobulo.mine.pdam.feature.packet.data.server;
 
-import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
 import me.bobulo.mine.pdam.feature.packet.data.entity.PlayerMetadata;
 import me.bobulo.mine.pdam.feature.packet.data.entity.factory.EntityMetadataFactory;
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
-import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.UUID;
 
 public final class SpawnPlayerServerPacketData implements ServerPacketData {
@@ -28,31 +25,6 @@ public final class SpawnPlayerServerPacketData implements ServerPacketData {
     @Override
     public @NotNull String getPacketName() {
         return PACKET_NAME;
-    }
-
-    public static class Serializer implements PacketDataSerializer<SpawnPlayerServerPacketData> {
-
-        @Override
-        public int getPacketId() {
-            return 0x0C;
-        }
-
-        @Override
-        public @NotNull SpawnPlayerServerPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
-            SpawnPlayerServerPacketData data = new SpawnPlayerServerPacketData();
-
-            data.entityId = buf.readVarIntFromBuffer();
-            data.playerId = buf.readUuid();
-            data.x = buf.readInt();
-            data.y = buf.readInt();
-            data.z = buf.readInt();
-            data.yaw = buf.readByte();
-            data.pitch = buf.readByte();
-            data.currentItem = buf.readShort();
-            data.metadata = buf.readEntityMetadata(PlayerMetadata.class);
-
-            return data;
-        }
     }
 
     public static class Extractor implements PacketDataExtractor<SpawnPlayerServerPacketData, S0CPacketSpawnPlayer> {

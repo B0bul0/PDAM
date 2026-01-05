@@ -1,5 +1,7 @@
 package me.bobulo.mine.pdam.feature.packet.interceptor;
 
+import me.bobulo.mine.pdam.feature.packet.ConnectionState;
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.packet.data.PacketCodecRegistry;
 import me.bobulo.mine.pdam.feature.packet.data.PacketData;
@@ -9,7 +11,6 @@ import me.bobulo.mine.pdam.feature.packet.event.DecompressPacketEvent;
 import me.bobulo.mine.pdam.feature.packet.event.ReceivePacketEvent;
 import me.bobulo.mine.pdam.feature.packet.event.SendPacketEvent;
 import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry;
-import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry.PacketDirection;
 import net.minecraft.network.Packet;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
@@ -69,7 +70,7 @@ public class PacketDataInterceptor {
     public void onDecompressPacket(DecompressPacketEvent event) {
         try {
             PacketDataBuffer buf = new PacketDataBuffer(event.getBuffer().duplicate());
-            PacketData packetData = PacketCodecRegistry.decode(event.getPacketId(), buf);
+            PacketData packetData = PacketCodecRegistry.decode(event.getConnectionState(), PacketDirection.SERVER, event.getPacketId(), buf);
 
             if (packetData == null) {
                 return;
@@ -86,7 +87,7 @@ public class PacketDataInterceptor {
     public void onCompressPacket(CompressPacketEvent event) {
         try {
             PacketDataBuffer buf = new PacketDataBuffer(event.getBuffer().duplicate());
-            PacketData packetData = PacketCodecRegistry.decode(event.getPacketId(), buf);
+            PacketData packetData = PacketCodecRegistry.decode(event.getConnectionState(), PacketDirection.CLIENT, event.getPacketId(), buf);
 
             if (packetData == null) {
                 return;
