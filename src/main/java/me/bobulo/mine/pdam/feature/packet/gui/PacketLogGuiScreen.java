@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.packet.gui;
 
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -192,6 +193,8 @@ public class PacketLogGuiScreen extends GuiScreen {
 
                 // Packet Name
                 if (yPos + 2 >= top && yPos + 2 < bottom) {
+                    int packetNameColor = entry.getDirection() == PacketDirection.SERVER ? 0x80FF80 : 0xFF8080;
+                    drawString(this.fontRendererObj, entry.getDirection() == PacketDirection.SERVER ? "▼" : "▲", left + 73, yPos + 2, packetNameColor);
                     drawString(this.fontRendererObj, entry.getPacketName(), left + 80, yPos + 2, textColor);
                 }
 

@@ -2,6 +2,7 @@ package me.bobulo.mine.pdam.feature.packet.log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -85,4 +86,9 @@ public class DisplayPacketLogEntry {
     public String[] getSearchTerms() {
         return searchTerms;
     }
+
+    public PacketDirection getDirection() {
+        return packetLogEntry.getDirection();
+    }
+
 }
