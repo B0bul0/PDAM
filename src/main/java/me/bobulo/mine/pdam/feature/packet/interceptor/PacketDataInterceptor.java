@@ -1,6 +1,5 @@
 package me.bobulo.mine.pdam.feature.packet.interceptor;
 
-import me.bobulo.mine.pdam.feature.packet.ConnectionState;
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.packet.data.PacketCodecRegistry;
@@ -16,7 +15,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.time.Instant;
 
 public class PacketDataInterceptor {
@@ -41,7 +39,7 @@ public class PacketDataInterceptor {
             }
 
             registerIncomingPacket(packetData);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn("Failed to extract packet data for incoming packet: {}",
               packet.getClass().getSimpleName(), e);
         }
@@ -58,7 +56,7 @@ public class PacketDataInterceptor {
             }
 
             registerOutgoingPacket(packetData);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn("Failed to extract packet data for outgoing packet: {}",
               packet.getClass().getSimpleName(), e);
         }
@@ -77,7 +75,7 @@ public class PacketDataInterceptor {
             }
 
             registerIncomingPacket(packetData);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn("Failed to decode packet data for packet ID: 0x{}",
               Integer.toHexString(event.getPacketId()), e);
         }
@@ -94,7 +92,7 @@ public class PacketDataInterceptor {
             }
 
             registerOutgoingPacket(packetData);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn("Failed to encode packet data for packet ID: 0x{}",
               Integer.toHexString(event.getPacketId()), e);
         }
