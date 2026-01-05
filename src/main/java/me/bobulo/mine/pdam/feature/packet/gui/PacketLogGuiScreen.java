@@ -4,6 +4,7 @@ import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.notification.Notifier;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -74,6 +75,8 @@ public class PacketLogGuiScreen extends GuiScreen {
             if (selectedLine != -1 && selectedLine < filteredLogs.size()) {
                 setClipboardString(filteredLogs.get(selectedLine).getPacketData());
                 Notifier.showSuccess(translateToLocal("pdam.general.copied_to_clipboard"));
+            } else {
+                Notifier.showWarning(translateToLocal("pdam.gui.packet_log.no_selection"));
             }
         }
     }

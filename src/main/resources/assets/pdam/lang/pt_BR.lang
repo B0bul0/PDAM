@@ -70,3 +70,4 @@ pdam.gui.packet_log.search=Pesquisar
 pdam.gui.packet_log.time=Horário
 pdam.gui.packet_log.packet_name=Nome
 pdam.gui.packet_log.packet_data=Dados do Pacote
+pdam.gui.packet_log.no_selection=Nenhum pacote selecionado
