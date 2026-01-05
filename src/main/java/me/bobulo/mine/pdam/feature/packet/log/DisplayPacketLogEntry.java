@@ -17,9 +17,10 @@ public class DisplayPacketLogEntry {
       .create();
 
     public static DisplayPacketLogEntry create(PacketLogEntry packetLogEntry) {
-        String json = GSON.toJson(packetLogEntry.getPacketData());
+        String json = GSON.toJson(packetLogEntry.getPacketData()).replace('§', '&');
+
         String shortData = json.length() > 200 ? json.substring(0, 200) + "..." : json;
-        shortData = shortData.replace("\n", " ").replace("\r", " ");
+        shortData = shortData.replaceAll("\\s+", " ");
 
         return new DisplayPacketLogEntry(
           packetLogEntry,
