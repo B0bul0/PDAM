@@ -10,6 +10,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Entity Information Panel**: Displays an on-screen panel with real-time information about the entity you are looking at.
 - **Skin Extraction**: Extract skins from players and heads.
 - **Copy Chat Messages**: Allows copying chat messages to clipboard by holding CTRL and clicking on the message.
+- **Packet Monitoring**: Monitors and logs incoming and outgoing packets for debugging purposes.
 
 ## Installation
 1. Ensure you have Minecraft Forge for version 1.8.9 installed.
