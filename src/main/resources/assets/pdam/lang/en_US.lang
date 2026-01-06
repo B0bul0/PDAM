@@ -62,7 +62,7 @@ pdam.packet_monitor.pauseLogging=Pause Logging
 # Packet Log Gui
 pdam.gui.packet_log.title=Packet Log Viewer
 pdam.gui.packet_log.copy=Copy
-pdam.gui.packet_log.close=Close
+pdam.gui.packet_log.close=Done
 pdam.gui.packet_log.clear=Clear
 pdam.gui.packet_log.pause=Pause
 pdam.gui.packet_log.resume=Resume
