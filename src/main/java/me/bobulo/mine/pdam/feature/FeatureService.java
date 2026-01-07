@@ -52,6 +52,27 @@ public final class FeatureService {
     }
 
     /**
+     * Checks if a feature with the given ID is registered.
+     *
+     * @param name The ID of the feature to check.
+     * @return {@code true} if the feature is registered, {@code false} otherwise.
+     */
+    public boolean isFeatureRegistered(String name) {
+        return features.containsKey(name);
+    }
+
+    /**
+     * Checks if a feature with the given ID is enabled.
+     *
+     * @param name The ID of the feature to check.
+     * @return {@code true} if the feature is enabled, {@code false} otherwise.
+     */
+    public boolean isFeatureEnabled(String name) {
+        Feature feature = getFeature(name);
+        return feature != null && feature.isEnabled();
+    }
+
+    /**
      * Gets a list of all registered features, sorted alphabetically by their ID.
      *
      * @return A sorted list of {@link Feature} instances.

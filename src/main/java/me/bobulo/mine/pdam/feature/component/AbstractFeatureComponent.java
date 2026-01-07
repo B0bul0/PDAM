@@ -24,6 +24,7 @@ public abstract class AbstractFeatureComponent implements FeatureComponent {
         Validate.isTrue(this.feature == null, "FeatureComponent is already initialized");
 
         this.feature = feature;
+        onInit();
     }
 
     public Feature getFeature() {
@@ -49,6 +50,14 @@ public abstract class AbstractFeatureComponent implements FeatureComponent {
             this.onDisable();
             enabled = false;
         }
+    }
+
+
+    /**
+     * Called during initialization of the FeatureComponent.
+     */
+    protected void onInit() {
+        // Optional
     }
 
     /**

@@ -52,3 +52,22 @@ pdam.skin_extraction.message.title=Informações da Skin de %1$s
 pdam.skin_extraction.message.value_data=Value
 pdam.skin_extraction.message.signature_data=Signature
 pdam.skin_extraction.message.url=URL
+
+# Packet Monitor Feature
+packet_monitor=Packet Monitor
+pdam.packet_monitor.enabled=Ativado
+pdam.packet_monitor.maxLogLimit=Limite Máximo de Logs
+pdam.packet_monitor.pauseLogging=Pausar Logs
+
+# Packet Log Gui
+pdam.gui.packet_log.title=Vizualização de Pacotes
+pdam.gui.packet_log.copy=Copiar
+pdam.gui.packet_log.close=Fechar
+pdam.gui.packet_log.clear=Limpar
+pdam.gui.packet_log.pause=Pausar
+pdam.gui.packet_log.resume=Retomar
+pdam.gui.packet_log.search=Pesquisar
+pdam.gui.packet_log.time=Horário
+pdam.gui.packet_log.packet_name=Nome
+pdam.gui.packet_log.packet_data=Dados do Pacote
+pdam.gui.packet_log.no_selection=Nenhum pacote selecionado
