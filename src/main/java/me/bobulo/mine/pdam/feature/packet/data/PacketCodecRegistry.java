@@ -102,7 +102,7 @@ public final class PacketCodecRegistry {
         // Client
         registerExtractor(C00PacketKeepAlive.class, new KeepAliveClientPacketData.Extractor());
         registerExtractor(C01PacketChatMessage.class, new ChatMessageClientPacketData.Extractor());
-        registerExtractor(C02PacketUseEntity.class, new UseEntityClientPacketData.Extractor());
+        registerSerializer(new UseEntityClientPacketData.Serializer());
         registerExtractor(C03PacketPlayer.class, new PlayerClientPacketData.Extractor());
         registerExtractor(C03PacketPlayer.C04PacketPlayerPosition.class, new PlayerPositionClientPacketData.PositionExtractor());
         registerExtractor(C03PacketPlayer.C05PacketPlayerLook.class, new PlayerLookClientPacketData.LookExtractor());
@@ -111,21 +111,21 @@ public final class PacketCodecRegistry {
         registerExtractor(C08PacketPlayerBlockPlacement.class, new PlayerBlockPlacementClientPacketData.Extractor());
         registerExtractor(C09PacketHeldItemChange.class, new HeldItemChangeClientPacketData.Extractor());
         registerExtractor(C0APacketAnimation.class, new AnimationClientPacketData.Extractor());
-        registerExtractor(C0BPacketEntityAction.class, new EntityActionClientPacketData.Extractor());
+        registerSerializer(new EntityActionClientPacketData.Serializer());
         registerExtractor(C0CPacketInput.class, new SteerVehicleClientPacketData.Extractor());
-        registerExtractor(C0DPacketCloseWindow.class, new CloseWindowClientPacketData.Extractor());
+        registerSerializer(new CloseWindowClientPacketData.Serializer());
         registerExtractor(C0EPacketClickWindow.class, new ClickWindowClientPacketData.Extractor());
-        registerExtractor(C0FPacketConfirmTransaction.class, new ConfirmTransactionClientPacketData.Extractor());
+        registerSerializer(new ConfirmTransactionClientPacketData.Serializer());
         registerExtractor(C10PacketCreativeInventoryAction.class, new CreativeInventoryActionClientPacketData.Extractor());
         registerExtractor(C11PacketEnchantItem.class, new EnchantItemClientPacketData.Extractor());
         registerExtractor(C12PacketUpdateSign.class, new UpdateSignClientPacketData.Extractor());
-        registerExtractor(C13PacketPlayerAbilities.class, new PlayerAbilitiesClientPacketData.Extractor());
+        registerSerializer(new PlayerAbilitiesClientPacketData.Serializer());
         registerExtractor(C14PacketTabComplete.class, new TabCompleteClientPacketData.Extractor());
-        registerExtractor(C15PacketClientSettings.class, new ClientSettingsClientPacketData.Extractor());
+        registerSerializer(new ClientSettingsClientPacketData.Serializer());
         registerExtractor(C16PacketClientStatus.class, new ClientStatusClientPacketData.Extractor());
         registerExtractor(C17PacketCustomPayload.class, new PluginMessageClientPacketData.Extractor());
-        registerExtractor(C18PacketSpectate.class, new SpectateClientPacketData.Extractor());
-        registerExtractor(C19PacketResourcePackStatus.class, new ResourcePackStatusClientPacketData.Extractor());
+        registerSerializer(new SpectateClientPacketData.Serializer());
+        registerSerializer(new ResourcePackStatusClientPacketData.Serializer());
     }
 
     /* Extractor */
