@@ -1,9 +1,13 @@
 package me.bobulo.mine.pdam.feature.packet.data.client;
 
-import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
-import me.bobulo.mine.pdam.util.ReflectionUtils;
-import net.minecraft.network.play.client.C13PacketPlayerAbilities;
+import me.bobulo.mine.pdam.feature.packet.ConnectionState;
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
+import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
+import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public final class PlayerAbilitiesClientPacketData implements ClientPacketData {
 
@@ -21,17 +25,23 @@ public final class PlayerAbilitiesClientPacketData implements ClientPacketData {
         return PACKET_NAME;
     }
 
-    public static class Extractor implements PacketDataExtractor<PlayerAbilitiesClientPacketData, C13PacketPlayerAbilities> {
+    public static class Serializer implements PacketDataSerializer<PlayerAbilitiesClientPacketData> {
 
         @Override
-        public @NotNull PlayerAbilitiesClientPacketData extract(@NotNull C13PacketPlayerAbilities packet) {
+        public SerializerKey getKey() {
+            return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x13);
+        }
+
+        @Override
+        public @NotNull PlayerAbilitiesClientPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
             PlayerAbilitiesClientPacketData data = new PlayerAbilitiesClientPacketData();
-            data.invulnerable = packet.isInvulnerable();
-            data.flying = packet.isFlying();
-            data.allowFlying = packet.isAllowFlying();
-            data.creativeMode = packet.isCreativeMode();
-            data.flySpeed = ReflectionUtils.getFieldValue(packet, "flySpeed");
-            data.walkSpeed = ReflectionUtils.getFieldValue(packet, "walkSpeed");
+            byte flags = buf.readByte();
+            data.invulnerable = (flags & 1) != 0;
+            data.flying = (flags & 2) != 0;
+            data.allowFlying = (flags & 4) != 0;
+            data.creativeMode = (flags & 8) != 0;
+            data.flySpeed = buf.readFloat();
+            data.walkSpeed = buf.readFloat();
             return data;
         }
     }

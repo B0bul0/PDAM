@@ -1,10 +1,13 @@
 package me.bobulo.mine.pdam.feature.packet.data.client;
 
-import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
-import me.bobulo.mine.pdam.util.ReflectionUtils;
-import net.minecraft.network.play.client.C18PacketSpectate;
+import me.bobulo.mine.pdam.feature.packet.ConnectionState;
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
+import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
+import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.UUID;
 
 public final class SpectateClientPacketData implements ClientPacketData {
@@ -18,12 +21,17 @@ public final class SpectateClientPacketData implements ClientPacketData {
         return PACKET_NAME;
     }
 
-    public static class Extractor implements PacketDataExtractor<SpectateClientPacketData, C18PacketSpectate> {
+    public static class Serializer implements PacketDataSerializer<SpectateClientPacketData> {
 
         @Override
-        public @NotNull SpectateClientPacketData extract(@NotNull C18PacketSpectate packet) {
+        public SerializerKey getKey() {
+            return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x18);
+        }
+
+        @Override
+        public @NotNull SpectateClientPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
             SpectateClientPacketData data = new SpectateClientPacketData();
-            data.id = ReflectionUtils.getFieldValue(packet, "id");
+            data.id = buf.readUuid();
             return data;
         }
 

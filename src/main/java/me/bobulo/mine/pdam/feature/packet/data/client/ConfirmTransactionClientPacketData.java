@@ -1,9 +1,13 @@
 package me.bobulo.mine.pdam.feature.packet.data.client;
 
-import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
-import me.bobulo.mine.pdam.util.ReflectionUtils;
-import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
+import me.bobulo.mine.pdam.feature.packet.ConnectionState;
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
+import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
+import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public final class ConfirmTransactionClientPacketData implements ClientPacketData {
 
@@ -18,14 +22,19 @@ public final class ConfirmTransactionClientPacketData implements ClientPacketDat
         return PACKET_NAME;
     }
 
-    public static class Extractor implements PacketDataExtractor<ConfirmTransactionClientPacketData, C0FPacketConfirmTransaction> {
+    public static class Serializer implements PacketDataSerializer<ConfirmTransactionClientPacketData> {
 
         @Override
-        public @NotNull ConfirmTransactionClientPacketData extract(@NotNull C0FPacketConfirmTransaction packet) {
+        public SerializerKey getKey() {
+            return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x0F);
+        }
+
+        @Override
+        public @NotNull ConfirmTransactionClientPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
             ConfirmTransactionClientPacketData data = new ConfirmTransactionClientPacketData();
-            data.windowId = packet.getWindowId();
-            data.uid = packet.getUid();
-            data.accepted = ReflectionUtils.getFieldValue(packet, "accepted");
+            data.windowId = buf.readByte();
+            data.uid = buf.readShort();
+            data.accepted = buf.readBoolean();
             return data;
         }
 

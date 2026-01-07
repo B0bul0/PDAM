@@ -1,10 +1,14 @@
 package me.bobulo.mine.pdam.feature.packet.data.client;
 
-import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
-import me.bobulo.mine.pdam.util.ReflectionUtils;
+import me.bobulo.mine.pdam.feature.packet.ConnectionState;
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
+import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
+import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.play.client.C15PacketClientSettings;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public final class ClientSettingsClientPacketData implements ClientPacketData {
 
@@ -21,16 +25,21 @@ public final class ClientSettingsClientPacketData implements ClientPacketData {
         return PACKET_NAME;
     }
 
-    public static class Extractor implements PacketDataExtractor<ClientSettingsClientPacketData, C15PacketClientSettings> {
+    public static class Serializer implements PacketDataSerializer<ClientSettingsClientPacketData> {
 
         @Override
-        public @NotNull ClientSettingsClientPacketData extract(@NotNull C15PacketClientSettings packet) {
+        public SerializerKey getKey() {
+            return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x15);
+        }
+
+        @Override
+        public @NotNull ClientSettingsClientPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
             ClientSettingsClientPacketData data = new ClientSettingsClientPacketData();
-            data.lang = packet.getLang();
-            data.view = ReflectionUtils.getFieldValue(packet, "view");
-            data.chatVisibility = packet.getChatVisibility();
-            data.enableColors = packet.isColorsEnabled();
-            data.modelPartFlags = packet.getModelPartFlags();
+            data.lang = buf.readString(7);
+            data.view = buf.readByte();
+            data.chatVisibility = EntityPlayer.EnumChatVisibility.getEnumChatVisibility(buf.readByte());
+            data.enableColors = buf.readBoolean();
+            data.modelPartFlags = buf.readUnsignedByte();
             return data;
         }
     }

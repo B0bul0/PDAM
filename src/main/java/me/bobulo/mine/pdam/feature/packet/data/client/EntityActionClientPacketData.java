@@ -1,9 +1,14 @@
 package me.bobulo.mine.pdam.feature.packet.data.client;
 
-import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
-import me.bobulo.mine.pdam.util.ReflectionUtils;
+import me.bobulo.mine.pdam.feature.packet.ConnectionState;
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
+import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
+import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public final class EntityActionClientPacketData implements ClientPacketData {
 
@@ -18,14 +23,19 @@ public final class EntityActionClientPacketData implements ClientPacketData {
         return PACKET_NAME;
     }
 
-    public static class Extractor implements PacketDataExtractor<EntityActionClientPacketData, C0BPacketEntityAction> {
+    public static class Serializer implements PacketDataSerializer<EntityActionClientPacketData> {
 
         @Override
-        public @NotNull EntityActionClientPacketData extract(@NotNull C0BPacketEntityAction packet) {
+        public SerializerKey getKey() {
+            return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x0B);
+        }
+
+        @Override
+        public @NotNull EntityActionClientPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
             EntityActionClientPacketData data = new EntityActionClientPacketData();
-            data.entityID = ReflectionUtils.getFieldValue(packet, "entityID");
-            data.action = packet.getAction();
-            data.auxData = packet.getAuxData();
+            data.entityID = buf.readVarInt();
+            data.action = C0BPacketEntityAction.Action.values()[buf.readByte()];
+            data.auxData = buf.readVarInt();
             return data;
         }
 

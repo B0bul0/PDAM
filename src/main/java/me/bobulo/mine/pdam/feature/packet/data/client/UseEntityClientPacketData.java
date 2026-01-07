@@ -1,10 +1,15 @@
 package me.bobulo.mine.pdam.feature.packet.data.client;
 
-import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
-import me.bobulo.mine.pdam.util.ReflectionUtils;
+import me.bobulo.mine.pdam.feature.packet.ConnectionState;
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
+import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
+import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.util.Vec3;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public final class UseEntityClientPacketData implements ClientPacketData {
 
@@ -19,14 +24,21 @@ public final class UseEntityClientPacketData implements ClientPacketData {
         return PACKET_NAME;
     }
 
-    public static class Extractor implements PacketDataExtractor<UseEntityClientPacketData, C02PacketUseEntity> {
+    public static class Serializer implements PacketDataSerializer<UseEntityClientPacketData> {
 
         @Override
-        public @NotNull UseEntityClientPacketData extract(@NotNull C02PacketUseEntity packet) {
+        public SerializerKey getKey() {
+            return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x02);
+        }
+
+        @Override
+        public @NotNull UseEntityClientPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
             UseEntityClientPacketData data = new UseEntityClientPacketData();
-            data.entityId = ReflectionUtils.getFieldValue(packet, "entityId");
-            data.action = packet.getAction();
-            data.hitVec = packet.getHitVec();
+            data.entityId = buf.readVarInt();
+            data.action = C02PacketUseEntity.Action.values()[buf.readVarInt()];
+            if (data.action == C02PacketUseEntity.Action.INTERACT_AT) {
+                data.hitVec = new Vec3(buf.readFloat(), buf.readFloat(), buf.readFloat());
+            }
             return data;
         }
 

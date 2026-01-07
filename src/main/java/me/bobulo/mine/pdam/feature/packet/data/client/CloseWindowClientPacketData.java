@@ -1,9 +1,13 @@
 package me.bobulo.mine.pdam.feature.packet.data.client;
 
-import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
-import me.bobulo.mine.pdam.util.ReflectionUtils;
-import net.minecraft.network.play.client.C0DPacketCloseWindow;
+import me.bobulo.mine.pdam.feature.packet.ConnectionState;
+import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
+import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
+import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public final class CloseWindowClientPacketData implements ClientPacketData {
 
@@ -16,12 +20,17 @@ public final class CloseWindowClientPacketData implements ClientPacketData {
         return PACKET_NAME;
     }
 
-    public static class Extractor implements PacketDataExtractor<CloseWindowClientPacketData, C0DPacketCloseWindow> {
+    public static class Serializer implements PacketDataSerializer<CloseWindowClientPacketData> {
 
         @Override
-        public @NotNull CloseWindowClientPacketData extract(@NotNull C0DPacketCloseWindow packet) {
+        public SerializerKey getKey() {
+            return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x0D);
+        }
+
+        @Override
+        public @NotNull CloseWindowClientPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
             CloseWindowClientPacketData data = new CloseWindowClientPacketData();
-            data.windowId = ReflectionUtils.getFieldValue(packet, "windowId");
+            data.windowId = buf.readByte();
             return data;
         }
 
