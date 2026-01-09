@@ -3,6 +3,11 @@ package me.bobulo.mine.pdam.feature;
 import me.bobulo.mine.pdam.config.ConfigBinder;
 import me.bobulo.mine.pdam.config.ConfigInitContext;
 import me.bobulo.mine.pdam.feature.component.FeatureComponent;
+import me.bobulo.mine.pdam.feature.event.FeatureComponentDisabledEvent;
+import me.bobulo.mine.pdam.feature.event.FeatureComponentEnabledEvent;
+import me.bobulo.mine.pdam.feature.event.FeatureDisabledEvent;
+import me.bobulo.mine.pdam.feature.event.FeatureEnabledEvent;
+import me.bobulo.mine.pdam.util.EventUtils;
 import me.bobulo.mine.pdam.util.ThreadUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +19,7 @@ import java.util.*;
 /**
  * Default implementation of a Feature.
  */
-public class FeatureImpl implements Feature, ComponentableFeature {
+public final class FeatureImpl implements Feature, ComponentableFeature {
 
     private static final Logger log = LogManager.getLogger(FeatureImpl.class);
 
@@ -76,6 +81,8 @@ public class FeatureImpl implements Feature, ComponentableFeature {
             onEnable();
             enabled = true;
 
+            EventUtils.callEvent(new FeatureEnabledEvent(this));
+
             log.info("Feature {} enabled", id);
         }
     }
@@ -90,19 +97,33 @@ public class FeatureImpl implements Feature, ComponentableFeature {
             onDisable();
             enabled = false;
 
+            EventUtils.callEvent(new FeatureDisabledEvent(this));
+
             log.info("Feature {} disabled", id);
         }
     }
 
     private void onEnable() {
         for (FeatureComponent component : components.values()) {
-            component.enable();
+            try {
+                component.enable();
+                EventUtils.callEvent(new FeatureComponentEnabledEvent(this, component));
+            } catch (Exception exception) {
+                log.error("Error while enabling component {} of feature {}",
+                  component.getClass().getSimpleName(), id, exception);
+            }
         }
     }
 
     private void onDisable() {
         for (FeatureComponent component : components.values()) {
-            component.disable();
+            try {
+                component.disable();
+                EventUtils.callEvent(new FeatureComponentDisabledEvent(this, component));
+            } catch (Exception exception) {
+                log.error("Error while disabling component {} of feature {}",
+                  component.getClass().getSimpleName(), id, exception);
+            }
         }
     }
 
