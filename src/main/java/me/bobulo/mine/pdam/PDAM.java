@@ -17,6 +17,7 @@ import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.tooltop.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.gui.MenuListener;
+import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.ui.UIManager;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -51,11 +52,16 @@ public final class PDAM {
         return instance.uiManager;
     }
 
+    public static ImGuiRenderer getImGuiRenderer() {
+        return instance.imGuiRenderer;
+    }
+
     /* Instance */
 
     private ConfigurationService config;
     private FeatureService featureService;
     private UIManager uiManager;
+    private ImGuiRenderer imGuiRenderer;
 
     @EventHandler
     public void init(FMLPreInitializationEvent event) {
@@ -69,6 +75,7 @@ public final class PDAM {
         this.config.init(event.getSuggestedConfigurationFile());
 
         this.uiManager = new UIManager();
+        this.imGuiRenderer = new ImGuiRenderer();
         this.featureService = new FeatureService();
 
         uiManager.addElement(new NotificationDisplayElement());

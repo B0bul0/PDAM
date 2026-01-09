@@ -1,4 +1,5 @@
 import org.apache.commons.lang3.SystemUtils
+import org.gradle.kotlin.dsl.exclude
 
 plugins {
     idea
@@ -16,6 +17,7 @@ val version: String by project
 val mixinGroup = "$baseGroup.mixin"
 val modid: String by project
 val transformerFile = file("src/main/resources/accesstransformer.cfg")
+val imguiVersion = "1.90.0"
 
 // Toolchains:
 java {
@@ -84,6 +86,11 @@ dependencies {
 
     // If you don't want to log in with your real minecraft account, remove this line
     runtimeOnly("me.djtheredstoner:DevAuth-forge-legacy:1.2.1")
+
+    shadowImpl("io.github.spair:imgui-java-binding:$imguiVersion")
+    shadowImpl("io.github.spair:imgui-java-natives-windows:$imguiVersion")
+//    shadowImpl("io.github.spair:imgui-java-natives-linux:$imguiVersion")
+//    shadowImpl("io.github.spair:imgui-java-natives-macos:$imguiVersion")
 }
 
 // Tasks:
