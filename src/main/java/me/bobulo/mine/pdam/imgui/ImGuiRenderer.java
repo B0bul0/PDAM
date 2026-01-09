@@ -46,6 +46,16 @@ public final class ImGuiRenderer {
         }
     }
 
+    public void unregisterWidow(Object widow) {
+        if (widow instanceof ImGuiRenderable) {
+            removeFrameRender((ImGuiRenderable) widow);
+        }
+
+        if (widow instanceof ToolbarItemWindow) {
+            imGuiToolbar.unregisterWindow((ToolbarItemWindow) widow);
+        }
+    }
+
     /* Register frame renders */
 
     public void addFrameRender(ImGuiRenderable frameRender) {
