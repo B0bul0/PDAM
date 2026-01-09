@@ -1,83 +1,49 @@
 package me.bobulo.mine.pdam.feature.sound;
 
-import me.bobulo.mine.pdam.config.ConfigInitContext;
+import me.bobulo.mine.pdam.PDAM;
 import me.bobulo.mine.pdam.feature.component.AbstractFeatureComponent;
+import me.bobulo.mine.pdam.feature.sound.log.SoundLogEntry;
+import me.bobulo.mine.pdam.feature.sound.widow.SoundDebugWindow;
+import me.bobulo.mine.pdam.log.LogHistory;
 import net.minecraftforge.common.MinecraftForge;
 
 public final class SoundDebugFeatureComponent extends AbstractFeatureComponent {
 
     private SoundDebugListener listener;
+    private SoundDebugWindow window;
 
-    private String[] whitelist;
-    private String[] blacklist;
+    private LogHistory<SoundLogEntry> soundHistory;
 
     @Override
     protected void onEnable() {
-        if (this.listener == null) {
-            this.listener = new SoundDebugListener(this);
-        }
+        this.soundHistory = new LogHistory<>();
+        this.listener = new SoundDebugListener(this);
+        this.window = new SoundDebugWindow(this);
 
         MinecraftForge.EVENT_BUS.register(this.listener);
+        PDAM.getImGuiRenderer().registerWidow(this.window);
     }
 
     @Override
     protected void onDisable() {
-        if (this.listener == null) {
-            return;
-        }
-
         MinecraftForge.EVENT_BUS.unregister(this.listener);
         this.listener = null;
+
+        PDAM.getImGuiRenderer().unregisterWidow(window);
+        this.window = null;
+
+        this.soundHistory.clear();
+        this.soundHistory = null;
     }
 
-    @Override
-    public void initProperties(ConfigInitContext context) {
-        context.createProperty("whitelist", new String[0])
-          .comment("List of sound names to always allow (empty = allow all)")
-          .onUpdate((newVal) -> this.whitelist = newVal);
-
-        context.createProperty("blacklist", new String[0])
-          .comment("List of sound names to block")
-          .onUpdate((newVal) -> this.blacklist = newVal);
+    public LogHistory<SoundLogEntry> getSoundHistory() {
+        return soundHistory;
     }
 
-    private boolean matches(String[] list, String soundName) {
-        if (list == null) {
-            return false;
+    public void logSound(SoundLogEntry soundLogEntry) {
+        if (soundHistory != null) {
+            soundHistory.addLogEntry(soundLogEntry);
         }
-
-        for (String pattern : list) {
-            if (pattern.contains("*")) {
-
-                String regex = pattern.replace(".", "\\.").replace("*", ".*");
-                if (soundName.matches(regex)) {
-                    return true;
-                }
-            } else {
-
-                if (pattern.equals(soundName)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public boolean filter(String soundName) {
-        if (soundName == null) {
-            return false;
-        }
-
-        if (matches(blacklist, soundName)) {
-            return false;
-        }
-
-        if (whitelist != null && whitelist.length > 0) {
-            return matches(whitelist, soundName);
-        }
-
-        return true;
     }
 
 }
