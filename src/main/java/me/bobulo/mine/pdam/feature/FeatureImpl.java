@@ -56,7 +56,7 @@ public final class FeatureImpl implements Feature, ComponentableFeature {
     public void initProperties(ConfigInitContext context) {
         this.configBinder = context.getConfigBinder();
 
-        context.createProperty("enabled", false)
+        context.createProperty("enabled", true)
           .comment("Enable or disable the " + name + " feature")
           .onUpdate(newVal -> {
               if (newVal) {
