@@ -7,11 +7,14 @@ import me.bobulo.mine.pdam.imgui.backend.ImGuiImplGl2;
 import me.bobulo.mine.pdam.imgui.backend.ImGuiImplLwjgl2;
 import me.bobulo.mine.pdam.imgui.input.ImGuiInputHandler;
 import me.bobulo.mine.pdam.imgui.toolbar.ImGuiToolbar;
+import me.bobulo.mine.pdam.imgui.toolbar.ToolbarItemWindow;
+import me.bobulo.mine.pdam.imgui.window.PacketLogGuiWindow;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +29,21 @@ public final class ImGuiRenderer {
     private ImGuiImplGl2 imGuiImplGl2;
     private ImGuiInputHandler inputHandler;
 
-    private ImGuiToolbar imGuiToolbar;
+    private final ImGuiToolbar imGuiToolbar  = new ImGuiToolbar();
 
     private final List<ImGuiRenderable> frameRenders = new ArrayList<>();
 
     public ImGuiRenderer() {
+    }
+
+    public void registerWidow(Object widow) {
+        if (widow instanceof ImGuiRenderable) {
+            addFrameRender((ImGuiRenderable) widow);
+        }
+
+        if (widow instanceof ToolbarItemWindow) {
+            imGuiToolbar.registerWindow((ToolbarItemWindow) widow);
+        }
     }
 
     /* Register frame renders */
@@ -71,12 +84,8 @@ public final class ImGuiRenderer {
         imGuiImplDisplay = new ImGuiImplLwjgl2();
         imGuiImplDisplay.init();
 
-        imGuiToolbar = new ImGuiToolbar();
-
         inputHandler = new ImGuiInputHandler(imGuiImplDisplay);
         MinecraftForge.EVENT_BUS.register(inputHandler);
-
-        imGuiToolbar.init();
 
         initialized = true;
     }
