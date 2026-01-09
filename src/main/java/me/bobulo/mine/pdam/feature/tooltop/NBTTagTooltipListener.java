@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.tooltop;
 
+import com.google.common.collect.Sets;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,8 +11,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.Set;
 
 public class NBTTagTooltipListener {
+
+    private static final Set<String> excludedTags = Sets.newHashSet(
+      "display",
+      "SkullOwner"
+    );
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
@@ -28,18 +35,15 @@ public class NBTTagTooltipListener {
             return;
         }
 
-        NBTTagCompound extraAttributes = nbt.getCompoundTag("ExtraAttributes");
-
-        if (extraAttributes == null || extraAttributes.getKeySet().isEmpty()) {
-            return;
-        }
-
         toolTip.add("");
         toolTip.add(EnumChatFormatting.DARK_GRAY + "NBT Data:");
 
-        for (String key : extraAttributes.getKeySet()) {
-            NBTBase tag = extraAttributes.getTag(key);
+        for (String key : nbt.getKeySet()) {
+            if (excludedTags.contains(key)) {
+                continue;
+            }
 
+            NBTBase tag = nbt.getTag(key);
             toolTip.add(EnumChatFormatting.GRAY + " " + key + ": " + tag.toString());
         }
     }
