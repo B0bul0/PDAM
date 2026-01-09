@@ -18,7 +18,7 @@ public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
 
     public static PacketMonitorFeatureComponent INSTANCE; // TODO remove static access
 
-    private static final int MAX_LOGS = 2_000_000;
+    private static final int MAX_LOGS = 1_000_000;
 
     private int maxLogLimit = MAX_LOGS;
     private boolean pauseLogging = false;
