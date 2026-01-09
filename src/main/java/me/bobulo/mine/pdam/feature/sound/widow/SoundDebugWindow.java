@@ -10,6 +10,7 @@ import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.sound.log.SoundLogEntry;
 import me.bobulo.mine.pdam.feature.sound.mapper.SoundMapper;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
+import me.bobulo.mine.pdam.imgui.window.LogWindow;
 import me.bobulo.mine.pdam.log.LogHistory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.*;
@@ -28,20 +29,30 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
 
     // Sound playing controls
     private String soundToPlay = "none";
-    private float[] pitch = new float[]{1.0f};
-    private ImGuiTextFilter soundFilter = new ImGuiTextFilter();
+    private final float[] pitch = new float[]{1.0f};
+    private final ImGuiTextFilter soundFilter = new ImGuiTextFilter();
 
-    // Logging
-    private ImGuiTextFilter logFilter = new ImGuiTextFilter();
+    private final LogWindow<SoundLogEntry> logWindow;
 
     public SoundDebugWindow(SoundDebugFeatureComponent feature) {
         super("Sound Debugger");
         this.feature = feature;
+        this.logWindow = new LogWindow<>(feature.getSoundHistory(), entry -> {
+            String soundName = mapSoundName(entry.getSoundName());
+            return String.format("Sound: %s | Volume: %.2f | Pitch: %.2f | Location: (%.2f, %.2f, %.2f)",
+              soundName,
+              entry.getVolume(),
+              entry.getPitch(),
+              entry.getX(),
+              entry.getY(),
+              entry.getZ()
+            );
+        });
     }
 
     @Override
     public void renderGui() {
-        ImGui.setNextWindowSize(500, 350, ImGuiCond.FirstUseEver);
+        ImGui.setNextWindowSize(500, 400, ImGuiCond.FirstUseEver);
         ImGui.setNextWindowPos(50, 60, ImGuiCond.FirstUseEver);
 
         if (!begin("Sound Debugger##SoundDebug", isVisible)) {
@@ -96,7 +107,7 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
             }
 
             if (beginTabItem("Log Sounds")) {
-                renderLogSounds();
+                logWindow.newFrame();
                 endTabItem();
             }
 
@@ -201,51 +212,6 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
                 );
             }
         }
-    }
-
-    private void renderLogSounds() {
-        LogHistory<SoundLogEntry> logHistory = feature.getSoundHistory();
-        if (logHistory == null) {
-            text("Sound log history not available.");
-            return;
-        }
-
-        int flags = ImGuiTableFlags.Borders
-          | ImGuiTableFlags.RowBg
-          | ImGuiTableFlags.ScrollY;
-
-        text("Total Log Sounds: " + logHistory.size());
-
-        separator();
-
-        if (beginTable("PacketLogsTable", 4, flags)) {
-            tableSetupColumn("Sound Name", ImGuiTableColumnFlags.WidthStretch);
-            tableSetupColumn("Volume", ImGuiTableColumnFlags.WidthFixed);
-            tableSetupColumn("Pitch", ImGuiTableColumnFlags.WidthFixed);
-            tableSetupColumn("Location", ImGuiTableColumnFlags.WidthFixed, 250F);
-            tableHeadersRow();
-
-            for (SoundLogEntry logEntry : logHistory.getLogEntries()) {
-                tableNextRow();
-                tableNextColumn();
-
-                String soundName = mapSoundName(logEntry.getSoundName());
-
-                text(soundName);
-                tableNextColumn();
-                text(String.format("%.2f", logEntry.getVolume()));
-                tableNextColumn();
-                text(String.format("%.2f", logEntry.getPitch()));
-                tableNextColumn();
-                text(String.format("X: %.2f Y: %.2f Z: %.2f",
-                  logEntry.getX(),
-                  logEntry.getY(),
-                  logEntry.getZ()
-                ));
-            }
-        }
-
-        endTable();
     }
 
     private String mapSoundName(String vanillaName) {

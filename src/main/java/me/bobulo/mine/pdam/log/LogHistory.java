@@ -8,7 +8,7 @@ import java.util.List;
 
 public class LogHistory<L extends LogEntry> {
 
-    private static final int MAX_LOGS = 1_000_000;
+    public static final int MAX_LOGS = 1_000_000;
     private static final int DEFAULT_LOGS_LIMIT = 500;
 
     private int maxLogLimit;
@@ -34,6 +34,10 @@ public class LogHistory<L extends LogEntry> {
     }
 
     public void setMaxLogLimit(int newLimit) {
+        if (newLimit == this.maxLogLimit) {
+            return;
+        }
+
         if (newLimit < 1) {
             newLimit = 1;
         } else if (newLimit > MAX_LOGS) {
