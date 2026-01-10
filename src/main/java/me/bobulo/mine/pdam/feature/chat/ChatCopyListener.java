@@ -1,6 +1,5 @@
 package me.bobulo.mine.pdam.feature.chat;
 
-import me.bobulo.mine.pdam.notification.NotificationManager;
 import me.bobulo.mine.pdam.notification.Notifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
@@ -10,6 +9,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Mouse;
@@ -25,17 +25,8 @@ import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 public class ChatCopyListener {
 
     private static final Logger log = LogManager.getLogger(ChatCopyListener.class);
-
-    private Field drawnChatLinesField;
-
-    public ChatCopyListener() {
-        try {
-            drawnChatLinesField = GuiNewChat.class.getDeclaredField("drawnChatLines");
-            drawnChatLinesField.setAccessible(true);
-        } catch (NoSuchFieldException e) {
-            log.warn("Could not access drawnChatLines field in GuiNewChat", e);
-        }
-    }
+    private static final Field drawnChatLinesField =
+      ReflectionHelper.findField(GuiNewChat.class, "drawnChatLines", "field_146253_i");
 
     @SuppressWarnings("unchecked")
     @SubscribeEvent
