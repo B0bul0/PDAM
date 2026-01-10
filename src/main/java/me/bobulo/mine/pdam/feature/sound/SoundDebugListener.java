@@ -17,12 +17,12 @@ public class SoundDebugListener {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onPlayerSoundEvent(PlaySoundSourceEvent event) {
-        String soundName = event.name;
+        String soundName = event.sound.getSoundLocation().toString();
         float pitch = event.sound.getPitch();
         float volume = event.sound.getVolume();
 
         soundDebugFeatureComponent.logSound(new SoundLogEntry(
-            soundName, pitch, volume,
+            soundName, volume, pitch,
           event.sound.getXPosF(), event.sound.getYPosF(), event.sound.getZPosF()
         ));
     }
