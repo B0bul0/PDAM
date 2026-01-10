@@ -11,7 +11,6 @@ import me.bobulo.mine.pdam.feature.sound.log.SoundLogEntry;
 import me.bobulo.mine.pdam.feature.sound.mapper.SoundMapper;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.imgui.window.LogWindow;
-import me.bobulo.mine.pdam.log.LogHistory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.*;
 import net.minecraft.util.ResourceLocation;

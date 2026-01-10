@@ -5,7 +5,6 @@ import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImInt;
 import imgui.type.ImString;
-import jline.internal.Log;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderable;
 import me.bobulo.mine.pdam.log.LogEntry;
 import me.bobulo.mine.pdam.log.LogHistory;

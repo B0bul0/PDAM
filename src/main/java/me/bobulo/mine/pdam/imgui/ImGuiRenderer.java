@@ -8,13 +8,11 @@ import me.bobulo.mine.pdam.imgui.backend.ImGuiImplLwjgl2;
 import me.bobulo.mine.pdam.imgui.input.ImGuiInputHandler;
 import me.bobulo.mine.pdam.imgui.toolbar.ImGuiToolbar;
 import me.bobulo.mine.pdam.imgui.toolbar.ToolbarItemWindow;
-import me.bobulo.mine.pdam.imgui.window.PacketLogGuiWindow;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
