@@ -35,6 +35,7 @@ public class SoundLogEntry implements LogEntry {
         this.z = z;
     }
 
+    @Override
     public long getTimestamp() {
         return timestamp;
     }
