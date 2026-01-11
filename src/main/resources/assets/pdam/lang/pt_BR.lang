@@ -9,10 +9,6 @@ pdam.nbt_tooltip.enabled=Ativado
 # Recurso de Depuração de Som
 sound_debug=Debug do Som
 pdam.sound_debug.enabled=Ativado
-pdam.sound_debug.blacklist=Filtro de Bloqueio
-pdam.sound_debug.whitelist=Filtro
-pdam.sound_debug.debug_message=Som: %1$s | Pitch: %2$s | Volume: %3$s
-pdam.sound_debug.debug_message_hover_location=Localização: %1$s, %2$s, %3$s
 
 # Recurso de Exibir Entidades Invisíveis
 show_invisible_entities=Exibir Entidades Invisíveis

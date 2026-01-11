@@ -9,10 +9,6 @@ pdam.nbt_tooltip.enabled=Enabled
 # Sound Debug Feature
 sound_debug=Sound Debug
 pdam.sound_debug.enabled=Enabled
-pdam.sound_debug.blacklist=Blacklist
-pdam.sound_debug.whitelist=Filter
-pdam.sound_debug.debug_message=Sound: %1$s | Pitch: %2$s | Volume: %3$s
-pdam.sound_debug.debug_message_hover_location=Location: %1$s, %2$s, %3$s
 
 # Show Invisible Entities Feature
 show_invisible_entities=Show Invisible Entities
