@@ -147,7 +147,6 @@ tasks.shadowJar {
     }
 
     fun relocate(name: String) = relocate(name, "$baseGroup.deps.$name")
-    relocate("imgui")
 }
 
 tasks.assemble.get().dependsOn(tasks.remapJar)
