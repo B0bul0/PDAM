@@ -16,7 +16,7 @@ import net.minecraft.client.audio.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-import java.util.Map;
+import java.util.*;
 
 import static imgui.ImGui.*;
 
@@ -32,6 +32,8 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
     private final ImGuiTextFilter soundFilter = new ImGuiTextFilter();
 
     private final LogWindow<SoundLogEntry> logWindow;
+
+    private final UniqueHistory<PlaySoundEntry> playSoundEntries = new UniqueHistory<>(25);
 
     public SoundDebugWindow(SoundDebugFeatureComponent feature) {
         super("Sound Debugger");
@@ -201,15 +203,49 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
 
         if (button("Play Test Sound")) {
             if (!"none".equals(soundToPlay)) {
-
-                String mappedSound = reverseMapSoundName(soundToPlay);
+                String originalSound = reverseMapSoundName(soundToPlay);
 
                 mc.getSoundHandler().playSound(
                   PositionedSoundRecord.create(
-                    new ResourceLocation(mappedSound), pitch[0]
+                    new ResourceLocation(originalSound), pitch[0]
                   )
                 );
+
+                playSoundEntries.push(new PlaySoundEntry(originalSound, pitch[0]));
             }
+        }
+
+        separator();
+
+        // Table history
+        text("Tested Sounds:");
+        int flags = ImGuiTableFlags.Borders
+          | ImGuiTableFlags.RowBg
+          | ImGuiTableFlags.ScrollY;
+
+        if (beginTable("TestedSoundsTable", 3, flags)) {
+            tableSetupColumn("Sound Name", ImGuiTableColumnFlags.WidthStretch);
+            tableSetupColumn("Pitch", ImGuiTableColumnFlags.WidthFixed);
+            tableSetupColumn("Play", ImGuiTableColumnFlags.WidthFixed);
+            tableHeadersRow();
+
+            for (PlaySoundEntry entry : playSoundEntries) {
+                tableNextRow();
+                tableNextColumn();
+                text(mapSoundName(entry.soundName));
+                tableNextColumn();
+                text(String.format("%.2f", entry.pitch));
+                tableNextColumn();
+                if (button("Play##" + entry.soundName + "_" + entry.pitch)) {
+                    mc.getSoundHandler().playSound(
+                      PositionedSoundRecord.create(
+                        new ResourceLocation(entry.soundName), entry.pitch
+                      )
+                    );
+                }
+            }
+
+            endTable();
         }
     }
 
@@ -217,6 +253,7 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
         if (soundMapper == null) {
             return vanillaName;
         }
+
         String mappedName = soundMapper.mapSoundName(vanillaName);
         return mappedName != null ? mappedName : vanillaName;
     }
@@ -228,6 +265,28 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
 
         String vanillaName = soundMapper.reverseMapSoundName(mappedName);
         return vanillaName != null ? vanillaName : mappedName;
+    }
+
+    static class PlaySoundEntry {
+        String soundName;
+        float pitch;
+
+        PlaySoundEntry(String soundName, float pitch) {
+            this.soundName = soundName;
+            this.pitch = pitch;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof PlaySoundEntry)) return false;
+            PlaySoundEntry that = (PlaySoundEntry) o;
+            return Float.compare(pitch, that.pitch) == 0 && Objects.equals(soundName, that.soundName);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(soundName, pitch);
+        }
     }
 
 }
