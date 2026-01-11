@@ -2,11 +2,12 @@ package me.bobulo.mine.pdam.feature.sound.log;
 
 import me.bobulo.mine.pdam.log.LogEntry;
 
+import java.time.Instant;
 import java.util.Objects;
 
 public class SoundLogEntry implements LogEntry {
 
-    private final long timestamp = System.currentTimeMillis();
+    private final Instant timestamp = Instant.now();
 
     private final String soundName;
     private final float volume;
@@ -36,7 +37,7 @@ public class SoundLogEntry implements LogEntry {
     }
 
     @Override
-    public long getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 

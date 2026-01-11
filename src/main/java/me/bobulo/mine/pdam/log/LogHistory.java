@@ -1,10 +1,10 @@
 package me.bobulo.mine.pdam.log;
 
-import me.bobulo.mine.pdam.util.BoundedConcurrentList;
+import me.bobulo.mine.pdam.util.FixedCircularHistory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class LogHistory<L extends LogEntry> {
 
@@ -14,7 +14,7 @@ public class LogHistory<L extends LogEntry> {
     private int maxLogLimit;
     private boolean paused = false;
 
-    private BoundedConcurrentList<L> logEntries;
+    private FixedCircularHistory<L> logEntries;
 
     public LogHistory() {
         this(DEFAULT_LOGS_LIMIT);
@@ -22,7 +22,7 @@ public class LogHistory<L extends LogEntry> {
 
     public LogHistory(int maxLogLimit) {
         this.maxLogLimit = maxLogLimit;
-        this.logEntries = new BoundedConcurrentList<>(maxLogLimit);
+        this.logEntries = new FixedCircularHistory<>(maxLogLimit);
     }
 
     public void addLogEntry(L entry) {
@@ -30,7 +30,7 @@ public class LogHistory<L extends LogEntry> {
             return;
         }
 
-        logEntries.add(entry);
+        logEntries.push(entry);
     }
 
     public void setMaxLogLimit(int newLimit) {
@@ -47,21 +47,20 @@ public class LogHistory<L extends LogEntry> {
         this.maxLogLimit = newLimit;
 
         // Recreate with new capacity
-        BoundedConcurrentList<L> newList = new BoundedConcurrentList<>(newLimit);
+        FixedCircularHistory<L> newList = new FixedCircularHistory<>(newLimit);
         List<L> snapshot = logEntries.snapshot();
 
         // Copy recent entries
         int start = Math.max(0, snapshot.size() - newLimit);
         for (int i = start; i < snapshot.size(); i++) {
-            newList.add(snapshot.get(i));
+            newList.push(snapshot.get(i));
         }
 
         this.logEntries = newList;
     }
 
-    @NotNull
-    public List<L> getLogEntries() {
-        return Collections.unmodifiableList(logEntries);
+    public void forEach(@NotNull Consumer<? super L> action) {
+        logEntries.forEach(action);
     }
 
     public int getMaxLogLimit() {

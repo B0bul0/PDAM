@@ -2,25 +2,33 @@ package me.bobulo.mine.pdam.feature.sound.widow;
 
 import imgui.ImGui;
 import imgui.ImGuiTextFilter;
-import imgui.flag.ImGuiCond;
-import imgui.flag.ImGuiKey;
-import imgui.flag.ImGuiTableColumnFlags;
-import imgui.flag.ImGuiTableFlags;
+import imgui.flag.*;
+import imgui.type.ImInt;
+import imgui.type.ImString;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.sound.log.SoundLogEntry;
 import me.bobulo.mine.pdam.feature.sound.mapper.SoundMapper;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
-import me.bobulo.mine.pdam.imgui.window.LogWindow;
+import me.bobulo.mine.pdam.log.LogHistory;
+import me.bobulo.mine.pdam.util.PlayerUtils;
+import me.bobulo.mine.pdam.util.UniqueHistory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-import java.util.*;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.Objects;
 
 import static imgui.ImGui.*;
+import static imgui.ImGui.logToClipboard;
 
 public class SoundDebugWindow extends AbstractRenderItemWindow {
+
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSS")
+      .withZone(ZoneId.systemDefault());
 
     private final SoundDebugFeatureComponent feature;
 
@@ -30,30 +38,24 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
     private String soundToPlay = "none";
     private final float[] pitch = new float[]{1.0f};
     private final ImGuiTextFilter soundFilter = new ImGuiTextFilter();
-
-    private final LogWindow<SoundLogEntry> logWindow;
-
     private final UniqueHistory<PlaySoundEntry> playSoundEntries = new UniqueHistory<>(25);
+
+    // Sound log viewer
+    private final LogHistory<SoundLogEntry> logHistory;
+    private final ImInt maxLogs;
+    private final ImString searchField = new ImString(256);
+    private int currentLogIndex = 0;
 
     public SoundDebugWindow(SoundDebugFeatureComponent feature) {
         super("Sound Debugger");
         this.feature = feature;
-        this.logWindow = new LogWindow<>(feature.getSoundHistory(), entry -> {
-            String soundName = mapSoundName(entry.getSoundName());
-            return String.format("Sound: %s | Volume: %.2f | Pitch: %.2f | Location: (%.2f, %.2f, %.2f)",
-              soundName,
-              entry.getVolume(),
-              entry.getPitch(),
-              entry.getX(),
-              entry.getY(),
-              entry.getZ()
-            );
-        });
+        this.logHistory = feature.getSoundHistory();
+        this.maxLogs = new ImInt(logHistory.getMaxLogLimit());
     }
 
     @Override
     public void renderGui() {
-        ImGui.setNextWindowSize(500, 400, ImGuiCond.FirstUseEver);
+        ImGui.setNextWindowSize(600, 400, ImGuiCond.FirstUseEver);
         ImGui.setNextWindowPos(50, 60, ImGuiCond.FirstUseEver);
 
         if (!begin("Sound Debugger##SoundDebug", isVisible)) {
@@ -108,7 +110,7 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
             }
 
             if (beginTabItem("Log Sounds")) {
-                logWindow.newFrame();
+                renderLogSound();
                 endTabItem();
             }
 
@@ -134,7 +136,7 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
             tableSetupColumn("Sound Name", ImGuiTableColumnFlags.WidthStretch);
             tableSetupColumn("Volume", ImGuiTableColumnFlags.WidthFixed);
             tableSetupColumn("Pitch", ImGuiTableColumnFlags.WidthFixed);
-            tableSetupColumn("Location", ImGuiTableColumnFlags.WidthFixed, 250F);
+            tableSetupColumn("Location", ImGuiTableColumnFlags.WidthFixed, 255F);
             tableHeadersRow();
 
             for (ISound sound : playingSounds.values()) {
@@ -247,6 +249,136 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
 
             endTable();
         }
+    }
+
+    private void renderLogSound() {
+        text("Total Logs: " + logHistory.size());
+
+        separator();
+
+        if (button("Clear")) {
+            logHistory.clear();
+        }
+
+        sameLine();
+        boolean copyAll = false;
+        if (button("Copy All")) {
+            copyAll = true;
+        }
+
+        sameLine();
+        String pauseResumeText = logHistory.isPaused() ? "Resume" : "Pause";
+        if (button(pauseResumeText)) {
+            logHistory.setPaused(!logHistory.isPaused());
+        }
+
+        sameLine();
+
+        setNextItemWidth(200.0f);
+        if (inputInt("Max Logs", maxLogs, 1, 100)) {
+            logHistory.setMaxLogLimit(maxLogs.get());
+        }
+
+        separator();
+
+        text("Search:");
+        sameLine();
+        pushItemWidth(300);
+
+        inputText("##search", searchField, ImGuiInputTextFlags.None);
+
+        popItemWidth();
+
+        separator();
+
+        float footerHeightToReserve = getStyle().getItemSpacing().y + getFrameHeightWithSpacing();
+
+        if (beginChild("ScrollingRegion", 0, -footerHeightToReserve, false, ImGuiWindowFlags.HorizontalScrollbar)) {
+
+            pushStyleVar(ImGuiStyleVar.ItemSpacing, 4f, 1f); // Tighten spacing
+
+            String filterText = searchField.get().trim().toLowerCase();
+            int flags = ImGuiTableFlags.Borders
+              | ImGuiTableFlags.RowBg
+              | ImGuiTableFlags.ScrollY;
+
+            if (copyAll) {
+                logToClipboard();
+            }
+
+            if (beginTable("##LogTable", 5, flags)) {
+
+                tableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 85F);
+                tableSetupColumn("Sound Name", ImGuiTableColumnFlags.WidthStretch, 210F);
+                tableSetupColumn("Volume", ImGuiTableColumnFlags.WidthFixed);
+                tableSetupColumn("Pitch", ImGuiTableColumnFlags.WidthFixed);
+                tableSetupColumn("Location", ImGuiTableColumnFlags.WidthFixed, 200F);
+
+                tableHeadersRow();
+
+                currentLogIndex = -1;
+                logHistory.forEach(logEntry -> {
+                    currentLogIndex++;
+
+                    if (!filterText.isEmpty() && !logEntry.toString().toLowerCase().contains(filterText)) {
+                        return;
+                    }
+
+                    tableNextRow();
+
+                    tableSetColumnIndex(0);
+                    selectable(DATE_TIME_FORMATTER.format(logEntry.getTimestamp()) + "##time" + currentLogIndex, false,
+                      ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap);
+
+                    if (beginPopupContextItem("log_popup##" + currentLogIndex)) {
+                        text("Log #" + currentLogIndex);
+                        text("Sound: " + mapSoundName(logEntry.getSoundName()));
+                        separator();
+
+                        if (button("Copy Data")) {
+                            String sb = "Time: " + DATE_TIME_FORMATTER.format(logEntry.getTimestamp()) + "\t" +
+                              "Sound: " + mapSoundName(logEntry.getSoundName()) + "\t" +
+                              "Vol: " + String.format("%.2f", logEntry.getVolume()) + "\t" +
+                              "Pitch: " + String.format("%.2f", logEntry.getPitch()) + "\t" +
+                              "Loc: " + String.format("X: %.2f Y: %.2f Z: %.2f", logEntry.getX(), logEntry.getY(), logEntry.getZ());
+                            setClipboardText(sb);
+                            closeCurrentPopup();
+                        }
+
+                        if (button("Teleport")) {
+                            PlayerUtils.teleportViaServer(
+                              logEntry.getX(),
+                              logEntry.getY(),
+                              logEntry.getZ()
+                            );
+                            closeCurrentPopup();
+                        }
+                        endPopup();
+                    }
+
+                    tableNextColumn();
+                    textUnformatted(mapSoundName(logEntry.getSoundName()));
+
+                    tableNextColumn();
+                    textUnformatted(String.format("%.2f", logEntry.getVolume()));
+
+                    tableNextColumn();
+                    textUnformatted(String.format("%.2f", logEntry.getPitch()));
+
+                    tableNextColumn();
+                    textUnformatted(String.format("X: %.2f Y: %.2f Z: %.2f", logEntry.getX(), logEntry.getY(), logEntry.getZ()));
+                });
+
+                endTable();
+            }
+
+            if (copyAll) {
+                logFinish();
+            }
+
+            popStyleVar();
+        }
+        endChild();
     }
 
     private String mapSoundName(String vanillaName) {
