@@ -121,10 +121,9 @@ public class PacketLogWindow extends AbstractRenderItemWindow {
             String searchText = searchField.get().toLowerCase().trim();
             List<DisplayPacketLogEntry> filteredLogs;
 
-            String filter = searchField.get().toLowerCase().trim();
             boolean noDirectionFilter = filterServer.get() && filterClient.get();
 
-            if (filter.isEmpty() && noDirectionFilter) {
+            if (searchText.isEmpty() && noDirectionFilter) {
                 filteredLogs = new ArrayList<>(logHistory.size());
                 logHistory.forEach(filteredLogs::add);
             } else {
@@ -201,7 +200,7 @@ public class PacketLogWindow extends AbstractRenderItemWindow {
                     tableNextColumn();
                     if (entry.isExpanded()) {
                         // show full data
-                        inputTextMultiline("##expandedData" + i, new ImString(entry.getPacketData()), ImGuiInputTextFlags.ReadOnly);
+                        textWrapped(entry.getPacketData());
                     } else {
                         // show short data
                         textUnformatted(entry.getPacketDataShort());
