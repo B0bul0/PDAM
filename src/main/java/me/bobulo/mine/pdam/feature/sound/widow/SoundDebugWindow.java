@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature.sound.widow;
 
 import imgui.ImGui;
+import imgui.ImGuiListClipper;
 import imgui.ImGuiTextFilter;
 import imgui.flag.*;
 import imgui.type.ImInt;
@@ -19,11 +20,12 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static imgui.ImGui.*;
-import static imgui.ImGui.logToClipboard;
 
 public class SoundDebugWindow extends AbstractRenderItemWindow {
 
@@ -41,10 +43,10 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
     private final UniqueHistory<PlaySoundEntry> playSoundEntries = new UniqueHistory<>(25);
 
     // Sound log viewer
+    private final ImGuiListClipper logClipper = new ImGuiListClipper();
     private final LogHistory<SoundLogEntry> logHistory;
     private final ImInt maxLogs;
     private final ImString searchField = new ImString(256);
-    private int currentLogIndex = 0;
 
     public SoundDebugWindow(SoundDebugFeatureComponent feature) {
         super("Sound Debugger");
@@ -285,7 +287,7 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
         sameLine();
         pushItemWidth(300);
 
-        inputText("##search", searchField, ImGuiInputTextFlags.None);
+        inputTextWithHint("##search", "Search...", searchField, ImGuiInputTextFlags.None);
 
         popItemWidth();
 
@@ -297,7 +299,6 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
 
             pushStyleVar(ImGuiStyleVar.ItemSpacing, 4f, 1f); // Tighten spacing
 
-            String filterText = searchField.get().trim().toLowerCase();
             int flags = ImGuiTableFlags.Borders
               | ImGuiTableFlags.RowBg
               | ImGuiTableFlags.ScrollY;
@@ -316,59 +317,72 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
 
                 tableHeadersRow();
 
-                currentLogIndex = -1;
-                logHistory.forEach(logEntry -> {
-                    currentLogIndex++;
+                ArrayList<SoundLogEntry> filteredLogs = new ArrayList<>(logHistory.size());
 
-                    if (!filterText.isEmpty() && !logEntry.toString().toLowerCase().contains(filterText)) {
-                        return;
-                    }
+                String filter = searchField.get().toLowerCase().trim();
+                if (filter.isEmpty()) {
+                    logHistory.forEach(filteredLogs::add);
+                } else {
+                    logHistory.forEach(entry -> {
+                        if (entry.toString().toLowerCase().contains(filter)) {
+                            filteredLogs.add(entry);
+                        }
+                    });
+                }
 
-                    tableNextRow();
+                logClipper.begin(filteredLogs.size());
+                while (logClipper.step()) {
+                    for (int i = logClipper.getDisplayStart(); i < logClipper.getDisplayEnd(); i++) {
+                        if (i >= filteredLogs.size()) break;
+                        SoundLogEntry logEntry = filteredLogs.get(i);
 
-                    tableSetColumnIndex(0);
-                    selectable(DATE_TIME_FORMATTER.format(logEntry.getTimestamp()) + "##time" + currentLogIndex, false,
-                      ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap);
+                        tableNextRow();
 
-                    if (beginPopupContextItem("log_popup##" + currentLogIndex)) {
-                        text("Log #" + currentLogIndex);
-                        text("Sound: " + mapSoundName(logEntry.getSoundName()));
-                        separator();
+                        tableSetColumnIndex(0);
+                        selectable(DATE_TIME_FORMATTER.format(logEntry.getTimestamp()) + "##time" + i, false,
+                          ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap);
 
-                        if (button("Copy Data")) {
-                            String sb = "Time: " + DATE_TIME_FORMATTER.format(logEntry.getTimestamp()) + "\t" +
-                              "Sound: " + mapSoundName(logEntry.getSoundName()) + "\t" +
-                              "Vol: " + String.format("%.2f", logEntry.getVolume()) + "\t" +
-                              "Pitch: " + String.format("%.2f", logEntry.getPitch()) + "\t" +
-                              "Loc: " + String.format("X: %.2f Y: %.2f Z: %.2f", logEntry.getX(), logEntry.getY(), logEntry.getZ());
-                            setClipboardText(sb);
-                            closeCurrentPopup();
+                        if (beginPopupContextItem("log_popup##" + i)) {
+                            text("Log #" + i);
+                            text("Sound: " + mapSoundName(logEntry.getSoundName()));
+                            separator();
+
+                            if (button("Copy Data")) {
+                                String sb = "Time: " + DATE_TIME_FORMATTER.format(logEntry.getTimestamp()) + "\t" +
+                                  "Sound: " + mapSoundName(logEntry.getSoundName()) + "\t" +
+                                  "Vol: " + String.format("%.2f", logEntry.getVolume()) + "\t" +
+                                  "Pitch: " + String.format("%.2f", logEntry.getPitch()) + "\t" +
+                                  "Loc: " + String.format("X: %.2f Y: %.2f Z: %.2f", logEntry.getX(), logEntry.getY(), logEntry.getZ());
+                                setClipboardText(sb);
+                                closeCurrentPopup();
+                            }
+
+                            if (button("Teleport")) {
+                                PlayerUtils.teleportViaServer(
+                                  logEntry.getX(),
+                                  logEntry.getY(),
+                                  logEntry.getZ()
+                                );
+                                closeCurrentPopup();
+                            }
+                            endPopup();
                         }
 
-                        if (button("Teleport")) {
-                            PlayerUtils.teleportViaServer(
-                              logEntry.getX(),
-                              logEntry.getY(),
-                              logEntry.getZ()
-                            );
-                            closeCurrentPopup();
-                        }
-                        endPopup();
+                        tableNextColumn();
+                        textUnformatted(mapSoundName(logEntry.getSoundName()));
+
+                        tableNextColumn();
+                        textUnformatted(String.format("%.2f", logEntry.getVolume()));
+
+                        tableNextColumn();
+                        textUnformatted(String.format("%.2f", logEntry.getPitch()));
+
+                        tableNextColumn();
+                        textUnformatted(String.format("X: %.2f Y: %.2f Z: %.2f", logEntry.getX(), logEntry.getY(), logEntry.getZ()));
                     }
+                }
 
-                    tableNextColumn();
-                    textUnformatted(mapSoundName(logEntry.getSoundName()));
-
-                    tableNextColumn();
-                    textUnformatted(String.format("%.2f", logEntry.getVolume()));
-
-                    tableNextColumn();
-                    textUnformatted(String.format("%.2f", logEntry.getPitch()));
-
-                    tableNextColumn();
-                    textUnformatted(String.format("X: %.2f Y: %.2f Z: %.2f", logEntry.getX(), logEntry.getY(), logEntry.getZ()));
-                });
-
+                logClipper.end();
                 endTable();
             }
 

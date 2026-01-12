@@ -33,6 +33,10 @@ public class LogHistory<L extends LogEntry> {
         logEntries.push(entry);
     }
 
+    public L getLogEntry(int index) {
+        return logEntries.get(index);
+    }
+
     public void setMaxLogLimit(int newLimit) {
         if (newLimit == this.maxLogLimit) {
             return;
