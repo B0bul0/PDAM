@@ -54,7 +54,7 @@ public class FixedCircularHistory<E> {
             }
 
             // Calculate the real index in the circular buffer
-            int realIndex = (head - 1 - index + capacity) % capacity;
+            int realIndex = (head - size + index + capacity) % capacity;
 
             return (E) buffer[realIndex];
         } finally {
@@ -71,7 +71,7 @@ public class FixedCircularHistory<E> {
             final int cap = this.capacity;
 
             for (int i = 0; i < currentSize; i++) {
-                int realIndex = (currentHead - 1 - i + cap) % cap;
+                int realIndex = (currentHead - currentSize + i + cap) % cap;
                 action.accept((E) this.buffer[realIndex]);
             }
         } finally {
@@ -85,7 +85,7 @@ public class FixedCircularHistory<E> {
         try {
             Object[] snapshot = new Object[size];
             for (int i = 0; i < size; i++) {
-                int realIndex = (head - 1 - i + capacity) % capacity;
+                int realIndex = (head - size + i + capacity) % capacity;
                 snapshot[i] = buffer[realIndex];
             }
             return Arrays.asList((E[]) snapshot);

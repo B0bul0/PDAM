@@ -3,11 +3,13 @@ package me.bobulo.mine.pdam.feature.packet.log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.log.LogEntry;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class DisplayPacketLogEntry {
+public class DisplayPacketLogEntry implements LogEntry {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSS")
       .withZone(ZoneId.systemDefault());
@@ -18,7 +20,7 @@ public class DisplayPacketLogEntry {
       .create();
 
     public static DisplayPacketLogEntry create(PacketLogEntry packetLogEntry) {
-        String json = GSON.toJson(packetLogEntry.getPacketData()).replace('§', '&');
+        String json = GSON.toJson(packetLogEntry.getPacketData());
 
         String shortData = json.length() > 200 ? json.substring(0, 200) + "..." : json;
         shortData = shortData.replaceAll("\\s+", " ");
@@ -26,7 +28,7 @@ public class DisplayPacketLogEntry {
         return new DisplayPacketLogEntry(
           packetLogEntry,
           DATE_TIME_FORMATTER.format(packetLogEntry.getTimestamp()),
-          packetLogEntry.getPacketName().replaceFirst("PacketMetadata", ""),
+          packetLogEntry.getPacketName(),
           shortData,
           json,
           new String[]{
@@ -53,6 +55,11 @@ public class DisplayPacketLogEntry {
         this.packetDataShort = packetDataShort;
         this.packetData = packetData;
         this.searchTerms = searchTerms;
+    }
+
+    @Override
+    public Instant getTimestamp() {
+        return packetLogEntry.getTimestamp();
     }
 
     public PacketLogEntry getPacketLogEntry() {

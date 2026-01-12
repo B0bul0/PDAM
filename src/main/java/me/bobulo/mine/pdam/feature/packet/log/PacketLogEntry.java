@@ -2,10 +2,11 @@ package me.bobulo.mine.pdam.feature.packet.log;
 
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.data.PacketData;
+import me.bobulo.mine.pdam.log.LogEntry;
 
 import java.time.Instant;
 
-public class PacketLogEntry {
+public class PacketLogEntry implements LogEntry {
 
     private final Instant timestamp;
     private final PacketData packetData;
