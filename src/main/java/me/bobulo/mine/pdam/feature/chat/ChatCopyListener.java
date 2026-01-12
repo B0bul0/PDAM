@@ -25,8 +25,15 @@ import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 public class ChatCopyListener {
 
     private static final Logger log = LogManager.getLogger(ChatCopyListener.class);
-    private static final Field drawnChatLinesField =
-      ReflectionHelper.findField(GuiNewChat.class, "drawnChatLines", "field_146253_i");
+    private static Field drawnChatLinesField;
+
+    public ChatCopyListener() {
+        try {
+            drawnChatLinesField = ReflectionHelper.findField(GuiNewChat.class, "drawnChatLines", "field_146253_i");
+        } catch (Exception e) {
+            log.warn("Could not access drawnChatLines field in GuiNewChat", e);
+        }
+    }
 
     @SuppressWarnings("unchecked")
     @SubscribeEvent
