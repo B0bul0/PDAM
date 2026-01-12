@@ -91,7 +91,8 @@ public class PacketLogWindow extends AbstractRenderItemWindow {
 
         sameLine();
         setNextItemWidth(160.0f);
-        if (inputInt("Max Logs", maxLogs, 1, 100)) {
+        inputInt("Max Logs", maxLogs, 1, 100);
+        if (isItemDeactivatedAfterEdit()) {
             logHistory.setMaxLogLimit(maxLogs.get());
         }
 

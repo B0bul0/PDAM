@@ -276,7 +276,8 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
         sameLine();
 
         setNextItemWidth(200.0f);
-        if (inputInt("Max Logs", maxLogs, 1, 100)) {
+        inputInt("Max Logs", maxLogs, 1, 100);
+        if (isItemDeactivatedAfterEdit()) {
             logHistory.setMaxLogLimit(maxLogs.get());
         }
 
