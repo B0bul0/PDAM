@@ -5,7 +5,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 ## Features
 - **Configurable Settings**: All features can be enabled or disabled through the Forge mod configuration menu.
 - **Item NBT Inspector**: Displays an item's NBT data in its tooltip.
-- **Sound Debugger**: Shows the name of sounds in chat as they are played.
+- **Sound Debugger**: Logs all played sounds to the console for debugging purposes.
 - **Invisible Entity Highlighter**: Makes invisible entities visible for easier debugging.
 - **Entity Information Panel**: Displays an on-screen panel with real-time information about the entity you are looking at.
 - **Skin Extraction**: Extract skins from players and heads.
