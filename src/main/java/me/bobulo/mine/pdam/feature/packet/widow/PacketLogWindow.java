@@ -208,6 +208,11 @@ public class PacketLogWindow extends AbstractRenderItemWindow {
                 }
             }
 
+            if (getScrollY() >= getScrollMaxY()) {
+                setScrollHereY(1.0f);
+            }
+
+            logClipper.end();
             endTable();
         }
     }

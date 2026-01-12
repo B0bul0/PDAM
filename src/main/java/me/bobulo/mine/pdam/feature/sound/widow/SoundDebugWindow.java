@@ -21,7 +21,6 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -380,6 +379,10 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
                         tableNextColumn();
                         textUnformatted(String.format("X: %.2f Y: %.2f Z: %.2f", logEntry.getX(), logEntry.getY(), logEntry.getZ()));
                     }
+                }
+
+                if (getScrollY() >= getScrollMaxY()) {
+                    setScrollHereY(1.0f);
                 }
 
                 logClipper.end();
