@@ -12,14 +12,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
 
-    private static final int MAX_LOGS = 1_000_000;
-
     private LogHistory<DisplayPacketLogEntry> packetEntries;
     private PacketLogWindow logWindow;
 
     @Override
     protected void onInit() {
-        this.packetEntries = new LogHistory<>(MAX_LOGS);
+        this.packetEntries = new LogHistory<>();
 
         addChildComponent(ForgerListenerFeatureComponent.of(
           new PacketDataInterceptor(this)
