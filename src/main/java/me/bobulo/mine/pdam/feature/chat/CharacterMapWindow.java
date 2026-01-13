@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.chat;
 
+import com.google.common.primitives.Chars;
 import imgui.ImGuiListClipper;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiPopupFlags;
@@ -11,6 +12,9 @@ import me.bobulo.mine.pdam.util.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.util.EnumChatFormatting;
+import org.apache.commons.lang3.Validate;
+
+import java.util.function.Predicate;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.MCFontImGui.mcText;
@@ -19,6 +23,52 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
 
     private static final int MAX_CHAR = 65536;
     private static final int COLUMNS = 14;
+
+    private static final char[] ALL_CHAR_VALUES = new char[MAX_CHAR];
+    private static final char[] ALLOWED_CHAT_CHAR_VALUES;
+    private static final char[] NUMBERS_CHAR_VALUES = Chars.concat(
+      createArray(48, 57),
+      createArray(9312, 9371),
+      createArray(9451, 9471),
+      createArray(10102, 10131)
+    );
+
+    private static final char[] ARROWS_CHAR_VALUES = Chars.concat(
+      createArray(10136, 10174),
+      new char[]{'⟀', '⫷', '⫸', '➔'},
+      createArray(10224, 10239),
+      createArray(10496, 10623),
+      createArray(11008, 11025),
+      createArray(11065, 11084)
+    );
+
+    private static final char[] BEST_CHAT_CHAR_VALUES = Chars.concat(new char[]{
+        '®', 'Θ', '۞', '۩', '܍', '܌', '܀', 'ܫ', '࿄', '࿈', '࿉', '࿊', '࿋', '࿌',
+        '࿎', '࿏', '࿒', '྿', '྾', '᠅', '᠈', '᠉', 'ᴥ', '†', '‡', '•', '‣', '⁂',
+        '⁑', '∞', '∅', '⌀', '⌚', '⌛', '⌹', '☃', '★', '☆', '☕', '☔', '☠', '☗',
+        '☖', '☘', '⭐', '⭑', '⭒', '⭓', '⭔', 'ꕕ', 'ꕔ', 'ꕹ', 'ꖴ', 'ꙮ', '꙰',
+        '❍', '❏', '❐', '❑', '❒', '❖', '⟁'
+      },
+      createArray(9762, 9885),
+      createArray(9888, 9905),
+      createArray(9920, 9923),
+      createArray(9985, 9988),
+      createArray(9990, 9993),
+      createArray(9996, 10023),
+      createArray(10025, 10059),
+      createArray(10072, 10078),
+      createArray(10082, 10101),
+      createArray(11026, 11055),
+      createArray(43048, 43051)
+    );
+
+    static {
+        for (int i = 0; i < MAX_CHAR; i++) {
+            ALL_CHAR_VALUES[i] = (char) i;
+        }
+
+        ALLOWED_CHAT_CHAR_VALUES = createArray(CharacterMapWindow::isAllowedChatCharacter);
+    }
 
     private final ImBoolean bold = new ImBoolean(false);
     private final ImBoolean italic = new ImBoolean(false);
@@ -74,11 +124,51 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
         checkbox("Strikethrough", strikethrough);
 
         separator();
+        text("Colors preview:");
+        mcText("§11 §22 §33 §44 §55 §66 §77 §88 §99 §00 §aA §bB §cC §dD §eE §fF", 0xFFFFFFFF, false, 2F);
+        sameLine();
+        if (button("Copy Color Char §")) {
+            setClipboardText("§");
+        }
+
+        separator();
 
         if (beginTabBar("CharacterTabs")) {
             if (beginTabItem("All Characters")) {
                 if (beginChild("all_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
-                    allCharacters();
+                    charactersTable(ALL_CHAR_VALUES);
+                    endChild();
+                }
+                endTabItem();
+            }
+
+            if (beginTabItem("Chat Allowed Characters")) {
+                if (beginChild("allowed_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
+                    charactersTable(ALLOWED_CHAT_CHAR_VALUES);
+                    endChild();
+                }
+                endTabItem();
+            }
+
+            if (beginTabItem("Best Characters")) {
+                if (beginChild("best_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
+                    charactersTable(BEST_CHAT_CHAR_VALUES);
+                    endChild();
+                }
+                endTabItem();
+            }
+
+            if (beginTabItem("Numbers")) {
+                if (beginChild("numbers_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
+                    charactersTable(NUMBERS_CHAR_VALUES);
+                    endChild();
+                }
+                endTabItem();
+            }
+
+            if (beginTabItem("Arrows")) {
+                if (beginChild("arrows_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
+                    charactersTable(ARROWS_CHAR_VALUES);
                     endChild();
                 }
                 endTabItem();
@@ -89,8 +179,22 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
 
     }
 
-    private void allCharacters() {
-        int lines = (int) Math.ceil((double) MAX_CHAR / COLUMNS);
+    private void charactersTable(Predicate<Character> charFilter) {
+        char[] charValues = new char[MAX_CHAR];
+        int counter = 0;
+        for (int i = 0; i < MAX_CHAR; i++) {
+            if (charFilter.test((char) i)) {
+                charValues[counter++] = (char) i;
+            }
+        }
+
+        char[] displayCharValues = new char[counter];
+        System.arraycopy(charValues, 0, displayCharValues, 0, counter);
+        charactersTable(displayCharValues);
+    }
+
+    private void charactersTable(char[] charValues) {
+        int lines = (int) Math.ceil((double) charValues.length / COLUMNS);
 
         columns(COLUMNS, "table_chars", false);
         clipper.begin(lines);
@@ -101,12 +205,12 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
 
                 for (int col = 0; col < COLUMNS; col++) {
                     int i = (row * COLUMNS) + col;
-                    if (i >= MAX_CHAR) {
+                    if (i >= charValues.length) {
                         nextColumn();
                         continue;
                     }
 
-                    char c = (char) i;
+                    char c = charValues[i];
 
                     StringBuilder styleText = new StringBuilder();
                     styleText.append(EnumChatFormatting.func_175744_a(selectedColor.get()));
@@ -124,15 +228,23 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
 
                     if (beginPopupContextItem("char_popup##" + i, ImGuiPopupFlags.MouseButtonLeft | ImGuiPopupFlags.MouseButtonRight)) {
                         text("Char: " + c);
-                        text("ID: " + i);
-                        text("Hex: 0x" + Integer.toHexString(i).toUpperCase());
-                        separator();
+                        text("ID: " + (int) c);
+                        text("Hex: 0x" + Integer.toHexString(c).toUpperCase());
 
-                        if (button("Copy")) {
+                        separator();
+                        text("Copy options:");
+                        if (button("Copy char")) {
                             setClipboardText(String.valueOf(c));
                             closeCurrentPopup();
                         }
 
+                        if (button("Copy with formatting")) {
+                            setClipboardText(formatedText);
+                            closeCurrentPopup();
+                        }
+
+                        separator();
+                        text("Chat options:");
                         if (button("Send to chat")) {
                             PlayerUtils.sendChatMessage(formatedText.replace("§", "&"));
                             closeCurrentPopup();
@@ -166,6 +278,36 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
 
         columns(1);
         clipper.end();
+    }
+
+    private static boolean isAllowedChatCharacter(char value) {
+        return value != 167 && value >= ' ' && value != 127;
+    }
+
+    private static char[] createArray(Predicate<Character> filter) {
+        char[] temp = new char[MAX_CHAR];
+        int count = 0;
+        for (int i = 0; i < MAX_CHAR; i++) {
+            char c = (char) i;
+            if (filter.test(c)) {
+                temp[count++] = c;
+            }
+        }
+
+        char[] result = new char[count];
+        System.arraycopy(temp, 0, result, 0, count);
+        return result;
+    }
+
+    private static char[] createArray(int initChar, int endChar) {
+        Validate.isTrue(endChar >= initChar, "endChar must be greater than or equal to initChar");
+        int size = endChar - initChar + 1;
+        char[] values = new char[size];
+        for (int i = 0; i < size; i++) {
+            values[i] = (char) (initChar + i);
+        }
+
+        return values;
     }
 
 }
