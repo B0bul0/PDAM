@@ -3,6 +3,7 @@ package me.bobulo.mine.pdam;
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
 import me.bobulo.mine.pdam.config.ConfigListener;
 import me.bobulo.mine.pdam.config.ConfigurationService;
+import me.bobulo.mine.pdam.feature.hologram.HologramWindow;
 import me.bobulo.mine.pdam.feature.chat.CharacterMapWindow;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
@@ -97,6 +98,7 @@ public final class PDAM {
         MinecraftForge.EVENT_BUS.register(uiManager);
         MinecraftForge.EVENT_BUS.register(new ChatCopyListener());
 
+        imGuiRenderer.registerWidow(new HologramWindow());
         imGuiRenderer.registerWidow(new CharacterMapWindow());
 
         // Register client commands
