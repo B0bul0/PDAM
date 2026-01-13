@@ -3,6 +3,7 @@ package me.bobulo.mine.pdam.imgui;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.flag.ImGuiConfigFlags;
+import me.bobulo.mine.pdam.PDAM;
 import me.bobulo.mine.pdam.imgui.backend.ImGuiImplGl2;
 import me.bobulo.mine.pdam.imgui.backend.ImGuiImplLwjgl2;
 import me.bobulo.mine.pdam.imgui.input.ImGuiInputHandler;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public final class ImGuiRenderer {
     private ImGuiImplGl2 imGuiImplGl2;
     private ImGuiInputHandler inputHandler;
 
-    private final ImGuiToolbar imGuiToolbar  = new ImGuiToolbar();
+    private final ImGuiToolbar imGuiToolbar = new ImGuiToolbar();
 
     private final List<ImGuiRenderable> frameRenders = new ArrayList<>();
 
@@ -85,6 +87,7 @@ public final class ImGuiRenderer {
         io.setIniFilename(null);
         io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
         io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
+        io.setIniFilename(new File(PDAM.getConfigDirectory(), "pdam_layout.ini").getAbsolutePath());
 
         imGuiImplGl2 = new ImGuiImplGl2();
         imGuiImplGl2.init();

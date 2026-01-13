@@ -7,6 +7,7 @@ import me.bobulo.mine.pdam.feature.chat.CharacterMapWindow;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
+import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.component.CallbackFeatureComponent;
 import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
@@ -18,8 +19,8 @@ import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.tooltop.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
-import me.bobulo.mine.pdam.ui.UIManager;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
+import me.bobulo.mine.pdam.ui.UIManager;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +28,8 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.File;
 
 @Mod(
   modid = PDAM.MOD_ID,
@@ -56,8 +59,13 @@ public final class PDAM {
         return instance.imGuiRenderer;
     }
 
+    public static File getConfigDirectory() {
+        return instance.configDirectory;
+    }
+
     /* Instance */
 
+    private File configDirectory;
     private ConfigurationService config;
     private FeatureService featureService;
     private UIManager uiManager;
@@ -71,8 +79,13 @@ public final class PDAM {
 
         instance = this;
 
+        this.configDirectory = event.getModConfigurationDirectory();
+        if (!this.configDirectory.exists()) {
+            this.configDirectory.mkdirs();
+        }
+
         this.config = new ConfigurationService();
-        this.config.init(event.getSuggestedConfigurationFile());
+        this.config.init(new File(event.getModConfigurationDirectory(), "pdam.cfg"));
 
         this.uiManager = new UIManager();
         this.imGuiRenderer = new ImGuiRenderer();

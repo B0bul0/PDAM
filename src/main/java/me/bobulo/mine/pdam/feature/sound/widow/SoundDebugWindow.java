@@ -26,12 +26,10 @@ import java.util.Objects;
 
 import static imgui.ImGui.*;
 
-public class SoundDebugWindow extends AbstractRenderItemWindow {
+public final class SoundDebugWindow extends AbstractRenderItemWindow {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSS")
       .withZone(ZoneId.systemDefault());
-
-    private final SoundDebugFeatureComponent feature;
 
     private SoundMapper soundMapper = SoundMapper.VANILLA;
 
@@ -47,10 +45,9 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
     private final ImInt maxLogs;
     private final ImString searchField = new ImString(256);
 
-    public SoundDebugWindow(SoundDebugFeatureComponent feature) {
+    public SoundDebugWindow(LogHistory<SoundLogEntry> logHistory) {
         super("Sound Debugger");
-        this.feature = feature;
-        this.logHistory = feature.getSoundHistory();
+        this.logHistory = logHistory;
         this.maxLogs = new ImInt(logHistory.getMaxLogLimit());
     }
 
@@ -98,7 +95,6 @@ public class SoundDebugWindow extends AbstractRenderItemWindow {
 
         separator();
 
-        // Abas para separar as seções
         if (beginTabBar("SoundTabs")) {
             if (beginTabItem("Active Sounds")) {
                 renderActiveSounds(playingSounds);
