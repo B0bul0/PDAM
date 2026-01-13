@@ -8,6 +8,7 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
+import me.bobulo.mine.pdam.mixin.GuiChatInvoker;
 import me.bobulo.mine.pdam.util.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
@@ -251,12 +252,15 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
                         }
 
                         if (button("Open in chat input")) {
-//                                if (Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
-//                                    GuiChat guiChat = (GuiChat) Minecraft.getMinecraft().currentScreen;
-//                                    guiChat.setText(c, false);
-//                                }
+                            String chatText = formatedText.replace("§", "&");
 
-                            Minecraft.getMinecraft().displayGuiScreen(new GuiChat(formatedText.replace("§", "&")));
+                            if (Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
+                                GuiChatInvoker guiChat = (GuiChatInvoker) Minecraft.getMinecraft().currentScreen;
+                                guiChat.invokeSetText(chatText, false);
+                            } else {
+                                Minecraft.getMinecraft().displayGuiScreen(new GuiChat(chatText));
+                            }
+
                             closeCurrentPopup();
                         }
 
