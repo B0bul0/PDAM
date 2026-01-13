@@ -9,6 +9,7 @@ import imgui.type.ImBoolean;
 import imgui.type.ImInt;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.mixin.GuiChatInvoker;
+import me.bobulo.mine.pdam.util.ChatColor;
 import me.bobulo.mine.pdam.util.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
@@ -126,9 +127,23 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
 
         separator();
         text("Colors preview:");
-        mcText("§11 §22 §33 §44 §55 §66 §77 §88 §99 §00 §aA §bB §cC §dD §eE §fF", 0xFFFFFFFF, false, 2F);
+
+        for (ChatColor color : ChatColor.ALL) {
+            if (!color.isColor()) {
+                continue;
+            }
+
+            mcText(color.toString() + color.getFormatChar(), 0xFFFFFFFF, false, 2F);
+            if (isItemHovered()) {
+                setTooltip("Color: " + color.name() + "\n" +
+                  "Code: " + color.getFormatChar());
+            }
+
+            sameLine();
+        }
+
         sameLine();
-        if (button("Copy Color Char §")) {
+        if (button("Copy §")) {
             setClipboardText("§");
         }
 
@@ -214,12 +229,13 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
                     char c = charValues[i];
 
                     StringBuilder styleText = new StringBuilder();
-                    styleText.append(EnumChatFormatting.func_175744_a(selectedColor.get()));
+                    if (selectedColor.get() != 15)
+                        styleText.append(ChatColor.fromColorIndex(selectedColor.get()));
 
-                    if (bold.get()) styleText.append(EnumChatFormatting.BOLD);
-                    if (italic.get()) styleText.append(EnumChatFormatting.ITALIC);
-                    if (underline.get()) styleText.append(EnumChatFormatting.UNDERLINE);
-                    if (strikethrough.get()) styleText.append(EnumChatFormatting.STRIKETHROUGH);
+                    if (bold.get()) styleText.append(ChatColor.BOLD);
+                    if (italic.get()) styleText.append(ChatColor.ITALIC);
+                    if (underline.get()) styleText.append(ChatColor.UNDERLINE);
+                    if (strikethrough.get()) styleText.append(ChatColor.STRIKETHROUGH);
 
                     styleText.append(c);
 
