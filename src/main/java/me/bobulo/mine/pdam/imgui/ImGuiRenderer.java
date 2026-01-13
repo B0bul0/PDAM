@@ -27,7 +27,7 @@ public final class ImGuiRenderer {
     private ImGuiImplGl2 imGuiImplGl2;
     private ImGuiInputHandler inputHandler;
 
-    private final ImGuiToolbar imGuiToolbar  = new ImGuiToolbar();
+    private final ImGuiToolbar imGuiToolbar = new ImGuiToolbar();
 
     private final List<ImGuiRenderable> frameRenders = new ArrayList<>();
 

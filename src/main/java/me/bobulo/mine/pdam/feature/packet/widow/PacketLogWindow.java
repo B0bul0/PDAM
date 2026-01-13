@@ -16,7 +16,7 @@ import java.util.List;
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 
-public class PacketLogWindow extends AbstractRenderItemWindow {
+public final class PacketLogWindow extends AbstractRenderItemWindow {
 
     private final LogHistory<DisplayPacketLogEntry> logHistory;
     private final ImGuiListClipper logClipper = new ImGuiListClipper();

@@ -18,7 +18,7 @@ public final class SoundDebugFeatureComponent extends AbstractFeatureComponent {
     protected void onEnable() {
         this.soundHistory = new LogHistory<>();
         this.listener = new SoundDebugListener(this);
-        this.window = new SoundDebugWindow(this);
+        this.window = new SoundDebugWindow(soundHistory);
 
         MinecraftForge.EVENT_BUS.register(this.listener);
         PDAM.getImGuiRenderer().registerWidow(this.window);
