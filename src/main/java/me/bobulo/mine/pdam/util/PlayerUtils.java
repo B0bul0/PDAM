@@ -17,4 +17,13 @@ public final class PlayerUtils {
         player.sendChatMessage("/tp " + x + " " + y + " " + z);
     }
 
+    public static void sendChatMessage(String message) {
+        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        if (player == null) {
+            return;
+        }
+
+        player.sendChatMessage(message);
+    }
+
 }
