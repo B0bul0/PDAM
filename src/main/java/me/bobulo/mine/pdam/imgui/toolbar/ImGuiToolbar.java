@@ -2,7 +2,9 @@ package me.bobulo.mine.pdam.imgui.toolbar;
 
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
+import me.bobulo.mine.pdam.gui.FeaturesMenuGui;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderable;
+import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -42,6 +44,11 @@ public class ImGuiToolbar implements ImGuiRenderable {
         if (begin("##Toolbar", windowFlags)) {
             if (beginMenuBar()) {
                 if (beginMenu("PDAM")) {
+
+                    if (menuItem("Features Menu")) {
+                        Minecraft.getMinecraft().displayGuiScreen(new FeaturesMenuGui(null));
+                    }
+
                     for (ToolbarItemWindow registeredWindow : registeredWindows) {
                         if (menuItem(registeredWindow.getMenuName() + "##" + registeredWindow.getClass().getSimpleName(), registeredWindow.isVisible())) {
                             registeredWindow.toggleVisible();

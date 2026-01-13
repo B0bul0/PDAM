@@ -16,7 +16,6 @@ import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.tooltop.NBTTagTooltipListener;
-import me.bobulo.mine.pdam.gui.MenuListener;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.ui.UIManager;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
@@ -80,7 +79,6 @@ public final class PDAM {
 
         uiManager.addElement(new NotificationDisplayElement());
 
-        MinecraftForge.EVENT_BUS.register(new MenuListener());
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
         MinecraftForge.EVENT_BUS.register(uiManager);
         MinecraftForge.EVENT_BUS.register(new ChatCopyListener());
