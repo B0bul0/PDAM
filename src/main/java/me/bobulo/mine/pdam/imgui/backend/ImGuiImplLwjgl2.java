@@ -84,16 +84,16 @@ public class ImGuiImplLwjgl2 {
         ImGuiIO io = ImGui.getIO();
 
         if (key == Keyboard.KEY_LCONTROL || key == Keyboard.KEY_RCONTROL) {
-            io.setKeyCtrl(pressed);
+            io.addKeyEvent(ImGuiKey.ModCtrl, pressed);
         }
         if (key == Keyboard.KEY_LSHIFT || key == Keyboard.KEY_RSHIFT) {
-            io.setKeyShift(pressed);
+            io.addKeyEvent(ImGuiKey.ModShift, pressed);
         }
         if (key == Keyboard.KEY_LMENU || key == Keyboard.KEY_RMENU) {
-            io.setKeyAlt(pressed);
+            io.addKeyEvent(ImGuiKey.ModAlt, pressed);
         }
         if (key == Keyboard.KEY_LMETA || key == Keyboard.KEY_RMETA) {
-            io.setKeySuper(pressed);
+            io.addKeyEvent(ImGuiKey.ModSuper, pressed);
         }
 
         io.addKeyEvent(lwjglKeyToImGuiKey(key), pressed);
