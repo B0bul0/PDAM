@@ -19,9 +19,9 @@ import java.util.List;
 
 import static imgui.ImGui.*;
 
-public final class ScoreboardWindow extends AbstractRenderItemWindow {
+public final class ScoreboardDebuggerWindow extends AbstractRenderItemWindow {
 
-    public ScoreboardWindow() {
+    public ScoreboardDebuggerWindow() {
         super("Scoreboard Debugger");
     }
 
