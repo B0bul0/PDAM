@@ -13,6 +13,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Packet Monitoring**: Monitors and logs incoming and outgoing packets for debugging purposes.
 - **Character Map**: Provides a GUI to browse and copy characters.
 - **Hologram Viewer**: Edit personal hologram for prototyping preview.
+- **Scoreboard Inspector**: Displays scoreboard information on-screen for easier debugging.
 
 ## Installation
 1. Ensure you have Minecraft Forge for version 1.8.9 installed.
