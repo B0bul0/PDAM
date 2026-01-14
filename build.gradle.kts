@@ -84,8 +84,8 @@ dependencies {
 
     shadowImpl("io.github.spair:imgui-java-binding:$imguiVersion")
     shadowImpl("io.github.spair:imgui-java-natives-windows:$imguiVersion")
-//    shadowImpl("io.github.spair:imgui-java-natives-linux:$imguiVersion")
-//    shadowImpl("io.github.spair:imgui-java-natives-macos:$imguiVersion")
+    shadowImpl("io.github.spair:imgui-java-natives-linux:$imguiVersion")
+    shadowImpl("io.github.spair:imgui-java-natives-macos:$imguiVersion")
 }
 
 // Tasks:
