@@ -29,7 +29,6 @@ loom {
     log4jConfigs.from(file("log4j2.xml"))
     launchConfigs {
         "client" {
-            // If you don't want mixins, remove these lines
             property("mixin.debug", "true")
             arg("--tweakClass", "org.spongepowered.asm.launch.MixinTweaker")
         }
@@ -45,7 +44,6 @@ loom {
     }
     forge {
         pack200Provider.set(dev.architectury.pack200.java.Pack200Adapter())
-        // If you don't want mixins, remove this lines
         mixinConfig("mixins.$modid.json")
         if (transformerFile.exists()) {
             println("Installing access transformer")
@@ -66,8 +64,7 @@ sourceSets.main {
 repositories {
     mavenCentral()
     maven("https://repo.spongepowered.org/maven/")
-    // If you don't want to log in with your real minecraft account, remove this line
-    maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
+    maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")  // Minecraft 1.8.9 authentication
 }
 
 val shadowImpl: Configuration by configurations.creating {
@@ -84,8 +81,7 @@ dependencies {
     }
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT")
 
-    // If you don't want to log in with your real minecraft account, remove this line
-    runtimeOnly("me.djtheredstoner:DevAuth-forge-legacy:1.2.1")
+    runtimeOnly("me.djtheredstoner:DevAuth-forge-legacy:1.2.1") // Minecraft 1.8.9 authentication
 
     shadowImpl("io.github.spair:imgui-java-binding:$imguiVersion")
     shadowImpl("io.github.spair:imgui-java-natives-windows:$imguiVersion")
