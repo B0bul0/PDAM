@@ -67,7 +67,7 @@ public class ImGuiImplLwjgl2 {
         io.setMouseWheel(io.getMouseWheel() + (scrollDelta / 120F));
     }
 
-    public void onKey() {
+    public void readKey() {
         if (!ImGui.getIO().getWantCaptureKeyboard() || !ImGui.getIO().getWantCaptureMouse()) {
             return;
         }

@@ -141,7 +141,7 @@ public final class ImGuiRenderer {
     }
 
     public void onTick() {
-        imGuiImplDisplay.onKey();
+        imGuiImplDisplay.readKey();
     }
 
 }
