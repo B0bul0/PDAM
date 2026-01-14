@@ -148,7 +148,7 @@ public final class PDAM {
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
-          .id("scoreboard_debugger")
+          .id("scoreboard_inspector")
           .component(ImGuiListenerFeatureComponent.of(new ScoreboardInspectorWindow()))
           .build());
     }
