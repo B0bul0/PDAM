@@ -84,7 +84,6 @@ public final class ImGuiRenderer {
         ImGui.createContext();
 
         ImGuiIO io = ImGui.getIO();
-        io.setIniFilename(null);
         io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
         io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
         io.setIniFilename(new File(PDAM.getConfigDirectory(), "pdam_layout.ini").getAbsolutePath());
