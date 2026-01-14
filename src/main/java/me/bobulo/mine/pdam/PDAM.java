@@ -3,6 +3,7 @@ package me.bobulo.mine.pdam;
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
 import me.bobulo.mine.pdam.config.ConfigListener;
 import me.bobulo.mine.pdam.config.ConfigurationService;
+import me.bobulo.mine.pdam.feature.component.ImGuiListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.hologram.HologramWindow;
 import me.bobulo.mine.pdam.feature.chat.CharacterMapWindow;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
@@ -14,6 +15,7 @@ import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
+import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardWindow;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
@@ -144,6 +146,11 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id("packet_monitor")
           .component(new PacketMonitorFeatureComponent())
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("scoreboard_debugger")
+          .component(ImGuiListenerFeatureComponent.of(new ScoreboardWindow()))
           .build());
     }
 
