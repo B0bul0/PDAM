@@ -14,7 +14,7 @@ import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
-import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardDebuggerWindow;
+import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
@@ -149,7 +149,7 @@ public final class PDAM {
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("scoreboard_debugger")
-          .component(ImGuiListenerFeatureComponent.of(new ScoreboardDebuggerWindow()))
+          .component(ImGuiListenerFeatureComponent.of(new ScoreboardInspectorWindow()))
           .build());
     }
 

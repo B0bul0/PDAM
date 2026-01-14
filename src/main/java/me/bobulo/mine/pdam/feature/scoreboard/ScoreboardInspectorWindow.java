@@ -19,10 +19,10 @@ import java.util.List;
 
 import static imgui.ImGui.*;
 
-public final class ScoreboardDebuggerWindow extends AbstractRenderItemWindow {
+public final class ScoreboardInspectorWindow extends AbstractRenderItemWindow {
 
-    public ScoreboardDebuggerWindow() {
-        super("Scoreboard Debugger");
+    public ScoreboardInspectorWindow() {
+        super("Scoreboard Inspector");
     }
 
     @Override
@@ -30,7 +30,7 @@ public final class ScoreboardDebuggerWindow extends AbstractRenderItemWindow {
         setNextWindowSize(200, 260, ImGuiCond.FirstUseEver);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Scoreboard Debugger###ScoreboardWindow", isVisible)) {
+        if (begin("Scoreboard Inspector###ScoreboardWindow", isVisible)) {
             renderContent();
         }
 
