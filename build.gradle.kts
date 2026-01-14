@@ -1,5 +1,4 @@
 import org.apache.commons.lang3.SystemUtils
-import org.gradle.kotlin.dsl.exclude
 
 plugins {
     idea
@@ -9,7 +8,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-//Constants:
+// Constants:
 
 val baseGroup: String by project
 val mcVersion: String by project
