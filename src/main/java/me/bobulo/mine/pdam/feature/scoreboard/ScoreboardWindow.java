@@ -3,23 +3,23 @@ package me.bobulo.mine.pdam.feature.scoreboard;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiTableFlags;
-import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImString;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.scoreboard.*;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import static imgui.ImGui.*;
 
 public final class ScoreboardWindow extends AbstractRenderItemWindow {
-
-    private final ImString sidebarTitle = new ImString();
-    private final ImString sidebarText = new ImString();
 
     public ScoreboardWindow() {
         super("Scoreboard Debugger");
@@ -39,23 +39,23 @@ public final class ScoreboardWindow extends AbstractRenderItemWindow {
 
     private void renderContent() {
         if (beginTabBar("ScoreboardTabs")) {
-            if (beginTabItem("Current Score Sidebar")) {
-                currentSidebar();
+
+            if (beginTabItem("Pretty Sidebar")) {
+                currentPrettySidebar();
                 endTabItem();
             }
 
-            if (beginTabItem("Current Score Bellow Name")) {
-                currentBellowName();
-                endTabItem();
-            }
+            if (beginTabItem("Current Players Scores")) {
+                text("Display Slots:");
+                separator();
 
-            if (beginTabItem("Current Score List")) {
-                currentList();
-                endTabItem();
-            }
+                if (beginTabBar("ScoreTabs")) {
+                    drawTabItemScore("List", 0);
+                    drawTabItemScore("Sidebar", 1);
+                    drawTabItemScore("Bellow Name", 2);
+                    endTabBar();
+                }
 
-            if (beginTabItem("Current Score")) {
-                currentScore();
                 endTabItem();
             }
 
@@ -68,79 +68,86 @@ public final class ScoreboardWindow extends AbstractRenderItemWindow {
         }
     }
 
-    private void currentSidebar() {
-        refreshSidebar();
+    private void drawTabItemScore(String label, int displaySlot) {
+        boolean open = beginTabItem("Current Score " + label);
+
+        if (isItemHovered()) {
+            setTooltip("Display Slot " + displaySlot + ": " + label);
+        }
+
+        if (open) {
+            currentScoreObjective(displaySlot);
+            endTabItem();
+        }
+    }
+
+    private void currentPrettySidebar() {
+        Scoreboard scoreboard = getScoreboard();
+        if (scoreboard == null) {
+            text("No scoreboard found.");
+            return;
+        }
+
+        ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1); // sidebar slot
+        if (objective == null) {
+            text("No sidebar objective found.");
+            return;
+        }
 
         text("Sidebar Title:");
-        text(sidebarTitle.get());
+        text(objective.getDisplayName());
         separator();
+
         text("Sidebar Content:");
-        inputTextMultiline("##SidebarText", sidebarText, -1, -1, ImGuiInputTextFlags.ReadOnly);
-    }
 
-    private void currentBellowName() {
-        Scoreboard scoreboard = getScoreboard();
-        if (scoreboard == null) {
-            return;
-        }
-
-        ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(2); // bellow name slot
-        if (objective == null) {
-            return;
-        }
-
-        text("Bellow Name Title:");
-        text(objective.getDisplayName());
-        separator();
-        text("Bellow Name Content:");
+        StringBuilder sb = new StringBuilder();
         List<Score> scores = new ArrayList<>(scoreboard.getSortedScores(objective));
         Collections.reverse(scores);
-        if (beginTable("BellowNameTable", 2, ImGuiTableFlags.RowBg | ImGuiTableFlags.Borders)) {
-            tableSetupColumn("Player");
-            tableSetupColumn("Score");
-            tableHeadersRow();
-            for (Score score : scores) {
-                tableNextRow();
-                tableNextColumn();
-                ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
-                if (team != null) {
-                    String prefix = team.getColorPrefix();
-                    String suffix = team.getColorSuffix();
-                    text(prefix + score.getPlayerName()+ suffix);
-                } else {
-                    text(score.getPlayerName());
-                }
-                tableNextColumn();
-                text(Integer.toString(score.getScorePoints()));
+        for (Score score : scores) {
+            ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
+            if (team != null) {
+                String prefix = team.getColorPrefix();
+                String suffix = team.getColorSuffix();
+                sb.append(prefix).append(score.getPlayerName()).append(suffix).append("\n");
+            } else {
+                sb.append(score.getPlayerName()).append("\n");
             }
-            endTable();
         }
+
+        inputTextMultiline("##SidebarText", new ImString(sb.toString()), -1, -1, ImGuiInputTextFlags.ReadOnly);
     }
 
-    private void currentList() {
+    private void currentScoreObjective(int displaySlot) {
         Scoreboard scoreboard = getScoreboard();
         if (scoreboard == null) {
+            text("No scoreboard found.");
             return;
         }
 
-        ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(0); // list slot
+        ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(displaySlot);
         if (objective == null) {
+            text("No objective found in this display slot.");
             return;
         }
 
-        text("List Title:");
+        text("Title:");
         text(objective.getDisplayName());
+
         separator();
-        text("List Content:");
+
+        text("Content:");
         List<Score> scores = new ArrayList<>(scoreboard.getSortedScores(objective));
         Collections.reverse(scores);
-        if (beginTable("ListTable", 2, ImGuiTableFlags.RowBg | ImGuiTableFlags.Borders)) {
+        if (beginTable("ScoreTable", 2, ImGuiTableFlags.RowBg | ImGuiTableFlags.Borders)) {
             tableSetupColumn("Player");
             tableSetupColumn("Score");
+
             tableHeadersRow();
+
             for (Score score : scores) {
                 tableNextRow();
                 tableNextColumn();
+
                 ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
                 if (team != null) {
                     String prefix = team.getColorPrefix();
@@ -149,43 +156,29 @@ public final class ScoreboardWindow extends AbstractRenderItemWindow {
                 } else {
                     text(score.getPlayerName());
                 }
+
                 tableNextColumn();
                 text(Integer.toString(score.getScorePoints()));
             }
+
             endTable();
-        }
-
-    }
-
-    private void currentScore() {
-        Scoreboard scoreboard = getScoreboard();
-        if (scoreboard == null) {
-            return;
-        }
-
-        for (String playerName : scoreboard.getObjectiveNames()) {
-            text("Player:");
-            sameLine();
-            text(playerName);
-
-            for (ScoreObjective objective : scoreboard.getScoreObjectives()) {
-                Score score = scoreboard.getValueFromObjective(playerName, objective);
-                text(objective.getName() + ":");
-                sameLine();
-                text(Integer.toString(score.getScorePoints()));
-            }
-
-            separator();
         }
     }
 
     private void currentTeams() {
         Scoreboard scoreboard = getScoreboard();
         if (scoreboard == null) {
+            text("No scoreboard found.");
             return;
         }
 
-        for (ScorePlayerTeam team : scoreboard.getTeams()) {
+        Collection<ScorePlayerTeam> teams = scoreboard.getTeams();
+        if (teams.isEmpty()) {
+            text("No teams found.");
+            return;
+        }
+
+        for (ScorePlayerTeam team : teams) {
             text("Team:");
             sameLine();
             text(team.getTeamName());
@@ -217,36 +210,6 @@ public final class ScoreboardWindow extends AbstractRenderItemWindow {
 
             separator();
         }
-    }
-
-    private void refreshSidebar() {
-        Scoreboard scoreboard = getScoreboard();
-        if (scoreboard == null) {
-            return;
-        }
-
-        ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1); // sidebar slot
-        if (objective == null) {
-            return;
-        }
-
-        sidebarTitle.set(objective.getDisplayName());
-        StringBuilder sb = new StringBuilder();
-
-        List<Score> scores = new ArrayList<>(scoreboard.getSortedScores(objective));
-        Collections.reverse(scores);
-        for (Score score : scores) {
-            ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
-            if (team != null) {
-                String prefix = team.getColorPrefix();
-                String suffix = team.getColorSuffix();
-                sb.append(prefix).append(score.getPlayerName()).append(suffix).append("\n");
-            } else {
-                sb.append(score.getPlayerName()).append("\n");
-            }
-        }
-
-        sidebarText.set(sb.toString().trim());
     }
 
     private Scoreboard getScoreboard() {
