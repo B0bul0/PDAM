@@ -99,9 +99,6 @@ public final class PDAM {
         MinecraftForge.EVENT_BUS.register(uiManager);
         MinecraftForge.EVENT_BUS.register(new ChatCopyListener());
 
-        imGuiRenderer.registerWidow(new HologramWindow());
-        imGuiRenderer.registerWidow(new CharacterMapWindow());
-
         // Register client commands
         ClientCommandHandler.instance.registerCommand(new CopyToClipboardCommand());
 
@@ -145,6 +142,16 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id("packet_monitor")
           .component(new PacketMonitorFeatureComponent())
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("character_map")
+          .component(ImGuiListenerFeatureComponent.of(new CharacterMapWindow()))
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("hologram_mockup")
+          .component(ImGuiListenerFeatureComponent.of(new HologramWindow()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()

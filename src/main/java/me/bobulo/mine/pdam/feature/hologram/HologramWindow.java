@@ -27,7 +27,7 @@ public final class HologramWindow extends AbstractRenderItemWindow {
     private final ImFloat viewDistance = new ImFloat(5f);
 
     public HologramWindow() {
-        super("Hologram Viewer");
+        super("Hologram Mockup");
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class HologramWindow extends AbstractRenderItemWindow {
         setNextWindowSize(400, 525, ImGuiCond.FirstUseEver);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Hologram Viewer###HologramWindow", isVisible)) {
+        if (begin("Hologram Mockup###HologramWindow", isVisible)) {
             renderContent();
         }
 
