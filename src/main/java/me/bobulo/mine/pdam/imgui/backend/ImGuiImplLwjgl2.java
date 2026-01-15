@@ -68,7 +68,7 @@ public class ImGuiImplLwjgl2 {
     }
 
     public void readKey() {
-        if (!ImGui.getIO().getWantCaptureKeyboard() || !ImGui.getIO().getWantCaptureMouse()) {
+        if (!ImGui.getIO().getWantCaptureKeyboard()) {
             return;
         }
 
