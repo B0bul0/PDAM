@@ -165,6 +165,11 @@ public final class PDAM {
           .id("server_info")
           .component(ImGuiListenerFeatureComponent.of(new ServerInfoWindow()))
           .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("fly_booster")
+          .component(ImGuiListenerFeatureComponent.of(new FlyBoosterWindow()))
+          .build());
     }
 
 }
