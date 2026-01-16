@@ -6,6 +6,8 @@ import imgui.flag.ImGuiConfigFlags;
 import me.bobulo.mine.pdam.PDAM;
 import me.bobulo.mine.pdam.imgui.backend.ImGuiImplGl2;
 import me.bobulo.mine.pdam.imgui.backend.ImGuiImplLwjgl2;
+import me.bobulo.mine.pdam.imgui.guizmo.RenderGuizmoHandler;
+import me.bobulo.mine.pdam.imgui.guizmo.GuizmoImGui;
 import me.bobulo.mine.pdam.imgui.input.ImGuiInputHandler;
 import me.bobulo.mine.pdam.imgui.toolbar.ImGuiToolbar;
 import me.bobulo.mine.pdam.imgui.toolbar.ToolbarItemWindow;
@@ -97,6 +99,8 @@ public final class ImGuiRenderer {
         inputHandler = new ImGuiInputHandler(imGuiImplDisplay);
         MinecraftForge.EVENT_BUS.register(inputHandler);
 
+        MinecraftForge.EVENT_BUS.register(new RenderGuizmoHandler());
+
         initialized = true;
     }
 
@@ -109,6 +113,7 @@ public final class ImGuiRenderer {
         imGuiImplGl2.newFrame();
 
         ImGui.newFrame();
+        GuizmoImGui.renderFrame();
 
         imGuiToolbar.newFrame();
 

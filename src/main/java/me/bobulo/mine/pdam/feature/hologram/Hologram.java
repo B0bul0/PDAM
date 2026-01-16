@@ -96,6 +96,10 @@ public final class Hologram {
     }
 
     public void setPosition(double x, double y, double z) {
+        if (this.x == x && this.y == y && this.z == z) {
+            return;
+        }
+
         this.x = x;
         this.y = y;
         this.z = z;

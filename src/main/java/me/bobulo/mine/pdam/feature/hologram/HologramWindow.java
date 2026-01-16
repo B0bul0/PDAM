@@ -1,9 +1,11 @@
 package me.bobulo.mine.pdam.feature.hologram;
 
+import imgui.extension.imguizmo.flag.Mode;
 import imgui.flag.ImGuiCond;
 import imgui.type.ImBoolean;
 import imgui.type.ImFloat;
 import imgui.type.ImString;
+import me.bobulo.mine.pdam.imgui.guizmo.GuizmoImGui;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -18,13 +20,16 @@ public final class HologramWindow extends AbstractRenderItemWindow {
     private static final Logger log = LogManager.getLogger(HologramWindow.class);
 
     private Hologram hologram;
+    private final float[] position = new float[]{0f, 0f, 0f};
 
     private final ImString hologramText = new ImString(2048);
     private boolean updatedText = false;
 
-    private final float[] position = new float[]{0f, 0f, 0f};
     private final ImBoolean lockToView = new ImBoolean();
     private final ImFloat viewDistance = new ImFloat(5f);
+
+    private final ImBoolean manipule = new ImBoolean();
+    private final float[] manipulatePosition = new float[3];
 
     public HologramWindow() {
         super("Hologram Mockup");
@@ -43,6 +48,16 @@ public final class HologramWindow extends AbstractRenderItemWindow {
 
         if (isVisible.get()) {
             try {
+                if (manipule.get() && !lockToView.get()) {
+                    manipulatePosition[0] = position[0];
+                    manipulatePosition[1] = position[1] + 2.3F; // Offset to match hologram height
+                    manipulatePosition[2] = position[2];
+                    GuizmoImGui.manipulateTranslation(Mode.WORLD, manipulatePosition);
+                    position[0] = manipulatePosition[0];
+                    position[1] = manipulatePosition[1] - 2.3F; // Revert offset
+                    position[2] = manipulatePosition[2];
+                }
+
                 updateHologramPosition();
 
                 if (updatedText) {
@@ -61,15 +76,10 @@ public final class HologramWindow extends AbstractRenderItemWindow {
     }
 
     private void renderContent() {
-        if (inputFloat3("Hologram Position", position)) {
-            if (hologram != null) {
-                hologram.setPosition(position[0], position[1], position[2]);
-            }
-        }
-
         checkbox("Lock to view", lockToView);
+        boolean lockToViewEnabled = lockToView.get();
 
-        if (!lockToView.get()) {
+        if (!lockToViewEnabled) {
             beginDisabled();
         }
 
@@ -77,7 +87,26 @@ public final class HologramWindow extends AbstractRenderItemWindow {
         setNextItemWidth(80.0f);
         inputFloat("Distance (blocks)", viewDistance);
 
-        if (!lockToView.get()) {
+        if (!lockToViewEnabled) {
+            endDisabled();
+        }
+
+        if (lockToViewEnabled) {
+            beginDisabled();
+        }
+
+        if (inputFloat3("Hologram Position", position)) {
+            if (hologram != null) {
+                hologram.setPosition(position[0], position[1], position[2]);
+            }
+        }
+
+        checkbox("Show Movement Handles", manipule);
+        if (isItemHovered()) {
+            setTooltip("Enable to move the hologram using visual handles in the 3D world.");
+        }
+
+        if (lockToViewEnabled) {
             endDisabled();
         }
 
@@ -124,7 +153,7 @@ public final class HologramWindow extends AbstractRenderItemWindow {
             Vec3 look = player.getLookVec();
             Vec3 target = eyePos.addVector(
               look.xCoord * viewDistanceBlocks,
-              look.yCoord * viewDistanceBlocks - (hologram.getLineCount() * 0.25f) / 2f - 2,
+              look.yCoord * viewDistanceBlocks - (hologram.getLineCount() * 0.25f) / 2f - 2, // Center the hologram vertically and offset down
               look.zCoord * viewDistanceBlocks
             );
 
@@ -132,7 +161,10 @@ public final class HologramWindow extends AbstractRenderItemWindow {
             position[0] = (float) target.xCoord;
             position[1] = (float) target.yCoord;
             position[2] = (float) target.zCoord;
+            return;
         }
+
+        hologram.setPosition(position[0], position[1], position[2]);
     }
 
 }
