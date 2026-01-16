@@ -83,13 +83,13 @@ public final class PDAM {
 
         instance = this;
 
-        this.configDirectory = event.getModConfigurationDirectory();
+        this.configDirectory = new File(event.getModConfigurationDirectory(), "pdam");
         if (!this.configDirectory.exists()) {
             this.configDirectory.mkdirs();
         }
 
         this.config = new ConfigurationService();
-        this.config.init(new File(event.getModConfigurationDirectory(), "pdam.cfg"));
+        this.config.init(new File(configDirectory, "pdam.cfg"));
 
         this.uiManager = new UIManager();
         this.imGuiRenderer = new ImGuiRenderer();
