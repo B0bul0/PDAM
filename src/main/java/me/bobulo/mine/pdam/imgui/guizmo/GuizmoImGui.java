@@ -48,6 +48,10 @@ public final class GuizmoImGui {
         GL11.glPopMatrix();
     }
 
+    public static boolean manipulateRotation(int mode, float[] rotation) {
+        return manipulate(Operation.ROTATE, mode, ignoreTranslation, rotation, ignoreScale);
+    }
+
     public static boolean manipulateTranslation(int mode, float[] translation) {
         return manipulate(Operation.TRANSLATE, mode, translation, ignoreRotation, ignoreScale);
     }
