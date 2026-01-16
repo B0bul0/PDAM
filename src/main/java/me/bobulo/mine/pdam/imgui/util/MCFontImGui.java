@@ -56,7 +56,7 @@ public final class MCFontImGui {
     }
 
     public static void mcText(String text) {
-        mcText(text, 0xFFFFFFFF, false, 1.0f);
+        mcText(text, 0xFFFFFFFF, false, 1.2f);
     }
 
     public static void mcText(String text, float scale) {
@@ -64,8 +64,8 @@ public final class MCFontImGui {
     }
 
     public static void mcText(String text, int color, boolean shadow, float scale) {
-        if (text == null || text.isEmpty()) {
-            return;
+        if (text == null) {
+            text = "null";
         }
 
         Minecraft mc = Minecraft.getMinecraft();
