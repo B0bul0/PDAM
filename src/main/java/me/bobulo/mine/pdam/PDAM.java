@@ -14,6 +14,7 @@ import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
+import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
