@@ -6,15 +6,12 @@ import imgui.flag.ImGuiInputTextFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImString;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
+import me.bobulo.mine.pdam.util.ServerConnector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.multiplayer.ServerList;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static imgui.ImGui.*;
@@ -28,6 +25,8 @@ public class ServerInfoWindow extends AbstractRenderItemWindow {
 
     private final ImBoolean rawMOTD = new ImBoolean(true);
     private final ImString motd = new ImString();
+
+    private final ImBoolean firstPing = new ImBoolean(true);
 
     public ServerInfoWindow() {
         super("Server Info");
@@ -85,6 +84,11 @@ public class ServerInfoWindow extends AbstractRenderItemWindow {
             }
 
             return;
+        }
+
+        if (firstPing.get() && !serverScanner.isPinging()) {
+            serverScanner.pingServerList();
+            firstPing.set(false);
         }
 
         text("Filter Servers:");
@@ -174,38 +178,28 @@ public class ServerInfoWindow extends AbstractRenderItemWindow {
 
         separator();
 
-        if (button("Connect to Server")) {
-            try {
-                int defaultPort = 25565; // Default Minecraft port
-
-                if (serverData.serverIP.contains(":")) {
-                    String[] parts = serverData.serverIP.split(":");
-                    String ip = parts[0];
-                    int port = NumberUtils.toInt(parts[1], defaultPort);
-                    FMLClientHandler.instance().connectToServerAtStartup(ip, port);
-                } else {
-                    FMLClientHandler.instance().connectToServerAtStartup(serverData.serverIP, defaultPort);
+        if (!isConnected(serverData)) {
+            if (button("Connect to Server")) {
+                try {
+                    ServerConnector.connectToServer(serverData);
+                } catch (Exception e) {
+                    log.error("Failed to connect to server: {}", serverData.serverIP, e);
                 }
-            } catch (Exception e) {
-                log.error("Failed to connect to server: {}", serverData.serverIP, e);
             }
         }
     }
 
-    private ServerData getCurrentServer() {
-        return Minecraft.getMinecraft().getCurrentServerData();
+    private boolean isConnected(ServerData serverData) {
+        ServerData currentServer = getCurrentServer();
+        if (currentServer == null || serverData == null) {
+            return false;
+        }
+
+        return currentServer.serverIP.equals(serverData.serverIP);
     }
 
-    public static List<ServerData> getServerList() {
-        Minecraft mc = Minecraft.getMinecraft();
-        ServerList serverList = new ServerList(mc);
-        serverList.loadServerList();
-
-        List<ServerData> servers = new ArrayList<>();
-        for (int i = 0; i < serverList.countServers(); i++) {
-            servers.add(serverList.getServerData(i));
-        }
-        return servers;
+    private ServerData getCurrentServer() {
+        return Minecraft.getMinecraft().getCurrentServerData();
     }
 
 }
