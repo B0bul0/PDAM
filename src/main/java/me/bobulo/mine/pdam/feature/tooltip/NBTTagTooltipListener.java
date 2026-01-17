@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.tooltop;
+package me.bobulo.mine.pdam.feature.tooltip;
 
 import com.google.common.collect.Sets;
 import net.minecraft.item.ItemStack;

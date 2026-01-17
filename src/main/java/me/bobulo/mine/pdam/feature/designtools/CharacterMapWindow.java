@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.chat.window;
+package me.bobulo.mine.pdam.feature.designtools;
 
 import com.google.common.primitives.Chars;
 import imgui.ImGuiListClipper;

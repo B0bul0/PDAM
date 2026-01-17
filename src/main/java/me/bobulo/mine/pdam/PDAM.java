@@ -6,15 +6,15 @@ import me.bobulo.mine.pdam.config.ConfigurationService;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
-import me.bobulo.mine.pdam.feature.chat.window.CharacterMapWindow;
-import me.bobulo.mine.pdam.feature.chat.window.MessageFormatterWindow;
+import me.bobulo.mine.pdam.feature.designtools.CharacterMapWindow;
+import me.bobulo.mine.pdam.feature.designtools.MessageFormatterWindow;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.component.CallbackFeatureComponent;
 import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.component.ImGuiListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
-import me.bobulo.mine.pdam.feature.hologram.HologramWindow;
+import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
@@ -24,9 +24,9 @@ import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
-import me.bobulo.mine.pdam.feature.title.ActionBarVisualizerWindow;
-import me.bobulo.mine.pdam.feature.title.TitleVisualizerWindow;
-import me.bobulo.mine.pdam.feature.tooltop.NBTTagTooltipListener;
+import me.bobulo.mine.pdam.feature.designtools.ActionBarVisualizerWindow;
+import me.bobulo.mine.pdam.feature.designtools.TitleVisualizerWindow;
+import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
 import me.bobulo.mine.pdam.ui.UIManager;
@@ -102,8 +102,6 @@ public final class PDAM {
 
         uiManager.addElement(new NotificationDisplayElement());
 
-        imGuiRenderer.registerWidow(new TitleVisualizerWindow());
-        imGuiRenderer.registerWidow(new ActionBarVisualizerWindow());
 
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
         MinecraftForge.EVENT_BUS.register(uiManager);
@@ -154,16 +152,6 @@ public final class PDAM {
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
-          .id("character_map")
-          .component(ImGuiListenerFeatureComponent.of(new CharacterMapWindow()))
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("hologram_mockup")
-          .component(ImGuiListenerFeatureComponent.of(new HologramWindow()))
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
           .id("scoreboard_inspector")
           .component(ImGuiListenerFeatureComponent.of(new ScoreboardInspectorWindow()))
           .build());
@@ -181,7 +169,6 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id("messaging_utilities")
           .component(ImGuiListenerFeatureComponent.of(
-            new MessageFormatterWindow(),
             new SendChatMessageWindow()
           ))
           .component(ForgerListenerFeatureComponent.of(new ChatCopyListener()))
@@ -190,6 +177,17 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id("sign_editor")
           .component(ForgerListenerFeatureComponent.of(new SignEditorListener()))
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("design_tools")
+          .component(ImGuiListenerFeatureComponent.of(
+            new CharacterMapWindow(),
+            new MessageFormatterWindow(),
+            new TitleVisualizerWindow(),
+            new ActionBarVisualizerWindow(),
+            new HologramMockupWindow()
+          ))
           .build());
     }
 

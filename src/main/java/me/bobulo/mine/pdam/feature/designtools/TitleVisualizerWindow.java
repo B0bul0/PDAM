@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.title;
+package me.bobulo.mine.pdam.feature.designtools;
 
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;

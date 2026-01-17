@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.hologram;
+package me.bobulo.mine.pdam.feature.designtools.hologram;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

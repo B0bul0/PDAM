@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.hologram;
+package me.bobulo.mine.pdam.feature.designtools.hologram;
 
 import imgui.extension.imguizmo.flag.Mode;
 import imgui.flag.ImGuiCond;
@@ -16,9 +16,9 @@ import org.apache.logging.log4j.Logger;
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 
-public final class HologramWindow extends AbstractRenderItemWindow {
+public final class HologramMockupWindow extends AbstractRenderItemWindow {
 
-    private static final Logger log = LogManager.getLogger(HologramWindow.class);
+    private static final Logger log = LogManager.getLogger(HologramMockupWindow.class);
 
     private Hologram hologram;
     private final float[] position = new float[]{0f, 0f, 0f};
@@ -32,7 +32,7 @@ public final class HologramWindow extends AbstractRenderItemWindow {
     private final ImBoolean manipule = new ImBoolean();
     private final float[] manipulatePosition = new float[3];
 
-    public HologramWindow() {
+    public HologramMockupWindow() {
         super("Hologram Mockup");
     }
 
@@ -41,7 +41,7 @@ public final class HologramWindow extends AbstractRenderItemWindow {
         setNextWindowSize(400, 525, ImGuiCond.FirstUseEver);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Hologram Mockup###HologramWindow", isVisible)) {
+        if (begin("Hologram Mockup###HologramMockupWindow", isVisible)) {
             keepInScreen();
             renderContent();
         }
