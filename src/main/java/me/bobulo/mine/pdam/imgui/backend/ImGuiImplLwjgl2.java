@@ -40,8 +40,7 @@ public class ImGuiImplLwjgl2 {
 
         // set delta
         long nutime = System.currentTimeMillis();
-        float delta =
-          time > 0 ? (float) (((double) nutime - time) / 1000.0) : 1.0f / 60;
+        float delta = time > 0 ? (float) (((double) nutime - time) / 1000.0) : 1.0f / 60;
 
         // prevent failed assert for delta > 0.0f
         io.setDeltaTime((delta > 0.0f) ? delta : 0.01f);

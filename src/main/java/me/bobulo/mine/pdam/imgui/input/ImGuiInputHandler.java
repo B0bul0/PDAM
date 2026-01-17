@@ -35,14 +35,6 @@ public class ImGuiInputHandler {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onKeyInput(InputEvent.KeyInputEvent event) {
-        int key = Keyboard.getEventKey() == 0 ?
-          Keyboard.getEventCharacter() : Keyboard.getEventKey();
-
-        display.onKey(key, Keyboard.getEventKeyState());
-    }
-
     public boolean isMouseOverImGui() {
         return ImGui.getIO().getWantCaptureMouse();
     }
