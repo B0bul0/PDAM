@@ -15,6 +15,7 @@ import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
+import me.bobulo.mine.pdam.feature.player.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
@@ -100,6 +101,8 @@ public final class PDAM {
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
         MinecraftForge.EVENT_BUS.register(uiManager);
         MinecraftForge.EVENT_BUS.register(new ChatCopyListener());
+
+        imGuiRenderer.registerWidow(new SendChatMessageWindow());
 
         // Register client commands
         ClientCommandHandler.instance.registerCommand(new CopyToClipboardCommand());
