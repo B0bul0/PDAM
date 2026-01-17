@@ -19,6 +19,7 @@ import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
+import me.bobulo.mine.pdam.feature.sign.SignEditorListener;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
@@ -179,6 +180,11 @@ public final class PDAM {
             new SendChatMessageWindow()
           ))
           .component(ForgerListenerFeatureComponent.of(new ChatCopyListener()))
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("sign_editor")
+          .component(ForgerListenerFeatureComponent.of(new SignEditorListener()))
           .build());
     }
 
