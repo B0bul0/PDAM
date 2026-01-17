@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 
 import static imgui.ImGui.*;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 
 public class SendChatMessageWindow extends AbstractRenderItemWindow {
 
@@ -31,6 +32,7 @@ public class SendChatMessageWindow extends AbstractRenderItemWindow {
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
         if (begin("Send Chat Message###SendChatMessageWindow", isVisible)) {
+            keepInScreen();
             renderContent();
         }
 

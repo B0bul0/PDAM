@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static imgui.ImGui.*;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 
 public final class HologramWindow extends AbstractRenderItemWindow {
 
@@ -41,6 +42,7 @@ public final class HologramWindow extends AbstractRenderItemWindow {
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
         if (begin("Hologram Mockup###HologramWindow", isVisible)) {
+            keepInScreen();
             renderContent();
         }
 

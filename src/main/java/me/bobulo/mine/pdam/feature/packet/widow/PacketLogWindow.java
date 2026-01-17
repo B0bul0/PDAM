@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static imgui.ImGui.*;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 
 public final class PacketLogWindow extends AbstractRenderItemWindow {
@@ -41,6 +42,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
         setNextWindowPos(100, 100, ImGuiCond.FirstUseEver);
 
         if (begin(translate("title") + "###PacketLogWindow", isVisible)) {
+            keepInScreen();
             renderContent();
         }
 

@@ -6,7 +6,6 @@ import imgui.ImGuiTextFilter;
 import imgui.flag.*;
 import imgui.type.ImInt;
 import imgui.type.ImString;
-import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
 import me.bobulo.mine.pdam.feature.sound.log.SoundLogEntry;
 import me.bobulo.mine.pdam.feature.sound.mapper.SoundMapper;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
@@ -25,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static imgui.ImGui.*;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 
 public final class SoundDebugWindow extends AbstractRenderItemWindow {
 
@@ -60,6 +60,8 @@ public final class SoundDebugWindow extends AbstractRenderItemWindow {
             end();
             return;
         }
+
+        keepInScreen();
 
         Minecraft mc = Minecraft.getMinecraft();
 

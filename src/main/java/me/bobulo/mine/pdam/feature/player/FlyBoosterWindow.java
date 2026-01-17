@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 
 import static imgui.ImGui.*;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 
 /**
  * A GUI window that allows the player to boost their flying speed in Minecraft.
@@ -27,6 +28,7 @@ public class FlyBoosterWindow extends AbstractRenderItemWindow {
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
         if (begin("Fly Booster###FlyBoosterWindow", isVisible, ImGuiWindowFlags.NoResize)) {
+            keepInScreen();
             renderContent();
         }
 

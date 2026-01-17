@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static imgui.ImGui.*;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 
 public final class ScoreboardInspectorWindow extends AbstractRenderItemWindow {
 
@@ -31,6 +32,7 @@ public final class ScoreboardInspectorWindow extends AbstractRenderItemWindow {
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
         if (begin("Scoreboard Inspector###ScoreboardWindow", isVisible)) {
+            keepInScreen();
             renderContent();
         }
 

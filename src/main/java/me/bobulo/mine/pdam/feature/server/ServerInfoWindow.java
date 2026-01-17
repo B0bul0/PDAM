@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 import static imgui.ImGui.*;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 import static me.bobulo.mine.pdam.imgui.util.MCFontImGui.mcText;
 
 public class ServerInfoWindow extends AbstractRenderItemWindow {
@@ -38,6 +39,7 @@ public class ServerInfoWindow extends AbstractRenderItemWindow {
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
         if (begin("Server Info###ServerInfoWindow", isVisible)) {
+            keepInScreen();
             renderContent();
         }
 
