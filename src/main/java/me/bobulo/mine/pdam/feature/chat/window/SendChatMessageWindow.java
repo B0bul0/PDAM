@@ -69,6 +69,8 @@ public class SendChatMessageWindow extends AbstractRenderItemWindow {
         sameLine();
 
         if (beginPopup("OptionsPopup")) {
+            text("Send Options");
+            separator();
             checkbox("Send on Enter", sendOnEnter);
             checkbox("Clear After Send", clearAfterSend);
             checkbox("Multi Message (Split by new lines)", multiMessage);
