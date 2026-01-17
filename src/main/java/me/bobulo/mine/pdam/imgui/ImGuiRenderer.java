@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @SideOnly(Side.CLIENT)
 public final class ImGuiRenderer {
@@ -33,7 +34,7 @@ public final class ImGuiRenderer {
 
     private final ImGuiToolbar imGuiToolbar = new ImGuiToolbar();
 
-    private final List<ImGuiRenderable> frameRenders = new ArrayList<>();
+    private final List<ImGuiRenderable> frameRenders = new CopyOnWriteArrayList<>();
 
     public ImGuiRenderer() {
     }
