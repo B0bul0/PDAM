@@ -3,19 +3,20 @@ package me.bobulo.mine.pdam;
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
 import me.bobulo.mine.pdam.config.ConfigListener;
 import me.bobulo.mine.pdam.config.ConfigurationService;
-import me.bobulo.mine.pdam.feature.component.ImGuiListenerFeatureComponent;
-import me.bobulo.mine.pdam.feature.hologram.HologramWindow;
-import me.bobulo.mine.pdam.feature.chat.window.CharacterMapWindow;
-import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
+import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
+import me.bobulo.mine.pdam.feature.chat.window.CharacterMapWindow;
+import me.bobulo.mine.pdam.feature.chat.window.MessageFormatterWindow;
+import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.component.CallbackFeatureComponent;
 import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
+import me.bobulo.mine.pdam.feature.component.ImGuiListenerFeatureComponent;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
+import me.bobulo.mine.pdam.feature.hologram.HologramWindow;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
-import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
@@ -100,9 +101,6 @@ public final class PDAM {
 
         MinecraftForge.EVENT_BUS.register(new ConfigListener());
         MinecraftForge.EVENT_BUS.register(uiManager);
-        MinecraftForge.EVENT_BUS.register(new ChatCopyListener());
-
-        imGuiRenderer.registerWidow(new SendChatMessageWindow());
 
         // Register client commands
         ClientCommandHandler.instance.registerCommand(new CopyToClipboardCommand());
@@ -172,6 +170,15 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id("fly_booster")
           .component(ImGuiListenerFeatureComponent.of(new FlyBoosterWindow()))
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("messaging_utilities")
+          .component(ImGuiListenerFeatureComponent.of(
+            new MessageFormatterWindow(),
+            new SendChatMessageWindow()
+          ))
+          .component(ForgerListenerFeatureComponent.of(new ChatCopyListener()))
           .build());
     }
 
