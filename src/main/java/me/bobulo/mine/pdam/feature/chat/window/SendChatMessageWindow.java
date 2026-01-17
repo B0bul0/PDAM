@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.player;
+package me.bobulo.mine.pdam.feature.chat.window;
 
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
