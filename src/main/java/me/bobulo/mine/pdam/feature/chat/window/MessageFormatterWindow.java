@@ -1,10 +1,15 @@
 package me.bobulo.mine.pdam.feature.chat.window;
 
 import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiInputTextFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImFloat;
+import imgui.type.ImInt;
 import imgui.type.ImString;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
+import net.minecraft.client.Minecraft;
+
+import java.util.List;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
@@ -20,6 +25,8 @@ public class MessageFormatterWindow extends AbstractRenderItemWindow {
     // options
     private final ImFloat scale = new ImFloat(1.3f); // message scale
     private final ImBoolean allowOtherColorCodes = new ImBoolean(true); // enable & formatting codes
+    private final ImBoolean wrapText = new ImBoolean(true); // wrap text in preview
+    private final ImInt wrapWidth = new ImInt(320); // wrap width in pixels
 
     public MessageFormatterWindow() {
         super("Message Formatter");
@@ -44,6 +51,21 @@ public class MessageFormatterWindow extends AbstractRenderItemWindow {
             separator();
             inputFloat("Text Scale", scale, 0.1f, 0.5f, "%.1f");
             checkbox("Allow & Color Codes", allowOtherColorCodes);
+
+            checkbox("Wrap Text in Preview", wrapText);
+            if (!wrapText.get()) {
+                beginDisabled();
+            }
+
+            inputInt("Wrap Width (px)", wrapWidth, 10, 30, ImGuiInputTextFlags.EnterReturnsTrue);
+            if (wrapWidth.get() < 40) {
+                wrapWidth.set(40);
+            }
+
+            if (!wrapText.get()) {
+                endDisabled();
+            }
+
             endPopup();
         }
 
@@ -67,7 +89,20 @@ public class MessageFormatterWindow extends AbstractRenderItemWindow {
             String text = message.get().trim();
 
             for (String line : text.split("\n")) {
-                mcText(getFormattedMessage(line), scale.get());
+                String formattedMessage = getFormattedMessage(line);
+
+                if (wrapText.get()) {
+                    List<String> strings = Minecraft.getMinecraft().fontRendererObj
+                      .listFormattedStringToWidth(formattedMessage, wrapWidth.get());
+
+                    for (String string : strings) {
+                        mcText(string, scale.get());
+                    }
+
+                    continue;
+                }
+
+                mcText(formattedMessage, scale.get());
             }
 
             endChild();
