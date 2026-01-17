@@ -14,6 +14,9 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Character Map**: Provides a GUI to browse and copy characters.
 - **Hologram Mockup**: Edit personal hologram for prototyping preview.
 - **Scoreboard Inspector**: Displays scoreboard information on-screen for easier debugging.
+- **Sign Editor**: Edit sign text in-game with a GUI.
+- **Fly Booster**: Enhances flying speed.
+- **Chat Message Formater**: Preview how messages appear in chat.
 
 ## Installation
 1. Ensure you have Minecraft Forge for version 1.8.9 installed.
