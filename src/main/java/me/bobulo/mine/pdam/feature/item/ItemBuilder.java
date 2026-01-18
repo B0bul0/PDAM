@@ -9,16 +9,102 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 public class ItemBuilder {
 
+    public static ItemBuilder fromItemStack(ItemStack itemStack) {
+        ItemBuilder itemBuilder = new ItemBuilder();
+
+        itemBuilder.setMaterial(Item.itemRegistry.getNameForObject(itemStack.getItem()).toString() +
+          ":" + itemStack.getItemDamage());
+
+        itemBuilder.setAmount(itemStack.stackSize);
+
+        NBTTagCompound tagCompound = itemStack.getTagCompound();
+        if (tagCompound != null) {
+            NBTTagCompound displayTag = tagCompound.getCompoundTag("display");
+
+            if (displayTag != null && displayTag.hasKey("Name")) {
+                itemBuilder.setCustomName(displayTag.getString("Name"));
+            }
+
+            if (displayTag != null && displayTag.hasKey("Lore")) {
+                NBTTagList loreTag = displayTag.getTagList("Lore", 8);
+                StringBuilder loreBuilder = new StringBuilder();
+                for (int i = 0; i < loreTag.tagCount(); i++) {
+                    if (i > 0) {
+                        loreBuilder.append("\n");
+                    }
+                    loreBuilder.append(loreTag.getStringTagAt(i));
+                }
+                itemBuilder.setCustomLore(loreBuilder.toString());
+            }
+
+            if (tagCompound.hasKey("Unbreakable")) {
+                itemBuilder.setUnbreakable(tagCompound.getBoolean("Unbreakable"));
+            }
+
+            if (tagCompound.hasKey("HideFlags")) {
+                int hideFlagsValue = tagCompound.getInteger("HideFlags");
+                List<HideFlag> hideFlags = HideFlag.VALUES.stream()
+                        .filter(hideFlag -> (hideFlagsValue & hideFlag.getBit()) != 0)
+                        .collect(Collectors.toList());
+                itemBuilder.setHideFlags(hideFlags);
+            }
+
+            if (tagCompound.hasKey("ench")) {
+                itemBuilder.setGlowing(true);
+            }
+
+            if (tagCompound.hasKey("ench")) {
+                NBTTagList enchTagList = tagCompound.getTagList("ench", 10);
+                Map<Enchantment, Integer> enchantments = new HashMap<>();
+
+                for (int i = 0; i < enchTagList.tagCount(); i++) {
+                    NBTTagCompound enchTag = enchTagList.getCompoundTagAt(i);
+                    Enchantment enchantment = Enchantment.byId(enchTag.getShort("id"));
+                    int level = enchTag.getShort("lvl");
+                    if (enchantment != null) {
+                        enchantments.put(enchantment, level);
+                    }
+                }
+
+                itemBuilder.setEnchantments(enchantments);
+            }
+
+            if (displayTag != null && displayTag.hasKey("color")) {
+                itemBuilder.setColor(displayTag.getInteger("color"));
+            }
+
+            if (tagCompound.hasKey("SkullOwner")) {
+                NBTTagCompound skullOwner = tagCompound.getCompoundTag("SkullOwner");
+                if (skullOwner != null && skullOwner.hasKey("Properties")) {
+                    NBTTagCompound properties = skullOwner.getCompoundTag("Properties");
+                    if (properties != null && properties.hasKey("textures")) {
+                        NBTTagList textures = properties.getTagList("textures", 10);
+                        if (textures.tagCount() > 0) {
+                            NBTTagCompound textureValue = textures.getCompoundTagAt(0);
+                            if (textureValue != null && textureValue.hasKey("Value")) {
+                                itemBuilder.setSkullValue(textureValue.getString("Value"));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return itemBuilder;
+    }
+
     private String material;
 
-    private int data;
-    private boolean durability;
+    private int durability;
 
     private int amount = 1;
 
@@ -29,19 +115,23 @@ public class ItemBuilder {
     private boolean unbreakable;
 
     private boolean glowing;
-    private Map<String, Integer> enchantments;
+    private Map<Enchantment, Integer> enchantments;
 
+    private int repairCost; // todo
 
     // Armor color
     private Integer color;
 
+    // Skull
+    private String skullValue;
+
 
     public ItemStack buildItem() {
-        Item item = Item.getByNameOrId(material);
-        ItemStack itemStack = new ItemStack(item, amount, (short) data);
+        ItemStack itemStack = ItemStackResolver.resolve(material);
+        itemStack.stackSize = amount;
 
-        if (durability) {
-            itemStack.setItemDamage(itemStack.getMaxDamage() - data);
+        if (durability > 0) {
+            itemStack.setItemDamage(itemStack.getMaxDamage() - durability);
         }
 
         if (StringUtils.isNoneBlank(customName)) {
@@ -82,10 +172,14 @@ public class ItemBuilder {
 
         if (enchantments != null && !enchantments.isEmpty()) {
             NBTTagList enchTagList = new NBTTagList();
-            for (Map.Entry<String, Integer> enchantmentEntry : enchantments.entrySet()) {
+            for (Map.Entry<Enchantment, Integer> enchantmentEntry : enchantments.entrySet()) {
+                if (enchantmentEntry.getKey() == null || enchantmentEntry.getValue() == null) {
+                    continue;
+                }
+
                 NBTTagCompound enchTag = new NBTTagCompound();
-                enchTag.setShort("id", (short) Integer.parseInt(enchantmentEntry.getKey()));
-                enchTag.setShort("lvl", (short) (int) enchantmentEntry.getValue());
+                enchTag.setShort("id", (short) enchantmentEntry.getKey().getId());
+                enchTag.setShort("lvl", enchantmentEntry.getValue().shortValue());
                 enchTagList.appendTag(enchTag);
             }
             tagCompound.setTag("ench", enchTagList);
@@ -97,31 +191,23 @@ public class ItemBuilder {
             tagCompound.setTag("display", displayTag);
         }
 
-//        itemStack.setItemDamage(durability);
+        if (StringUtils.isNoneBlank(skullValue)) {
+            NBTTagCompound skullOwner = new NBTTagCompound();
+            skullOwner.setString("Id", UUID.randomUUID().toString());
+            skullOwner.setString("Name", "Custom");
 
+            NBTTagCompound properties = new NBTTagCompound();
+            NBTTagList textures = new NBTTagList();
+            NBTTagCompound textureValue = new NBTTagCompound();
+            textureValue.setString("Value", skullValue);
+
+            textures.appendTag(textureValue);
+            properties.setTag("textures", textures);
+            skullOwner.setTag("Properties", properties);
+            tagCompound.setTag("SkullOwner", skullOwner);
+        }
 
         return itemStack;
-    }
-
-    public enum HideFlag {
-        ENCHANTS,
-        ATTRIBUTES,
-        UNBREAKABLE,
-        DESTROYS,
-        PLACED_ON,
-        POTION_EFFECTS;
-
-        public static final List<HideFlag> VALUES = ImmutableList.copyOf(values());
-
-        private final int bit;
-
-        HideFlag() {
-            this.bit = 1 << this.ordinal();
-        }
-
-        public int getBit() {
-            return bit;
-        }
     }
 
 }
