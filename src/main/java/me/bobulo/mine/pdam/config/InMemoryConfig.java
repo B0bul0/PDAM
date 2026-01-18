@@ -3,6 +3,9 @@ package me.bobulo.mine.pdam.config;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * An in-memory implementation of the Config interface.
+ */
 public final class InMemoryConfig extends AbstractBaseConfig {
 
     private final Map<String, Object> data = new ConcurrentHashMap<>();

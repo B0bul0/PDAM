@@ -2,12 +2,18 @@ package me.bobulo.mine.pdam.config;
 
 import com.google.gson.*;
 import me.bobulo.mine.pdam.config.exception.ConfigLoadException;
+import me.bobulo.mine.pdam.config.exception.ConfigSaveException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
+/**
+ * A configuration implementation that uses Gson to read and write JSON files.
+ * <p>
+ * Supports nested keys using dot notation (e.g., "pvp.damage").
+ */
 public class GsonFileConfig implements PersistentConfig {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -40,7 +46,7 @@ public class GsonFileConfig implements PersistentConfig {
 
     @Override
     public void saveConfig() {
-        if (jsonElement == null) { // not loaded
+        if (jsonElement == null) { // not loaded, nothing to save
             return;
         }
 
@@ -52,7 +58,7 @@ public class GsonFileConfig implements PersistentConfig {
         try (Writer writer = new FileWriter(file)) {
             GSON.toJson(jsonElement, writer);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to save config to file: " + file.getAbsolutePath(), e);
+            throw new ConfigSaveException("Failed to save config to file: " + file.getAbsolutePath(), e);
         }
     }
 
@@ -105,12 +111,12 @@ public class GsonFileConfig implements PersistentConfig {
     }
 
     @Override
-    public <V> V getValue(String key, Class<V> valueType) {
+    public <V> V getValue(String key, @NotNull Class<V> valueType) {
         return GSON.fromJson(get(key), valueType);
     }
 
     @Override
-    public <V> V getValue(String key, Type valueType) {
+    public <V> V getValue(String key, @NotNull Type valueType) {
         return GSON.fromJson(get(key), valueType);
     }
 
@@ -120,7 +126,7 @@ public class GsonFileConfig implements PersistentConfig {
             return;
         }
 
-        String[] parts = splitKey(key);
+        String[] parts = splitKey(key); // Split the key by dots
         JsonObject parent = getOrCreateParent(parts);
         String lastKey = parts[parts.length - 1];
 
@@ -129,6 +135,7 @@ public class GsonFileConfig implements PersistentConfig {
             return;
         }
 
+        // Handle primitive types directly
         if (value instanceof Number) {
             parent.addProperty(lastKey, (Number) value);
         } else if (value instanceof String) {
@@ -151,6 +158,7 @@ public class GsonFileConfig implements PersistentConfig {
         return getByPath(key);
     }
 
+    // Helper method to navigate the JSON structure based on the dot-separated key
     private JsonElement getByPath(String key) {
         String[] parts = splitKey(key);
         JsonElement current = ensureRoot();
@@ -196,6 +204,7 @@ public class GsonFileConfig implements PersistentConfig {
         return jsonElement;
     }
 
+    // Splits the key by dots
     private String[] splitKey(String key) {
         if (key == null) {
             return new String[0];

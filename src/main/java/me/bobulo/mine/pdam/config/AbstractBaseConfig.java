@@ -1,9 +1,19 @@
 package me.bobulo.mine.pdam.config;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Type;
 
+/**
+ * An abstract base implementation of the Config interface.
+ * <p>
+ * Provides default implementations for retrieving configuration values.
+ */
 public abstract class AbstractBaseConfig implements Config {
 
+    /**
+     * Gets the raw object associated with the specified key.
+     */
     public abstract Object getRaw(String key);
 
     @Override
@@ -55,14 +65,14 @@ public abstract class AbstractBaseConfig implements Config {
     }
 
     @Override
-    public <V> V getValue(String key, Class<V> valueType) {
+    public <V> V getValue(String key, @NotNull Class<V> valueType) {
         Object raw = getRaw(key);
         return valueType.isInstance(raw) ? valueType.cast(raw) : null;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <V> V getValue(String key, Type valueType) {
+    public <V> V getValue(String key, @NotNull Type valueType) {
         Object raw = getRaw(key);
         if (valueType instanceof Class<?>) {
             return getValue(key, (Class<V>) valueType);

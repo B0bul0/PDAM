@@ -3,6 +3,11 @@ package me.bobulo.mine.pdam.config;
 import me.bobulo.mine.pdam.PDAM;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A configuration element that represents a specific configuration value.
+ *
+ * @param <V> the type of the configuration value
+ */
 public final class ConfigElement<V> implements ConfigValue<V> {
 
     public static <V> ConfigElement<V> of(@NotNull String key, @NotNull V defaultValue) {
@@ -27,7 +32,7 @@ public final class ConfigElement<V> implements ConfigValue<V> {
     private final V defaultValue;
     private final Config config;
 
-    private ConfigElement(String key, Class<V> valueType, V defaultValue, Config config) {
+    private ConfigElement(@NotNull String key, @NotNull Class<V> valueType, V defaultValue, @NotNull Config config) {
         this.key = key;
         this.valueType = valueType;
         this.defaultValue = defaultValue;
@@ -44,7 +49,7 @@ public final class ConfigElement<V> implements ConfigValue<V> {
     public void set(V value) {
         config.setValue(key, value);
 
-        if (config instanceof PersistentConfig) { // TODO improve
+        if (config instanceof PersistentConfig) {
             ((PersistentConfig) config).saveConfig();
         }
     }

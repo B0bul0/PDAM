@@ -4,6 +4,9 @@ import me.bobulo.mine.pdam.PDAM;
 
 import java.io.File;
 
+/**
+ * Factory class for creating different types of Config instances.
+ */
 public final class ConfigFactory {
 
     public static Config createEmptyConfig() {
