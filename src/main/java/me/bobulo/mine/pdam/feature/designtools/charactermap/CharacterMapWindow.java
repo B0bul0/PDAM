@@ -28,18 +28,20 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
       ConfigElement.of("designTools.favoriteCharacters", new FavoriteCharacters());
 
     private static final int MAX_CHAR = 65536;
-    private static final int COLUMNS = 14;
 
     private static final char[] ALL_CHAR_VALUES = new char[MAX_CHAR];
     private static final char[] ALLOWED_CHAT_CHAR_VALUES;
     private static final char[] NUMBERS_CHAR_VALUES = Chars.concat(
       createArray(48, 57),
       createArray(9312, 9371),
+      createArray(12881, 12895),
+      createArray(12977, 12991),
       createArray(9451, 9471),
       createArray(10102, 10131)
     );
 
     private static final char[] ARROWS_CHAR_VALUES = Chars.concat(
+      createArray(8592, 8703),
       createArray(10136, 10174),
       new char[]{'⟀', '⫷', '⫸', '➔'},
       createArray(10224, 10239),
@@ -53,7 +55,8 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
         '࿎', '࿏', '࿒', '྿', '྾', '᠅', '᠈', '᠉', 'ᴥ', '†', '‡', '•', '‣', '⁂',
         '⁑', '∞', '∅', '⌀', '⌚', '⌛', '⌹', '☃', '★', '☆', '☕', '☔', '☠', '☗',
         '☖', '☘', '⭐', '⭑', '⭒', '⭓', '⭔', 'ꕕ', 'ꕔ', 'ꕹ', 'ꖴ', 'ꙮ', '꙰',
-        '❍', '❏', '❐', '❑', '❒', '❖', '⟁'
+        '❍', '❏', '❐', '❑', '❒', '❖', '⟁', '﹋', '﹏', '﹌', '︽', '︾', '﴾', '﴿',
+        '｟', '｠', '⎙', '⎘', '⎋', '⏎', '⏣', '≈', '⧾'
       },
       createArray(9762, 9885),
       createArray(9888, 9905),
@@ -222,17 +225,20 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
     }
 
     private void charactersTable(char[] charValues) {
-        int lines = (int) Math.ceil((double) charValues.length / COLUMNS);
+        int widowWidth = (int) getWindowWidth();
+        int columns = Math.max(1, widowWidth / 64);
 
-        columns(COLUMNS, "table_chars", false);
+        int lines = (int) Math.ceil((double) charValues.length / columns);
+
+        columns(columns, "table_chars", false);
         clipper.begin(lines);
 
         while (clipper.step()) {
             for (int row = clipper.getDisplayStart(); row < clipper.getDisplayEnd(); row++) {
                 if (row >= lines) break;
 
-                for (int col = 0; col < COLUMNS; col++) {
-                    int i = (row * COLUMNS) + col;
+                for (int col = 0; col < columns; col++) {
+                    int i = (row * columns) + col;
                     if (i >= charValues.length) {
                         nextColumn();
                         continue;
@@ -316,8 +322,8 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
                     if (isItemHovered()) {
                         setTooltip(
                           "Char: " + c + "\n" +
-                            "ID: " + i + "\n" +
-                            "Hex: 0x" + Integer.toHexString(i).toUpperCase()
+                            "ID: " + ((int)c) + "\n" +
+                            "Hex: 0x" + Integer.toHexString(c).toUpperCase()
                         );
                     }
 
