@@ -1,6 +1,5 @@
 package me.bobulo.mine.pdam.feature.component;
 
-import me.bobulo.mine.pdam.config.PropertyDeclarer;
 import me.bobulo.mine.pdam.feature.Feature;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * A feature can be composed of multiple components, each handling a specific piece of logic,
  * such as event listening. Components share the lifecycle of their parent feature.
  */
-public interface FeatureComponent extends PropertyDeclarer {
+public interface FeatureComponent {
 
     /**
      * Initializes the component with its parent feature.

@@ -1,7 +1,5 @@
 package me.bobulo.mine.pdam.feature;
 
-import me.bobulo.mine.pdam.config.ConfigBinder;
-import me.bobulo.mine.pdam.config.ConfigInitContext;
 import me.bobulo.mine.pdam.feature.component.FeatureComponent;
 import me.bobulo.mine.pdam.feature.event.FeatureComponentDisabledEvent;
 import me.bobulo.mine.pdam.feature.event.FeatureComponentEnabledEvent;
@@ -29,8 +27,6 @@ public final class FeatureImpl implements Feature, ComponentableFeature {
 
     private final Map<Class<? extends FeatureComponent>, FeatureComponent> components = new HashMap<>();
 
-    private ConfigBinder configBinder;
-
     public FeatureImpl(String id) {
         Validate.notBlank(id, "Feature id cannot be null or blank");
         this.id = id;
@@ -50,25 +46,6 @@ public final class FeatureImpl implements Feature, ComponentableFeature {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    @Override
-    public void initProperties(ConfigInitContext context) {
-        this.configBinder = context.getConfigBinder();
-
-        context.createProperty("enabled", true)
-          .comment("Enable or disable the " + name + " feature")
-          .onUpdate(newVal -> {
-              if (newVal) {
-                  enable();
-              } else {
-                  disable();
-              }
-          });
-
-        for (FeatureComponent component : components.values()) {
-            component.initProperties(context);
-        }
     }
 
     @Override
@@ -137,12 +114,6 @@ public final class FeatureImpl implements Feature, ComponentableFeature {
 
         component.init(this);
         components.put(component.getClass(), component);
-
-        if (configBinder != null) {
-            ConfigInitContext context = new ConfigInitContext(configBinder);
-            component.initProperties(context);
-            configBinder.initialize(component);
-        }
 
         if (enabled) {
             component.enable();
