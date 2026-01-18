@@ -27,7 +27,7 @@ import me.bobulo.mine.pdam.feature.designtools.TitleVisualizerWindow;
 import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
-import me.bobulo.mine.pdam.setting.ConfigService;
+import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.ui.UIManager;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
