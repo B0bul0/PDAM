@@ -1,6 +1,5 @@
-package me.bobulo.mine.pdam.feature.item;
+package me.bobulo.mine.pdam.feature.designtools.item;
 
-import com.google.common.collect.ImmutableList;
 import lombok.Data;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,18 +7,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
-public class ItemBuilder {
+public class ItemData {
 
-    public static ItemBuilder fromItemStack(ItemStack itemStack) {
-        ItemBuilder itemBuilder = new ItemBuilder();
+    @NotNull
+    public static ItemData fromItemStack(@NotNull ItemStack itemStack) {
+        ItemData itemBuilder = new ItemData();
 
         itemBuilder.setMaterial(Item.itemRegistry.getNameForObject(itemStack.getItem()).toString() +
           ":" + itemStack.getItemDamage());
@@ -52,10 +50,14 @@ public class ItemBuilder {
 
             if (tagCompound.hasKey("HideFlags")) {
                 int hideFlagsValue = tagCompound.getInteger("HideFlags");
-                List<HideFlag> hideFlags = HideFlag.VALUES.stream()
-                        .filter(hideFlag -> (hideFlagsValue & hideFlag.getBit()) != 0)
-                        .collect(Collectors.toList());
+                Set<HideFlag> hideFlags = HideFlag.VALUES.stream()
+                  .filter(hideFlag -> (hideFlagsValue & hideFlag.getBit()) != 0)
+                  .collect(Collectors.toSet());
                 itemBuilder.setHideFlags(hideFlags);
+            }
+
+            if (tagCompound.hasKey("RepairCost")) {
+                itemBuilder.setRepairCost(tagCompound.getInteger("RepairCost"));
             }
 
             if (tagCompound.hasKey("ench")) {
@@ -83,15 +85,22 @@ public class ItemBuilder {
             }
 
             if (tagCompound.hasKey("SkullOwner")) {
-                NBTTagCompound skullOwner = tagCompound.getCompoundTag("SkullOwner");
-                if (skullOwner != null && skullOwner.hasKey("Properties")) {
-                    NBTTagCompound properties = skullOwner.getCompoundTag("Properties");
-                    if (properties != null && properties.hasKey("textures")) {
-                        NBTTagList textures = properties.getTagList("textures", 10);
-                        if (textures.tagCount() > 0) {
-                            NBTTagCompound textureValue = textures.getCompoundTagAt(0);
-                            if (textureValue != null && textureValue.hasKey("Value")) {
-                                itemBuilder.setSkullValue(textureValue.getString("Value"));
+                if (tagCompound.hasKey("SkullOwner", 8)) {
+                    itemBuilder.setSkullName(tagCompound.getString("SkullOwner"));
+                } else if (tagCompound.hasKey("SkullOwner", 10)) {
+                    NBTTagCompound skullOwner = tagCompound.getCompoundTag("SkullOwner");
+                    if (skullOwner.hasKey("Name")) {
+                        itemBuilder.setSkullName(skullOwner.getString("Name"));
+                    }
+                    if (skullOwner.hasKey("Properties")) {
+                        NBTTagCompound properties = skullOwner.getCompoundTag("Properties");
+                        if (properties.hasKey("textures")) {
+                            NBTTagList textures = properties.getTagList("textures", 10);
+                            if (textures.tagCount() > 0) {
+                                NBTTagCompound textureValue = textures.getCompoundTagAt(0);
+                                if (textureValue.hasKey("Value")) {
+                                    itemBuilder.setSkullValue(textureValue.getString("Value"));
+                                }
                             }
                         }
                     }
@@ -111,23 +120,26 @@ public class ItemBuilder {
     private String customName;
     private String customLore;
 
-    private List<HideFlag> hideFlags;
+    private Set<HideFlag> hideFlags = new HashSet<>();
     private boolean unbreakable;
+    private int repairCost;
 
     private boolean glowing;
-    private Map<Enchantment, Integer> enchantments;
-
-    private int repairCost; // todo
+    private Map<Enchantment, Integer> enchantments = new HashMap<>();
 
     // Armor color
     private Integer color;
 
     // Skull
+    private String skullName;
     private String skullValue;
-
 
     public ItemStack buildItem() {
         ItemStack itemStack = ItemStackResolver.resolve(material);
+        if (itemStack == null) {
+            return null;
+        }
+
         itemStack.stackSize = amount;
 
         if (durability > 0) {
@@ -191,10 +203,14 @@ public class ItemBuilder {
             tagCompound.setTag("display", displayTag);
         }
 
+        if (repairCost > 0) {
+            tagCompound.setInteger("RepairCost", repairCost);
+        }
+
         if (StringUtils.isNoneBlank(skullValue)) {
             NBTTagCompound skullOwner = new NBTTagCompound();
             skullOwner.setString("Id", UUID.randomUUID().toString());
-            skullOwner.setString("Name", "Custom");
+            skullOwner.setString("Name", skullName == null ? "Custom" : skullName);
 
             NBTTagCompound properties = new NBTTagCompound();
             NBTTagList textures = new NBTTagList();

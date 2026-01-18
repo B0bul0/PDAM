@@ -16,6 +16,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Sign Editor**: Edit sign text in-game with a GUI.
 - **Fly Booster**: Enhances flying speed.
 - **Chat Message Formater**: Preview how messages appear in chat.
+- **Item Builder**: Create and customize items.
 
 ## Installation
 1. Ensure you have Minecraft Forge for version 1.8.9 installed.

@@ -1,17 +1,20 @@
-package me.bobulo.mine.pdam.feature.item;
+package me.bobulo.mine.pdam.feature.designtools.item.window;
 
 import imgui.ImGuiTextFilter;
 import imgui.flag.ImGuiCond;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
 import imgui.type.ImString;
+import me.bobulo.mine.pdam.feature.designtools.item.Enchantment;
+import me.bobulo.mine.pdam.feature.designtools.item.HideFlag;
+import me.bobulo.mine.pdam.feature.designtools.item.ItemData;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.ItemColorUtil;
+import me.bobulo.mine.pdam.util.PlayerUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
-import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C10PacketCreativeInventoryAction;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -23,9 +26,9 @@ import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 
 public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
-    private ItemBuilder itemBuilder = new ItemBuilder();
+    private ItemData itemBuilder = new ItemData();
 
-    private final ImString material = new ImString("minecraft:stone", 256);
+    private final ImString material = new ImString("", 256);
 
     private final ImInt durability = new ImInt();
 
@@ -36,6 +39,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
     private final ImBoolean unbreakable = new ImBoolean(false);
     private final ImBoolean glowing = new ImBoolean(false);
+    private final ImInt repairCost = new ImInt(0);
 
     private final Set<HideFlag> hideFlags = EnumSet.noneOf(HideFlag.class);
 
@@ -45,6 +49,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
     private float[] colorRGB = new float[]{0.0f, 0.0f, 0.0f};
 
     private final ImString skullValue = new ImString("", 512);
+    private final ImString skullName = new ImString("", 512);
 
     public ItemBuilderWindow() {
         super("Item Builder");
@@ -52,7 +57,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
     @Override
     public void renderGui() {
-        setNextWindowSize(400, 450, ImGuiCond.FirstUseEver);
+        setNextWindowSize(500, 500, ImGuiCond.Once);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
         if (begin("Item Builder##ItemBuilderWindow", isVisible)) {
@@ -63,7 +68,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         end();
     }
 
-    private void importItem(ItemBuilder item) {
+    private void importItem(ItemData item) {
         itemBuilder = item;
 
         // Update UI values
@@ -80,17 +85,33 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
             enchantments.put(entry.getKey(), new ImInt(entry.getValue()));
         }
-        colorRGB = ItemColorUtil.toRgb(item.getColor());
+        colorRGB = ItemColorUtil.toRgb(item.getColor() == null ? 0 : item.getColor());
         skullValue.set(item.getSkullValue());
+        skullName.set(item.getSkullName());
+        repairCost.set(item.getRepairCost());
     }
 
     private void renderContent() {
-            if (button("Import from Hand")) {
-                ItemStack itemStack = Minecraft.getMinecraft().thePlayer.getHeldItem();
-                ItemBuilder itemBuilder1 = ItemBuilder.fromItemStack(itemStack);
-                importItem(itemBuilder1);
-            }
+        boolean disableImport = false;
+        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        if (player == null || player.getHeldItem() == null) {
+            disableImport = true;
+        }
 
+        if (disableImport) {
+            beginDisabled();
+        }
+
+        if (button("Import from Hand") && !disableImport) {
+            ItemStack heldItem = player.getHeldItem();
+            if (heldItem != null) {
+                importItem(ItemData.fromItemStack(heldItem));
+            }
+        }
+
+        if (disableImport) {
+            endDisabled();
+        }
 
         if (beginChild("##EditSection", 0, 0, true)) {
             renderEditSection();
@@ -115,102 +136,120 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
             }
         }
 
-        if (inputText("Item", material)) {
+        text("Item:");
+        sameLine();
+        if (inputText("##Item", material)) {
             itemBuilder.setMaterial(material.get());
         }
 
-        if (inputInt("Durability", durability)) {
-            itemBuilder.setDurability(durability.get());
-        }
-
-        if (inputInt("Amount", amount)) {
+        text("Amount:");
+        sameLine();
+        setNextItemWidth(150);
+        if (inputInt("##Amount", amount)) {
             itemBuilder.setAmount(amount.get());
             setMaxMinValue(amount, 1, 64);
         }
 
+        sameLine();
+        text("Durability:");
+        sameLine();
+        setNextItemWidth(150);
+        if (inputInt("##Durability", durability)) {
+            itemBuilder.setDurability(durability.get());
+            setMaxMinValue(amount, 1, 10000);
+        }
+
         separatorText("Display Properties:");
 
-        if (inputText("Custom Name", customName)) {
+        text("Custom Name:");
+        sameLine();
+        if (inputText("##CustomName", customName)) {
             itemBuilder.setCustomName(customName.get());
         }
 
-        if (inputTextMultiline("Custom Lore", customLore)) {
+        text("Custom Lore:");
+        if (inputTextMultiline("##Lore", customLore, -1, 0)) {
             itemBuilder.setCustomLore(customLore.get());
         }
 
+        spacing();
         renderEnchantmentSection();
 
-        separatorText("Other Properties:");
+        if (treeNode("Other Properties")) {
 
-        if (checkbox("Unbreakable", unbreakable)) {
-            itemBuilder.setUnbreakable(unbreakable.get());
-        }
-
-        sameLine();
-
-        if (checkbox("Glowing", glowing)) {
-            itemBuilder.setGlowing(glowing.get());
-        }
-
-        sameLine();
-
-        if (beginPopup("hideFlagsSelect")) {
-            text("Hide Flags:");
-            checkbox("Hide All", hideFlags.size() == HideFlag.VALUES.size());
-            if (isItemClicked()) {
-                if (hideFlags.size() == HideFlag.VALUES.size()) {
-                    hideFlags.clear();
-                } else {
-                    hideFlags.addAll(HideFlag.VALUES);
-                }
+            if (checkbox("Unbreakable", unbreakable)) {
+                itemBuilder.setUnbreakable(unbreakable.get());
             }
 
-            separator();
-            for (HideFlag flag : HideFlag.VALUES) {
-                checkbox("Hide " + flag.name(), hideFlags.contains(flag));
+            sameLine();
 
+            if (checkbox("Glowing", glowing)) {
+                itemBuilder.setGlowing(glowing.get());
+            }
+
+            sameLine();
+
+            if (beginPopup("hideFlagsSelect")) {
+                text("Hide Flags:");
+                checkbox("Hide All", hideFlags.size() == HideFlag.VALUES.size());
                 if (isItemClicked()) {
-                    if (hideFlags.contains(flag)) {
-                        hideFlags.remove(flag);
+                    if (hideFlags.size() == HideFlag.VALUES.size()) {
+                        hideFlags.clear();
                     } else {
-                        hideFlags.add(flag);
+                        hideFlags.addAll(HideFlag.VALUES);
+                    }
+
+                    itemBuilder.setHideFlags(hideFlags);
+                }
+
+                separator();
+                for (HideFlag flag : HideFlag.VALUES) {
+                    checkbox("Hide " + flag.name(), hideFlags.contains(flag));
+
+                    if (isItemClicked()) {
+                        if (hideFlags.contains(flag)) {
+                            hideFlags.remove(flag);
+                        } else {
+                            hideFlags.add(flag);
+                        }
+
+                        itemBuilder.setHideFlags(hideFlags);
                     }
                 }
+
+                endPopup();
             }
 
-            endPopup();
-        }
+            if (button("Hide Flags")) {
+                openPopup("hideFlagsSelect");
+            }
 
-        if (button("Hide Flags")) {
-            openPopup("hideFlagsSelect");
-        }
+            if (inputInt("Repair Cost", repairCost)) {
+                itemBuilder.setRepairCost(repairCost.get());
+                setMaxMinValue(repairCost, 0, 10000);
+            }
 
-        renderSkullSection();
+            renderSkullSection();
 
-        if (treeNode("Color")) {
             if (colorEdit3("Color", colorRGB)) {
                 itemBuilder.setColor(ItemColorUtil.toRgbInt(colorRGB));
             }
             treePop();
         }
 
+        separator();
+
         if (disableGiving) {
             beginDisabled();
         }
 
-        separator();
-
-        setNextItemWidth(200);
-        if (button("Build Item")) {
+        if (button("Give Item", 200, 20)) {
             ItemStack itemStack = itemBuilder.buildItem();
-            Minecraft mc = Minecraft.getMinecraft();
-
-            if (!mc.playerController.isInCreativeMode()) { // only works in creative
+            if (itemStack == null) {
                 return;
             }
 
-            NetHandlerPlayClient netHandler = mc.getNetHandler();
-            netHandler.addToSendQueue(new C10PacketCreativeInventoryAction(38, itemStack)); // 36 - 44 Hotbar
+            PlayerUtils.giveItem(itemStack);
         }
 
         if (disableGiving) {
@@ -221,6 +260,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
     private void renderEnchantmentSection() {
         if (treeNode("Enchantment")) {
+
             enchantmentFilter.draw();
 
             for (Enchantment enchantment : Enchantment.VALUES) {
@@ -234,8 +274,10 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
                 if (isItemClicked()) {
                     if (enable) {
                         enchantments.remove(enchantment);
+                        itemBuilder.getEnchantments().remove(enchantment);
                     } else {
                         enchantments.putIfAbsent(enchantment, new ImInt(1));
+                        itemBuilder.getEnchantments().putIfAbsent(enchantment, 1);
                     }
                 }
 
@@ -248,19 +290,25 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
                 setNextItemWidth(150);
                 if (inputInt("##level" + enchantment.getKey(), enchantments.get(enchantment))) {
                     setMaxMinValue(enchantments.get(enchantment), 1, 100);
+                    itemBuilder.getEnchantments().put(enchantment, enchantments.get(enchantment).intValue());
                 }
             }
+
             treePop();
         }
     }
 
     private void renderSkullSection() {
-        if (treeNode("Skull")) {
-            if (inputText("Skull Value", skullValue)) {
-                itemBuilder.setSkullValue(skullValue.get());
-            }
+        if (inputText("Skull Value", skullValue)) {
+            itemBuilder.setSkullValue(skullValue.get());
+        }
 
-            treePop();
+        if (isItemHovered()) {
+            setTooltip("The Base64 value from the skin properties.");
+        }
+
+        if (inputText("Skull Name", skullName)) {
+            itemBuilder.setSkullValue(skullName.get());
         }
     }
 

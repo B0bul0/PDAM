@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.item;
+package me.bobulo.mine.pdam.feature.designtools.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -14,7 +14,7 @@ import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
-import me.bobulo.mine.pdam.feature.item.ItemBuilderWindow;
+import me.bobulo.mine.pdam.feature.designtools.item.window.ItemBuilderWindow;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;

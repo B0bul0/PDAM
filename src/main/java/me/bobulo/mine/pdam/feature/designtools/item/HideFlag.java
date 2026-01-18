@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.item;
+package me.bobulo.mine.pdam.feature.designtools.item;
 
 import com.google.common.collect.ImmutableList;
 

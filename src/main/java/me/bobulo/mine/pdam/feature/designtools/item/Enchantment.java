@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.item;
+package me.bobulo.mine.pdam.feature.designtools.item;
 
 import com.google.common.collect.ImmutableList;
 
@@ -61,8 +61,13 @@ public enum Enchantment {
         }
     }
 
+    // Local key
     private final String key;
+
+    // Minecraft resourceLocation
     private final String resourceLocation;
+
+    // Minecraft id
     private final int id;
 
     Enchantment(String key, String resourceLocation) {
@@ -79,9 +84,6 @@ public enum Enchantment {
         return resourceLocation;
     }
 
-    /**
-     * Retorna o id numérico do encantamento na versão atual do jogo ou -1 se não resolvido.
-     */
     public int getId() {
         return id;
     }
