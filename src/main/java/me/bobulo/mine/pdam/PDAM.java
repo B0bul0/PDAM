@@ -5,8 +5,7 @@ import me.bobulo.mine.pdam.feature.Feature;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
-import me.bobulo.mine.pdam.feature.designtools.CharacterMapWindow;
-import me.bobulo.mine.pdam.feature.designtools.MessageFormatterWindow;
+import me.bobulo.mine.pdam.feature.designtools.*;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.component.CallbackFeatureComponent;
 import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
@@ -23,8 +22,6 @@ import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
-import me.bobulo.mine.pdam.feature.designtools.ActionBarVisualizerWindow;
-import me.bobulo.mine.pdam.feature.designtools.TitleVisualizerWindow;
 import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
@@ -191,7 +188,8 @@ public final class PDAM {
             new MessageFormatterWindow(),
             new TitleVisualizerWindow(),
             new ActionBarVisualizerWindow(),
-            new HologramMockupWindow()
+            new HologramMockupWindow(),
+            new PlaySoundWindow()
           ))
           .build());
     }
