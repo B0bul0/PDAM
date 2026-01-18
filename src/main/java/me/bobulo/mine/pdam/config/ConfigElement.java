@@ -11,12 +11,7 @@ public final class ConfigElement<V> implements ConfigValue<V> {
 
     @SuppressWarnings("unchecked")
     public static <V> ConfigElement<V> of(@NotNull String key, @NotNull V defaultValue, @NotNull Config config) {
-        ConfigElement<V> element = new ConfigElement<>();
-        element.key = key;
-        element.valueType = (Class<V>) defaultValue.getClass();
-        element.defaultValue = defaultValue;
-        element.config = config;
-        return element;
+        return new ConfigElement<>(key, (Class<V>) defaultValue.getClass(), defaultValue, config);
     }
 
     public static <V> ConfigElement<V> of(@NotNull String key, @NotNull Class<V> valueType) {
@@ -24,19 +19,19 @@ public final class ConfigElement<V> implements ConfigValue<V> {
     }
 
     public static <V> ConfigElement<V> of(@NotNull String key, @NotNull Class<V> valueType, @NotNull Config config) {
-        ConfigElement<V> element = new ConfigElement<>();
-        element.key = key;
-        element.valueType = valueType;
-        element.config = config;
-        return element;
+        return new ConfigElement<>(key, valueType, null, config);
     }
 
-    private String key;
-    private Class<V> valueType;
-    private V defaultValue;
-    private Config config;
+    private final String key;
+    private final Class<V> valueType;
+    private final V defaultValue;
+    private final Config config;
 
-    private ConfigElement() {
+    private ConfigElement(String key, Class<V> valueType, V defaultValue, Config config) {
+        this.key = key;
+        this.valueType = valueType;
+        this.defaultValue = defaultValue;
+        this.config = config;
     }
 
     @Override
@@ -48,5 +43,9 @@ public final class ConfigElement<V> implements ConfigValue<V> {
     @Override
     public void set(V value) {
         config.setValue(key, value);
+
+        if (config instanceof PersistentConfig) { // TODO improve
+            ((PersistentConfig) config).saveConfig();
+        }
     }
 }

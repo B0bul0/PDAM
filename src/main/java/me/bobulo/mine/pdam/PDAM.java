@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam;
 
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
+import me.bobulo.mine.pdam.feature.Feature;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
@@ -106,6 +107,14 @@ public final class PDAM {
         ClientCommandHandler.instance.registerCommand(new CopyToClipboardCommand());
 
         registerFeatures();
+
+        for (Feature feature : featureService.getSortedFeatures()) {
+            try {
+                feature.enable();
+            } catch (Exception exception) {
+                log.error("Failed to initialize feature: {}", feature.getId(), exception);
+            }
+        }
 
         log.info("PDAM initialized");
     }

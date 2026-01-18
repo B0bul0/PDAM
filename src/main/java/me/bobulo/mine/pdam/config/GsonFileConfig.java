@@ -1,20 +1,16 @@
 package me.bobulo.mine.pdam.config;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.google.gson.*;
+import me.bobulo.mine.pdam.config.exception.ConfigLoadException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 public class GsonFileConfig implements PersistentConfig {
 
-    private static final Gson GSON = new Gson();
-    private static final Logger log = LogManager.getLogger(GsonFileConfig.class);
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private final File file;
     private JsonElement jsonElement;
@@ -37,8 +33,8 @@ public class GsonFileConfig implements PersistentConfig {
             } else {
                 jsonElement = config;
             }
-        } catch (IOException e) {
-            jsonElement = new JsonObject();
+        } catch (Exception e) {
+            throw new ConfigLoadException("Failed to load config from file: " + file.getAbsolutePath(), e);
         }
     }
 
@@ -55,9 +51,8 @@ public class GsonFileConfig implements PersistentConfig {
 
         try (Writer writer = new FileWriter(file)) {
             GSON.toJson(jsonElement, writer);
-        } catch (IOException e) {
-            // TODO launch exception
-            log.error("Failed to save config to file: {}", file.getAbsolutePath(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save config to file: " + file.getAbsolutePath(), e);
         }
     }
 
@@ -125,22 +120,26 @@ public class GsonFileConfig implements PersistentConfig {
             return;
         }
 
+        String[] parts = splitKey(key);
+        JsonObject parent = getOrCreateParent(parts);
+        String lastKey = parts[parts.length - 1];
+
         if (value == null) {
-            getJsonObject().remove(key);
+            parent.remove(lastKey);
             return;
         }
 
         if (value instanceof Number) {
-            getJsonObject().addProperty(key, (Number) value);
+            parent.addProperty(lastKey, (Number) value);
         } else if (value instanceof String) {
-            getJsonObject().addProperty(key, (String) value);
+            parent.addProperty(lastKey, (String) value);
         } else if (value instanceof Boolean) {
-            getJsonObject().addProperty(key, (Boolean) value);
+            parent.addProperty(lastKey, (Boolean) value);
         } else if (value instanceof Character) {
-            getJsonObject().addProperty(key, (Character) value);
+            parent.addProperty(lastKey, (Character) value);
         } else {
             JsonElement element = GSON.toJsonTree(value);
-            getJsonObject().add(key, element);
+            parent.add(lastKey, element);
         }
     }
 
@@ -149,11 +148,62 @@ public class GsonFileConfig implements PersistentConfig {
             return null;
         }
 
-        return getJsonObject().get(key);
+        return getByPath(key);
     }
 
-    private JsonObject getJsonObject() {
-        return jsonElement.getAsJsonObject();
+    private JsonElement getByPath(String key) {
+        String[] parts = splitKey(key);
+        JsonElement current = ensureRoot();
+
+        for (String part : parts) {
+            if (current == null || !current.isJsonObject()) {
+                return null;
+            }
+            current = current.getAsJsonObject().get(part);
+        }
+
+        return current;
+    }
+
+    private JsonObject getOrCreateParent(String[] parts) {
+        JsonObject root = ensureRoot().getAsJsonObject();
+        if (parts.length == 1) {
+            return root;
+        }
+
+        JsonObject current = root;
+        for (int i = 0; i < parts.length - 1; i++) {
+            String part = parts[i];
+            JsonElement child = current.get(part);
+
+            if (child == null || !child.isJsonObject()) {
+                JsonObject obj = new JsonObject();
+                current.add(part, obj);
+                current = obj;
+            } else {
+                current = child.getAsJsonObject();
+            }
+        }
+
+        return current;
+    }
+
+    private JsonElement ensureRoot() {
+        if (jsonElement == null || !jsonElement.isJsonObject()) {
+            jsonElement = new JsonObject();
+        }
+
+        return jsonElement;
+    }
+
+    private String[] splitKey(String key) {
+        if (key == null) {
+            return new String[0];
+        }
+
+        return Arrays.stream(key.split("\\."))
+          .filter(s -> !s.isEmpty())
+          .toArray(String[]::new);
     }
 
 }
