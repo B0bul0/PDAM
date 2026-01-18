@@ -14,4 +14,8 @@ public final class ClipboardUtils {
         GuiScreen.setClipboardString(text);
     }
 
+    public static String getFromClipboard() {
+        return GuiScreen.getClipboardString();
+    }
+
 }
