@@ -31,6 +31,9 @@ public final class ImGuiRenderer {
     private ImGuiImplGl2 imGuiImplGl2;
     private ImGuiInputHandler inputHandler;
 
+    // Flag to cancel rendering in case of error
+    private boolean cancelRender;
+
     private final ImGuiToolbar imGuiToolbar = new ImGuiToolbar();
 
     private final List<ImGuiRenderable> frameRenders = new CopyOnWriteArrayList<>();
@@ -121,14 +124,14 @@ public final class ImGuiRenderer {
             try {
                 frameRender.newFrame();
             } catch (Exception exception) {
-                try {
-                    ImGui.end();
-                } catch (Exception ignored) {
-                    break;
-                }
-
+                cancelRender = true;
                 log.error("Error while rendering ImGui frame:", exception);
             }
+        }
+
+        if (cancelRender) {
+            ImGui.endFrame();
+            return;
         }
 
         ImGui.render();
