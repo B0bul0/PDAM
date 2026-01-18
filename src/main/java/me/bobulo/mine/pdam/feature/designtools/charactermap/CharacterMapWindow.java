@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.designtools;
+package me.bobulo.mine.pdam.feature.designtools.charactermap;
 
 import com.google.common.primitives.Chars;
 import imgui.ImGuiListClipper;
@@ -7,6 +7,7 @@ import imgui.flag.ImGuiPopupFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
+import me.bobulo.mine.pdam.config.ConfigElement;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.mixin.GuiChatInvoker;
 import me.bobulo.mine.pdam.util.ChatColor;
@@ -21,7 +22,10 @@ import java.util.function.Predicate;
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.MCFontImGui.mcText;
 
-public class CharacterMapWindow extends AbstractRenderItemWindow {
+public final class CharacterMapWindow extends AbstractRenderItemWindow {
+
+    private static final ConfigElement<FavoriteCharacters> FAVORITE_CHARACTERS =
+      ConfigElement.of("designTools.favoriteCharacters", new FavoriteCharacters());
 
     private static final int MAX_CHAR = 65536;
     private static final int COLUMNS = 14;
@@ -166,6 +170,14 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
                 endTabItem();
             }
 
+            if (beginTabItem("Favorites")) {
+                if (beginChild("favorites_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
+                    charactersTable(character -> FAVORITE_CHARACTERS.get().containsCharacter(character));
+                    endChild();
+                }
+                endTabItem();
+            }
+
             if (beginTabItem("Best Characters")) {
                 if (beginChild("best_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
                     charactersTable(BEST_CHAT_CHAR_VALUES);
@@ -258,6 +270,24 @@ public class CharacterMapWindow extends AbstractRenderItemWindow {
                         if (button("Copy with formatting")) {
                             setClipboardText(formatedText);
                             closeCurrentPopup();
+                        }
+
+                        separator();
+                        text("Favorite options:");
+
+                        FavoriteCharacters favoriteCharacters = FAVORITE_CHARACTERS.get();
+                        if (favoriteCharacters.containsCharacter(c)) {
+                            if (button("Unfavorite")) {
+                                favoriteCharacters.removeCharacter(c);
+                                FAVORITE_CHARACTERS.set(favoriteCharacters);
+                                closeCurrentPopup();
+                            }
+                        } else {
+                            if (button("Favorite")) {
+                                favoriteCharacters.addCharacter(c);
+                                FAVORITE_CHARACTERS.set(favoriteCharacters);
+                                closeCurrentPopup();
+                            }
                         }
 
                         separator();
