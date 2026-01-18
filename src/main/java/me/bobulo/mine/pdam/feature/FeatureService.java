@@ -1,7 +1,5 @@
 package me.bobulo.mine.pdam.feature;
 
-import me.bobulo.mine.pdam.PDAM;
-import me.bobulo.mine.pdam.config.ConfigBinder;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,10 +33,6 @@ public final class FeatureService {
 
         features.put(feature.getId(), feature);
         log.debug("Registered feature: {}", feature.getId());
-
-        ConfigBinder configBinder = new ConfigBinder(feature.getId());
-        PDAM.getConfigService().registerBinder(configBinder);
-        configBinder.initialize(feature);
     }
 
     /**

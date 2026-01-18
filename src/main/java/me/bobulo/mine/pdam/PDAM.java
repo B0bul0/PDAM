@@ -1,8 +1,7 @@
 package me.bobulo.mine.pdam;
 
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
-import me.bobulo.mine.pdam.config.ConfigListener;
-import me.bobulo.mine.pdam.config.ConfigurationService;
+import me.bobulo.mine.pdam.feature.Feature;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
@@ -29,6 +28,7 @@ import me.bobulo.mine.pdam.feature.designtools.TitleVisualizerWindow;
 import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
+import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.ui.UIManager;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -42,8 +42,7 @@ import java.io.File;
 
 @Mod(
   modid = PDAM.MOD_ID,
-  useMetadata = true,
-  guiFactory = "me.bobulo.mine.pdam.gui.DefaultGuiFactory"
+  useMetadata = true
 )
 public final class PDAM {
 
@@ -56,7 +55,7 @@ public final class PDAM {
         return instance.featureService;
     }
 
-    public static ConfigurationService getConfigService() {
+    public static ConfigService getConfigService() {
         return instance.config;
     }
 
@@ -75,7 +74,7 @@ public final class PDAM {
     /* Instance */
 
     private File configDirectory;
-    private ConfigurationService config;
+    private ConfigService config;
     private FeatureService featureService;
     private UIManager uiManager;
     private ImGuiRenderer imGuiRenderer;
@@ -93,8 +92,8 @@ public final class PDAM {
             this.configDirectory.mkdirs();
         }
 
-        this.config = new ConfigurationService();
-        this.config.init(new File(configDirectory, "pdam.cfg"));
+        this.config = new ConfigService();
+        this.config.init(new File(configDirectory, "pdam.json"));
 
         this.uiManager = new UIManager();
         this.imGuiRenderer = new ImGuiRenderer();
@@ -102,14 +101,20 @@ public final class PDAM {
 
         uiManager.addElement(new NotificationDisplayElement());
 
-
-        MinecraftForge.EVENT_BUS.register(new ConfigListener());
         MinecraftForge.EVENT_BUS.register(uiManager);
 
         // Register client commands
         ClientCommandHandler.instance.registerCommand(new CopyToClipboardCommand());
 
         registerFeatures();
+
+        for (Feature feature : featureService.getSortedFeatures()) {
+            try {
+                feature.enable();
+            } catch (Exception exception) {
+                log.error("Failed to initialize feature: {}", feature.getId(), exception);
+            }
+        }
 
         log.info("PDAM initialized");
     }

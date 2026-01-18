@@ -1,12 +1,10 @@
 package me.bobulo.mine.pdam.feature;
 
-import me.bobulo.mine.pdam.config.PropertyDeclarer;
-
 /**
  * Represents a modular feature of the mod.
- * Each feature can be enabled or disabled and may have its own configuration properties.
+ * Each feature can be enabled or disabled.
  */
-public interface Feature extends PropertyDeclarer {
+public interface Feature {
 
     /**
      * Gets the unique identifier for this feature.
