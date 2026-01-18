@@ -41,7 +41,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
         setNextWindowSize(1000, 600, ImGuiCond.FirstUseEver);
         setNextWindowPos(100, 100, ImGuiCond.FirstUseEver);
 
-        if (begin(translate("title") + "###PacketLogWindow", isVisible)) {
+        if (begin(translate("title") + "##PacketLogWindow", isVisible)) {
             keepInScreen();
             renderContent();
         }

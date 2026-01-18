@@ -38,7 +38,7 @@ public class ServerInfoWindow extends AbstractRenderItemWindow {
         setNextWindowSize(380, 550, ImGuiCond.FirstUseEver);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Server Info###ServerInfoWindow", isVisible)) {
+        if (begin("Server Info##ServerInfoWindow", isVisible)) {
             keepInScreen();
             renderContent();
         }

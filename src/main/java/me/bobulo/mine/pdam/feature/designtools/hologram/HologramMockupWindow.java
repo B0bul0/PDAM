@@ -41,7 +41,7 @@ public final class HologramMockupWindow extends AbstractRenderItemWindow {
         setNextWindowSize(400, 525, ImGuiCond.FirstUseEver);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Hologram Mockup###HologramMockupWindow", isVisible)) {
+        if (begin("Hologram Mockup##HologramMockupWindow", isVisible)) {
             keepInScreen();
             renderContent();
         }

@@ -37,7 +37,7 @@ public class MessageFormatterWindow extends AbstractRenderItemWindow {
         setNextWindowSize(400, 450, ImGuiCond.FirstUseEver);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Chat Message Formatter###MessageFormatterWindow", isVisible)) {
+        if (begin("Chat Message Formatter##MessageFormatterWindow", isVisible)) {
             keepInScreen();
             renderContent();
         }

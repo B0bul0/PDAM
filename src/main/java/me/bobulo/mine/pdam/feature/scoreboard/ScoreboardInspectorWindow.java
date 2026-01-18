@@ -31,7 +31,7 @@ public final class ScoreboardInspectorWindow extends AbstractRenderItemWindow {
         setNextWindowSize(200, 260, ImGuiCond.FirstUseEver);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Scoreboard Inspector###ScoreboardWindow", isVisible)) {
+        if (begin("Scoreboard Inspector##ScoreboardWindow", isVisible)) {
             keepInScreen();
             renderContent();
         }

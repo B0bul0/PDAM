@@ -31,7 +31,7 @@ public class SendChatMessageWindow extends AbstractRenderItemWindow {
         setNextWindowSize(400, 450, ImGuiCond.FirstUseEver);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Send Chat Message###SendChatMessageWindow", isVisible)) {
+        if (begin("Send Chat Message##SendChatMessageWindow", isVisible)) {
             keepInScreen();
             renderContent();
         }

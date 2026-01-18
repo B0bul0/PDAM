@@ -97,7 +97,7 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
         setNextWindowSize(700, 600, ImGuiCond.FirstUseEver);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Character Map###CharacterMapWindow", isVisible)) {
+        if (begin("Character Map##CharacterMapWindow", isVisible)) {
             renderContent();
         }
 

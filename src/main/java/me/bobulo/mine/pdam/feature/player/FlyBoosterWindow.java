@@ -27,7 +27,7 @@ public class FlyBoosterWindow extends AbstractRenderItemWindow {
         setNextWindowSize(235, 80, ImGuiCond.Always);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
-        if (begin("Fly Booster###FlyBoosterWindow", isVisible, ImGuiWindowFlags.NoResize)) {
+        if (begin("Fly Booster##FlyBoosterWindow", isVisible, ImGuiWindowFlags.NoResize)) {
             keepInScreen();
             renderContent();
         }
