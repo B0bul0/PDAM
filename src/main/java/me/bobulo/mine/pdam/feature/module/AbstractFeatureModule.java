@@ -1,7 +1,6 @@
 package me.bobulo.mine.pdam.feature.module;
 
 import me.bobulo.mine.pdam.feature.Feature;
-import me.bobulo.mine.pdam.feature.processor.FeatureProcessor;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
@@ -90,20 +89,6 @@ public abstract class AbstractFeatureModule implements FeatureModule {
 
         childModules.remove(module);
         feature.removeModule(module);
-    }
-
-    public void addChildProcessor(@NotNull FeatureProcessor processor) {
-        Validate.notNull(processor, "FeatureProcessor cannot be null");
-        Validate.isTrue(feature != null, "Parent Feature is not initialized");
-
-        feature.addProcessor(processor);
-    }
-
-    public void removeChildProcessor(@NotNull FeatureProcessor processor) {
-        Validate.notNull(processor, "FeatureProcessor cannot be null");
-        Validate.isTrue(feature != null, "Parent Feature is not initialized");
-
-        feature.removeProcessor(processor);
     }
 
 }

@@ -1,6 +1,5 @@
-package me.bobulo.mine.pdam.feature.designtools;
+package me.bobulo.mine.pdam.feature.imgui;
 
-import me.bobulo.mine.pdam.feature.imgui.MenuImGuiRender;
 import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
 import me.bobulo.mine.pdam.imgui.toolbar.ToolbarItemWindow;
@@ -8,9 +7,12 @@ import me.bobulo.mine.pdam.imgui.toolbar.ToolbarItemWindow;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static imgui.ImGui.*;
+import static imgui.ImGui.menuItem;
 
-public final class DesignToolsMenuImguiRender extends AbstractFeatureModule implements MenuImGuiRender {
+/**
+ * Renders toolbar item windows in the menu.
+ */
+public final class ToolbarMenuImGuiRender extends AbstractFeatureModule implements MenuImGuiRender {
 
     private List<ToolbarItemWindow> registeredWindows;
 
@@ -32,15 +34,10 @@ public final class DesignToolsMenuImguiRender extends AbstractFeatureModule impl
 
     @Override
     public void draw() {
-        if (beginMenu("Design Tools##DesignToolsMenuImguiRender")) {
-
-            for (ToolbarItemWindow registeredWindow : registeredWindows) {
-                if (menuItem(registeredWindow.getMenuName() + "##" + registeredWindow.getClass().getSimpleName(), registeredWindow.isVisible())) {
-                    registeredWindow.toggleVisible();
-                }
+        for (ToolbarItemWindow registeredWindow : registeredWindows) {
+            if (menuItem(registeredWindow.getMenuName() + "##" + registeredWindow.getClass().getSimpleName(), registeredWindow.isVisible())) {
+                registeredWindow.toggleVisible();
             }
-
-            endMenu();
         }
     }
 
