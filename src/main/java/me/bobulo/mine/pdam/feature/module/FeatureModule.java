@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature.module;
 
 import me.bobulo.mine.pdam.feature.Feature;
+import me.bobulo.mine.pdam.feature.FeatureBehavior;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,26 +10,18 @@ import org.jetbrains.annotations.NotNull;
  * A feature can be composed of multiple modules, each handling a specific piece of logic,
  * such as event listening. Modules share the lifecycle of their parent feature.
  */
-public interface FeatureModule {
-
-    /**
-     * Initializes the module with its parent feature.
-     * This method is called by the feature that owns this module and should only be called once.
-     *
-     * @param feature The parent feature that this module belongs to.
-     */
-    void init(@NotNull Feature feature);
+public interface FeatureModule extends FeatureBehavior {
 
     /**
      * Enables the module, activating its functionality.
      * This is typically called when the parent feature is enabled.
      */
-    void enable();
+    void enable(@NotNull Feature feature);
 
     /**
      * Disables the module, deactivating its functionality.
      * This is typically called when the parent feature is disabled.
      */
-    void disable();
+    void disable(@NotNull Feature feature);
 
 }

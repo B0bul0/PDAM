@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.module;
 
+import com.google.common.collect.ImmutableList;
 import me.bobulo.mine.pdam.PDAM;
 
 import java.util.Arrays;
@@ -18,11 +19,15 @@ public final class ImGuiListenerFeatureModule extends AbstractFeatureModule {
     private final List<Object> listeners;
 
     ImGuiListenerFeatureModule(Object... listeners) {
-        this.listeners = Arrays.asList(listeners);
+        this.listeners = ImmutableList.copyOf(listeners);
     }
 
     ImGuiListenerFeatureModule(List<Object> listeners) {
-        this.listeners = listeners;
+        this.listeners = ImmutableList.copyOf(listeners);
+    }
+
+    public List<Object> getListeners() {
+        return listeners;
     }
 
     @Override

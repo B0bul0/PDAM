@@ -1,19 +1,20 @@
 package me.bobulo.mine.pdam;
 
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
+import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.feature.Feature;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
-import me.bobulo.mine.pdam.feature.designtools.*;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
+import me.bobulo.mine.pdam.feature.designtools.*;
+import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
+import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
+import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
+import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
-import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
-import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
-import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
-import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureModule;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
@@ -26,7 +27,6 @@ import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureModule;
 import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
-import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.ui.UIManager;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -192,6 +192,7 @@ public final class PDAM {
             new HologramMockupWindow(),
             new PlaySoundWindow()
           ))
+          .module(new DesignToolsMenuImguiRender())
           .build());
     }
 

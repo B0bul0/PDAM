@@ -2,6 +2,9 @@ package me.bobulo.mine.pdam.imgui.toolbar;
 
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
+import me.bobulo.mine.pdam.PDAM;
+import me.bobulo.mine.pdam.feature.imgui.MenuBarImGuiRender;
+import me.bobulo.mine.pdam.feature.imgui.MenuImGuiRender;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderable;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +47,11 @@ public class ImGuiToolbar implements ImGuiRenderable {
 
                 if (beginMenu("PDAM")) {
 
+                    List<MenuImGuiRender> allComponents = PDAM.getFeatureService().getAllBehaviors(MenuImGuiRender.class);
+                    for (MenuImGuiRender component : allComponents) {
+                        component.draw();
+                    }
+
                     for (ToolbarItemWindow registeredWindow : registeredWindows) {
                         if (menuItem(registeredWindow.getMenuName() + "##" + registeredWindow.getClass().getSimpleName(), registeredWindow.isVisible())) {
                             registeredWindow.toggleVisible();
@@ -51,6 +59,11 @@ public class ImGuiToolbar implements ImGuiRenderable {
                     }
 
                     endMenu();
+                }
+
+                List<MenuBarImGuiRender> allComponents = PDAM.getFeatureService().getAllBehaviors(MenuBarImGuiRender.class);
+                for (MenuBarImGuiRender component : allComponents) {
+                    component.draw();
                 }
 
                 endMenuBar();

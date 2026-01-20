@@ -16,7 +16,7 @@ public class PacketMonitorFeatureModule extends AbstractFeatureModule {
     private PacketLogWindow logWindow;
 
     @Override
-    protected void onInit() {
+    protected void onInitialize() {
         this.packetEntries = new LogHistory<>();
 
         addChildModule(ForgerListenerFeatureModule.of(

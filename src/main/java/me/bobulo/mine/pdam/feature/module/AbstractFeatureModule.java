@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature.module;
 
 import me.bobulo.mine.pdam.feature.Feature;
+import me.bobulo.mine.pdam.feature.processor.FeatureProcessor;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,15 +18,6 @@ public abstract class AbstractFeatureModule implements FeatureModule {
 
     private final List<FeatureModule> childModules = new ArrayList<>(6);
 
-    @Override
-    public final void init(@NotNull Feature feature) {
-        Validate.notNull(feature, "Feature cannot be null");
-        Validate.isTrue(this.feature == null, "FeatureModule is already initialized");
-
-        this.feature = feature;
-        onInit();
-    }
-
     public Feature getFeature() {
         return feature;
     }
@@ -35,7 +27,16 @@ public abstract class AbstractFeatureModule implements FeatureModule {
     }
 
     @Override
-    public final void enable() {
+    public final void enable(@NotNull Feature feature) {
+        Validate.notNull(feature, "Feature cannot be null");
+        Validate.isTrue(this.feature == null || this.feature == feature,
+          "FeatureModule is initialized with a different Feature");
+
+        if (this.feature == null) {
+            this.feature = feature;
+            this.onInitialize();
+        }
+
         if (!enabled) {
             this.onEnable();
             enabled = true;
@@ -43,18 +44,21 @@ public abstract class AbstractFeatureModule implements FeatureModule {
     }
 
     @Override
-    public final void disable() {
+    public final void disable(@NotNull Feature feature) {
+        Validate.notNull(feature, "Feature cannot be null");
+        Validate.isTrue(this.feature == feature,
+          "FeatureModule is initialized with a different Feature");
+
         if (enabled) {
             this.onDisable();
             enabled = false;
         }
     }
 
-
     /**
-     * Called during initialization of the FeatureModule.
+     * Called when the FeatureModule is first initialized.
      */
-    protected void onInit() {
+    protected void onInitialize() {
         // Optional
     }
 
@@ -74,20 +78,32 @@ public abstract class AbstractFeatureModule implements FeatureModule {
         Validate.notNull(module, "FeatureModule cannot be null");
         Validate.isTrue(!childModules.contains(module), "FeatureModule is already a child");
         Validate.isTrue(module != this, "FeatureModule cannot be a child of itself");
-        Validate.isTrue(feature instanceof ModularFeature, "Parent Feature is not ModularFeature");
-        ModularFeature modularFeature = (ModularFeature) feature;
+        Validate.isTrue(feature != null, "Parent Feature is not initialized");
 
         childModules.add(module);
-        modularFeature.addModule(module);
+        feature.addModule(module);
     }
 
     public void removeChildModule(@NotNull FeatureModule module) {
         Validate.notNull(module, "FeatureModule cannot be null");
-        Validate.isTrue(feature instanceof ModularFeature, "Parent Feature is not ModularFeature");
-        ModularFeature modularFeature = (ModularFeature) feature;
+        Validate.isTrue(feature != null, "Parent Feature is not initialized");
 
         childModules.remove(module);
-        modularFeature.removeModule(module);
+        feature.removeModule(module);
+    }
+
+    public void addChildProcessor(@NotNull FeatureProcessor processor) {
+        Validate.notNull(processor, "FeatureProcessor cannot be null");
+        Validate.isTrue(feature != null, "Parent Feature is not initialized");
+
+        feature.addProcessor(processor);
+    }
+
+    public void removeChildProcessor(@NotNull FeatureProcessor processor) {
+        Validate.notNull(processor, "FeatureProcessor cannot be null");
+        Validate.isTrue(feature != null, "Parent Feature is not initialized");
+
+        feature.removeProcessor(processor);
     }
 
 }
