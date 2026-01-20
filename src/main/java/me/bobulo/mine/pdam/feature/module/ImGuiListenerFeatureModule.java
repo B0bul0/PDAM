@@ -1,27 +1,27 @@
-package me.bobulo.mine.pdam.feature.component;
+package me.bobulo.mine.pdam.feature.module;
 
 import me.bobulo.mine.pdam.PDAM;
 
 import java.util.Arrays;
 import java.util.List;
 
-public final class ImGuiListenerFeatureComponent extends AbstractFeatureComponent {
+public final class ImGuiListenerFeatureModule extends AbstractFeatureModule {
 
-    public static ImGuiListenerFeatureComponent of(Object... listeners) {
-        return new ImGuiListenerFeatureComponent(listeners);
+    public static ImGuiListenerFeatureModule of(Object... listeners) {
+        return new ImGuiListenerFeatureModule(listeners);
     }
 
-    public static ImGuiListenerFeatureComponent of(List<Object> windows) {
-        return new ImGuiListenerFeatureComponent(windows);
+    public static ImGuiListenerFeatureModule of(List<Object> windows) {
+        return new ImGuiListenerFeatureModule(windows);
     }
 
     private final List<Object> listeners;
 
-    ImGuiListenerFeatureComponent(Object... listeners) {
+    ImGuiListenerFeatureModule(Object... listeners) {
         this.listeners = Arrays.asList(listeners);
     }
 
-    ImGuiListenerFeatureComponent(List<Object> listeners) {
+    ImGuiListenerFeatureModule(List<Object> listeners) {
         this.listeners = listeners;
     }
 

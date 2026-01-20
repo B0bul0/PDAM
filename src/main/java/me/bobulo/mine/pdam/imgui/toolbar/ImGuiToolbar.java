@@ -41,14 +41,18 @@ public class ImGuiToolbar implements ImGuiRenderable {
 
         if (begin("##Toolbar", windowFlags)) {
             if (beginMenuBar()) {
+
                 if (beginMenu("PDAM")) {
+
                     for (ToolbarItemWindow registeredWindow : registeredWindows) {
                         if (menuItem(registeredWindow.getMenuName() + "##" + registeredWindow.getClass().getSimpleName(), registeredWindow.isVisible())) {
                             registeredWindow.toggleVisible();
                         }
                     }
+
                     endMenu();
                 }
+
                 endMenuBar();
             }
             end();

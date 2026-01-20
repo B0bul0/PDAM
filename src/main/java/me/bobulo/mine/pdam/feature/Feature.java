@@ -34,7 +34,7 @@ public interface Feature {
     /**
      * Enables the feature.
      * This method should handle the logic to activate the feature,
-     * such as registering event listeners or components.
+     * such as registering event listeners or modules.
      */
     void enable();
 
