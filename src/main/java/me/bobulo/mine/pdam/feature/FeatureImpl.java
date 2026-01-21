@@ -117,6 +117,8 @@ public final class FeatureImpl implements Feature, ModularFeature {
         activeModules.add(module);
         registry.put(module.getClass(), module);
 
+        module.onAttach(this);
+
         if (enabled) {
             module.enable(this);
         }
@@ -125,10 +127,13 @@ public final class FeatureImpl implements Feature, ModularFeature {
     @Override
     public void removeModule(@NotNull FeatureModule module) {
         Validate.isTrue(ThreadUtils.isMainThread(), "Modules can only be removed from the main thread");
+        FeatureBehavior featureBehavior = registry.get(module.getClass());
+        Validate.isTrue(featureBehavior == module,
+          "Module instance " + module + " is not registered in feature " + id);
 
-        if (!activeModules.remove(module)) {
-            throw new IllegalArgumentException("Module instance " + module + " is not registered in feature " + id);
-        }
+        registry.remove(module.getClass());
+        activeModules.remove(module);
+        module.onDetach(this);
 
         if (enabled) {
             module.disable(this);
