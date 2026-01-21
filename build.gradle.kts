@@ -86,6 +86,9 @@ dependencies {
     shadowImpl("io.github.spair:imgui-java-natives-windows:$imguiVersion")
     shadowImpl("io.github.spair:imgui-java-natives-linux:$imguiVersion")
     shadowImpl("io.github.spair:imgui-java-natives-macos:$imguiVersion")
+
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
 }
 
 // Tasks:

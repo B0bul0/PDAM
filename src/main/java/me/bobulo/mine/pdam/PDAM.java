@@ -10,6 +10,7 @@ import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.designtools.*;
 import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
 import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
+import me.bobulo.mine.pdam.feature.designtools.item.window.ItemBuilderWindow;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.imgui.ToolbarMenuImGuiRender;
@@ -197,7 +198,8 @@ public final class PDAM {
             new TitleVisualizerWindow(),
             new ActionBarVisualizerWindow(),
             new HologramMockupWindow(),
-            new PlaySoundWindow()
+            new PlaySoundWindow(),
+            new ItemBuilderWindow()
           ))
           .module(new DesignToolsMenuImguiRender())
           .build());
