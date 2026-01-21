@@ -1,6 +1,8 @@
 package me.bobulo.mine.pdam.feature.packet;
 
+import com.google.common.collect.ImmutableList;
 import me.bobulo.mine.pdam.PDAM;
+import me.bobulo.mine.pdam.feature.imgui.ToolbarMenuImGuiRenderer;
 import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.packet.interceptor.PacketDataInterceptor;
@@ -14,6 +16,7 @@ public class PacketMonitorFeatureModule extends AbstractFeatureModule {
 
     private LogHistory<DisplayPacketLogEntry> packetEntries;
     private PacketLogWindow logWindow;
+    private ToolbarMenuImGuiRenderer toolbarMenuImGuiRenderer;
 
     @Override
     protected void onInitialize() {
@@ -29,6 +32,9 @@ public class PacketMonitorFeatureModule extends AbstractFeatureModule {
     protected void onEnable() {
         this.logWindow = new PacketLogWindow(packetEntries);
         PDAM.getImGuiRenderer().registerWidow(logWindow);
+        this.toolbarMenuImGuiRenderer = new ToolbarMenuImGuiRenderer(ImmutableList.of(logWindow));
+
+        addChildModule(toolbarMenuImGuiRenderer);
     }
 
     @Override
@@ -37,6 +43,9 @@ public class PacketMonitorFeatureModule extends AbstractFeatureModule {
         this.logWindow = null;
 
         this.packetEntries.clear();
+
+        removeChildModule(toolbarMenuImGuiRenderer);
+        this.toolbarMenuImGuiRenderer = null;
     }
 
     public void addPacketEntry(@NotNull PacketLogEntry packetLogEntry) {
