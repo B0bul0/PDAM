@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Enum representing all possible enchantments in Minecraft Vanilla.
+ */
 public enum Enchantment {
 
     PROTECTION("protection", "minecraft:protection"),

@@ -9,6 +9,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+/**
+ * Data class representing item properties for building ItemStacks.
+ */
 @Data
 public class ItemData {
 

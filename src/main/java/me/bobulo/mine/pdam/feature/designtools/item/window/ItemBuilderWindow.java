@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature.designtools.item.window;
 
 import imgui.ImGuiTextFilter;
+import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
@@ -9,6 +10,7 @@ import me.bobulo.mine.pdam.feature.designtools.item.Enchantment;
 import me.bobulo.mine.pdam.feature.designtools.item.HideFlag;
 import me.bobulo.mine.pdam.feature.designtools.item.ItemData;
 import me.bobulo.mine.pdam.feature.designtools.item.ItemDataFactory;
+import me.bobulo.mine.pdam.imgui.util.ImGuiNotificationDrawer;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.ClipboardUtils;
 import me.bobulo.mine.pdam.util.ItemColorUtil;
@@ -27,7 +29,12 @@ import java.util.Set;
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
 
+/**
+ * A GUI window for building and customizing Minecraft items.
+ */
 public class ItemBuilderWindow extends AbstractRenderItemWindow {
+
+    private final ImGuiNotificationDrawer notificationDrawer = new ImGuiNotificationDrawer();
 
     private ItemData itemData = new ItemData();
 
@@ -55,6 +62,8 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
     private final ImString skullName = new ImString("", 512);
 
     private final ImString jsonBuffer = new ImString("", 1024);
+
+    private String lastWarning = "";
 
     public ItemBuilderWindow() {
         super("Item Builder");
@@ -97,6 +106,32 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
     }
 
     private void renderContent() {
+        notificationDrawer.draw();
+
+        renderWarningSection();
+        renderImportSection();
+
+        if (beginChild("##EditSection", 0, 0, true)) {
+            renderEditSection();
+            endChild();
+        }
+    }
+
+    private void renderWarningSection() {
+        if (StringUtils.isEmpty(lastWarning)) {
+            return;
+        }
+
+        if (beginChild("##WarningSection", 0, 40, true)) {
+            pushStyleColor(ImGuiCol.Text, 1.0f, 0.0f, 0.0f, 1.0f);
+            textWrapped(lastWarning);
+            popStyleColor();
+
+            endChild();
+        }
+    }
+
+    private void renderImportSection() {
         boolean disableHandImport = false;
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
         if (player == null || player.getHeldItem() == null) {
@@ -122,7 +157,13 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
             if (button("From Clipboard")) {
                 String clipboard = ClipboardUtils.getFromClipboard();
                 if (StringUtils.isNoneBlank(clipboard)) {
-                    importItem(ItemDataFactory.fromJson(clipboard));
+                    try {
+                        importItem(ItemDataFactory.fromJson(clipboard));
+                        closeCurrentPopup(); // Close popup on successful import
+                    } catch (Exception ignored) {
+                        notificationDrawer.addNotification("Failed to import item from JSON.");
+                    }
+                    jsonBuffer.set("");
                 }
             }
 
@@ -133,8 +174,9 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
             if (button("Import")) {
                 try {
                     importItem(ItemDataFactory.fromJson(jsonBuffer.get()));
+                    closeCurrentPopup(); // Close popup on successful import
                 } catch (Exception ignored) {
-                    // Ignore invalid json
+                    notificationDrawer.addNotification("Failed to import item from JSON.");
                 }
                 jsonBuffer.set("");
             }
@@ -145,11 +187,6 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         sameLine();
         if (button("Import from Json")) {
             openPopup("ImportJson");
-        }
-
-        if (beginChild("##EditSection", 0, 0, true)) {
-            renderEditSection();
-            endChild();
         }
     }
 
@@ -190,7 +227,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         setNextItemWidth(150);
         if (inputInt("##Durability", durability)) {
             itemData.setDurability(durability.get());
-            setMaxMinValue(amount, 1, 10000);
+            setMaxMinValue(durability, 1, 10000);
         }
 
         separatorText("Display Properties:");
@@ -208,6 +245,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
         spacing();
         renderEnchantmentSection();
+        spacing();
 
         if (treeNode("Other Properties")) {
 
@@ -225,8 +263,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
             if (beginPopup("hideFlagsSelect")) {
                 text("Hide Flags:");
-                checkbox("Hide All", hideFlags.size() == HideFlag.VALUES.size());
-                if (isItemClicked()) {
+                if (checkbox("Hide All", hideFlags.size() == HideFlag.VALUES.size())) {
                     if (hideFlags.size() == HideFlag.VALUES.size()) {
                         hideFlags.clear();
                     } else {
@@ -238,9 +275,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
                 separator();
                 for (HideFlag flag : HideFlag.VALUES) {
-                    checkbox("Hide " + flag.name(), hideFlags.contains(flag));
-
-                    if (isItemClicked()) {
+                    if (checkbox("Hide " + flag.name(), hideFlags.contains(flag))) {
                         if (hideFlags.contains(flag)) {
                             hideFlags.remove(flag);
                         } else {
@@ -271,7 +306,9 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
             treePop();
         }
 
+        spacing();
         separator();
+        spacing();
 
         if (disableGiving) {
             beginDisabled();
@@ -280,6 +317,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         if (button("Give Item", 200, 20)) {
             ItemStack itemStack = itemData.buildItem();
             if (itemStack == null) {
+                notificationDrawer.addNotification("Failed to build item. Check the material.");
                 return;
             }
 
@@ -300,8 +338,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
     }
 
     private void renderEnchantmentSection() {
-        if (treeNode("Enchantment")) {
-
+        if (beginPopup("EnchantmentsSettings")) {
             enchantmentFilter.draw();
 
             for (Enchantment enchantment : Enchantment.VALUES) {
@@ -310,9 +347,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
                 }
 
                 boolean enable = enchantments.containsKey(enchantment);
-                checkbox(enchantment.getKey(), enable);
-
-                if (isItemClicked()) {
+                if (checkbox(enchantment.getKey(), enable)) {
                     if (enable) {
                         enchantments.remove(enchantment);
                         itemData.getEnchantments().remove(enchantment);
@@ -335,7 +370,11 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
                 }
             }
 
-            treePop();
+            endPopup();
+        }
+
+        if (button("Enchantments", 200, 0)) {
+            openPopup("EnchantmentsSettings");
         }
     }
 
@@ -349,7 +388,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         }
 
         if (inputText("Skull Name", skullName)) {
-            itemData.setSkullValue(skullName.get());
+            itemData.setSkullName(skullName.get());
         }
     }
 

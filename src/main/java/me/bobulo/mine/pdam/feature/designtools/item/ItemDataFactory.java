@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Factory class for creating ItemData instances from JSON strings and ItemStacks.
+ */
 public final class ItemDataFactory {
 
     private static final Gson GSON = new Gson();

@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
+/**
+ * Enum representing all possible item hide flags in Minecraft Vanilla.
+ */
 public enum HideFlag {
 
     ENCHANTS,

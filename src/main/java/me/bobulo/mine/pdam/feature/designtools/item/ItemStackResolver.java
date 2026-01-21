@@ -4,8 +4,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.math.NumberUtils;
 
-public class ItemStackResolver {
+public final class ItemStackResolver {
 
+    /**
+     * Resolves an ItemStack from a material string.
+     *
+     * @param material Material string (e.g., "minecraft:stone", "minecraft:wool:5", "wool:5", "35:14")
+     * @return Resolved ItemStack or null if not found
+     */
     public static ItemStack resolve(String material) {
         Item item = Item.getByNameOrId(material);
         if (item != null) {
