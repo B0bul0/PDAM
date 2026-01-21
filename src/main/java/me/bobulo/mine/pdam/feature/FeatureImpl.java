@@ -1,10 +1,10 @@
 package me.bobulo.mine.pdam.feature;
 
-import me.bobulo.mine.pdam.feature.component.FeatureComponent;
-import me.bobulo.mine.pdam.feature.event.FeatureComponentDisabledEvent;
-import me.bobulo.mine.pdam.feature.event.FeatureComponentEnabledEvent;
 import me.bobulo.mine.pdam.feature.event.FeatureDisabledEvent;
 import me.bobulo.mine.pdam.feature.event.FeatureEnabledEvent;
+import me.bobulo.mine.pdam.feature.event.FeatureModuleDisabledEvent;
+import me.bobulo.mine.pdam.feature.event.FeatureModuleEnabledEvent;
+import me.bobulo.mine.pdam.feature.module.FeatureModule;
 import me.bobulo.mine.pdam.util.EventUtils;
 import me.bobulo.mine.pdam.util.ThreadUtils;
 import org.apache.commons.lang3.Validate;
@@ -13,11 +13,12 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Default implementation of a Feature.
  */
-public final class FeatureImpl implements Feature, ComponentableFeature {
+public final class FeatureImpl implements Feature, ModularFeature {
 
     private static final Logger log = LogManager.getLogger(FeatureImpl.class);
 
@@ -25,7 +26,8 @@ public final class FeatureImpl implements Feature, ComponentableFeature {
     private final String name;
     private boolean enabled = false;
 
-    private final Map<Class<? extends FeatureComponent>, FeatureComponent> components = new HashMap<>();
+    private final List<FeatureModule> activeModules = new CopyOnWriteArrayList<>();
+    private final Map<Class<? extends FeatureBehavior>, FeatureBehavior> registry = new HashMap<>();
 
     public FeatureImpl(String id) {
         Validate.notBlank(id, "Feature id cannot be null or blank");
@@ -81,78 +83,96 @@ public final class FeatureImpl implements Feature, ComponentableFeature {
     }
 
     private void onEnable() {
-        for (FeatureComponent component : components.values()) {
+        for (FeatureModule module : activeModules) {
             try {
-                component.enable();
-                EventUtils.callEvent(new FeatureComponentEnabledEvent(this, component));
+                module.enable(this);
+                EventUtils.callEvent(new FeatureModuleEnabledEvent(this, module));
             } catch (Exception exception) {
-                log.error("Error while enabling component {} of feature {}",
-                  component.getClass().getSimpleName(), id, exception);
+                log.error("Error while enabling module {} of feature {}",
+                  module.getClass().getSimpleName(), id, exception);
             }
         }
     }
 
     private void onDisable() {
-        for (FeatureComponent component : components.values()) {
+        for (FeatureModule module : activeModules) {
             try {
-                component.disable();
-                EventUtils.callEvent(new FeatureComponentDisabledEvent(this, component));
+                module.disable(this);
+                EventUtils.callEvent(new FeatureModuleDisabledEvent(this, module));
             } catch (Exception exception) {
-                log.error("Error while disabling component {} of feature {}",
-                  component.getClass().getSimpleName(), id, exception);
+                log.error("Error while disabling module {} of feature {}",
+                  module.getClass().getSimpleName(), id, exception);
             }
         }
     }
 
-    /* Register Components */
+    /* Register Modules */
 
     @Override
-    public void addComponent(@NotNull FeatureComponent component) {
-        Validate.isTrue(ThreadUtils.isMainThread(), "Components can only be added from the main thread");
-        Validate.isTrue(!components.containsValue(component),
-          "Component instance " + component + " is already registered in feature " + id);
+    public void addModule(@NotNull FeatureModule module) {
+        Validate.isTrue(ThreadUtils.isMainThread(), "Modules can only be added from the main thread");
+        Validate.isTrue(!activeModules.contains(module),
+          "Module instance " + module + " is already registered in feature " + id);
 
-        component.init(this);
-        components.put(component.getClass(), component);
+        activeModules.add(module);
+        registry.put(module.getClass(), module);
+
+        module.onAttach(this);
 
         if (enabled) {
-            component.enable();
+            module.enable(this);
         }
     }
 
     @Override
-    public void removeComponent(@NotNull FeatureComponent component) {
-        Validate.isTrue(ThreadUtils.isMainThread(), "Components can only be removed from the main thread");
+    public void removeModule(@NotNull FeatureModule module) {
+        Validate.isTrue(ThreadUtils.isMainThread(), "Modules can only be removed from the main thread");
+        FeatureBehavior featureBehavior = registry.get(module.getClass());
+        Validate.isTrue(featureBehavior == module,
+          "Module instance " + module + " is not registered in feature " + id);
 
-        FeatureComponent removed = components.remove(component.getClass());
-        Validate.isTrue(removed != null,
-          "Component instance " + component + " is not registered in feature " + id);
-
+        registry.remove(module.getClass());
+        activeModules.remove(module);
+        module.onDetach(this);
 
         if (enabled) {
-            component.disable();
+            module.disable(this);
         }
     }
 
     @Override
-    public boolean hasComponent(@NotNull FeatureComponent component) {
-        return components.get(component.getClass()) == component;
+    public @NotNull Collection<FeatureModule> getModules() {
+        return Collections.unmodifiableCollection(activeModules);
+    }
+
+    /* Behaviors */
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends FeatureBehavior> T getBehavior(@NotNull Class<T> behaviorClass) {
+        return (T) registry.get(behaviorClass);
     }
 
     @Override
-    public boolean hasComponent(@NotNull Class<? extends FeatureComponent> component) {
-        return components.containsKey(component);
+    public <T extends FeatureBehavior> boolean hasBehavior(@NotNull Class<T> behaviorClass) {
+        return registry.containsKey(behaviorClass);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends FeatureComponent> T getComponent(@NotNull Class<T> componentClass) {
-        return (T) components.get(componentClass);
+    public <T extends FeatureBehavior> Collection<T> getBehaviors() {
+        return (Collection<T>) Collections.unmodifiableCollection(registry.values());
     }
 
     @Override
-    public @NotNull Collection<FeatureComponent> getComponents() {
-        return Collections.unmodifiableCollection(components.values());
+    public <T extends FeatureBehavior> List<T> getBehaviors(@NotNull Class<T> behaviorClass) {
+        List<T> behaviors = new ArrayList<>();
+        for (FeatureBehavior behavior : registry.values()) {
+            if (behaviorClass.isInstance(behavior)) {
+                behaviors.add(behaviorClass.cast(behavior));
+            }
+        }
+        return behaviors;
     }
 
     /* Builder */
@@ -163,7 +183,7 @@ public final class FeatureImpl implements Feature, ComponentableFeature {
 
     public static final class FeatureBuilder {
         private String id;
-        private final List<FeatureComponent> components = new ArrayList<>();
+        private final List<FeatureModule> modules = new ArrayList<>();
 
         private FeatureBuilder() {
         }
@@ -173,24 +193,24 @@ public final class FeatureImpl implements Feature, ComponentableFeature {
             return this;
         }
 
-        public FeatureBuilder components(List<FeatureComponent> components) {
-            this.components.addAll(components);
+        public FeatureBuilder modules(Collection<FeatureModule> modules) {
+            this.modules.addAll(modules);
             return this;
         }
 
-        public FeatureBuilder components(FeatureComponent... components) {
-            this.components.addAll(Arrays.asList(components));
+        public FeatureBuilder modules(FeatureModule... modules) {
+            this.modules.addAll(Arrays.asList(modules));
             return this;
         }
 
-        public FeatureBuilder component(FeatureComponent component) {
-            this.components.add(component);
+        public FeatureBuilder module(FeatureModule module) {
+            this.modules.add(module);
             return this;
         }
 
         public FeatureImpl build() {
             FeatureImpl feature = new FeatureImpl(id);
-            this.components.forEach(feature::addComponent);
+            this.modules.forEach(feature::addModule);
             return feature;
         }
     }

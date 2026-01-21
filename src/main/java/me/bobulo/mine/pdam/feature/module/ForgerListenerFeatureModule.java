@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.component;
+package me.bobulo.mine.pdam.feature.module;
 
 import net.minecraftforge.common.MinecraftForge;
 
@@ -6,27 +6,27 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A {@link FeatureComponent} that automatically registers and unregisters Forge event listeners.
- * When the component is enabled, it registers all provided listener objects to the {@link MinecraftForge#EVENT_BUS}.
+ * A {@link FeatureModule} that automatically registers and unregisters Forge event listeners.
+ * When the module is enabled, it registers all provided listener objects to the {@link MinecraftForge#EVENT_BUS}.
  * When disabled, it unregisters them.
  */
-public final class ForgerListenerFeatureComponent extends AbstractFeatureComponent {
+public final class ForgerListenerFeatureModule extends AbstractFeatureModule {
 
-    public static ForgerListenerFeatureComponent of(Object... listeners) {
-        return new ForgerListenerFeatureComponent(listeners);
+    public static ForgerListenerFeatureModule of(Object... listeners) {
+        return new ForgerListenerFeatureModule(listeners);
     }
 
-    public static ForgerListenerFeatureComponent of(List<Object> listeners) {
-        return new ForgerListenerFeatureComponent(listeners);
+    public static ForgerListenerFeatureModule of(List<Object> listeners) {
+        return new ForgerListenerFeatureModule(listeners);
     }
 
     private final List<Object> listeners;
 
-    ForgerListenerFeatureComponent(Object... listeners) {
+    ForgerListenerFeatureModule(Object... listeners) {
         this.listeners = Arrays.asList(listeners);
     }
 
-    ForgerListenerFeatureComponent(List<Object> listeners) {
+    ForgerListenerFeatureModule(List<Object> listeners) {
         this.listeners = listeners;
     }
 

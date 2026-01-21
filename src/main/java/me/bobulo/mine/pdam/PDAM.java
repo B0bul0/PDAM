@@ -1,20 +1,22 @@
 package me.bobulo.mine.pdam;
 
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
+import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.feature.Feature;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
-import me.bobulo.mine.pdam.feature.designtools.*;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
-import me.bobulo.mine.pdam.feature.component.CallbackFeatureComponent;
-import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
-import me.bobulo.mine.pdam.feature.component.ImGuiListenerFeatureComponent;
+import me.bobulo.mine.pdam.feature.designtools.*;
 import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
+import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
-import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
-import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureComponent;
+import me.bobulo.mine.pdam.feature.imgui.ToolbarMenuImGuiRender;
+import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
+import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
+import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
+import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureModule;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
@@ -22,11 +24,10 @@ import me.bobulo.mine.pdam.feature.sign.SignEditorListener;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
-import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureComponent;
+import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureModule;
 import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
-import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.ui.UIManager;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -120,29 +121,30 @@ public final class PDAM {
     private void registerFeatures() {
         featureService.registerFeature(FeatureImpl.builder()
           .id("sound_debug")
-          .component(new SoundDebugFeatureComponent())
+          .module(new SoundDebugFeatureModule())
+          .module(new ToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("nbt_tooltip")
-          .component(ForgerListenerFeatureComponent.of(new NBTTagTooltipListener()))
+          .module(ForgerListenerFeatureModule.of(new NBTTagTooltipListener()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("show_invisible_entities")
-          .component(CallbackFeatureComponent.of(
+          .module(CallbackFeatureModule.of(
             () -> ShowInvisibleEntities.showInvisibleEntities = true,
             () -> ShowInvisibleEntities.showInvisibleEntities = false)
           ).build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("entity_info_overlay")
-          .component(ForgerListenerFeatureComponent.of(new EntityOverlayInfoListener()))
+          .module(ForgerListenerFeatureModule.of(new EntityOverlayInfoListener()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("skin_extraction")
-          .component(ForgerListenerFeatureComponent.of(
+          .module(ForgerListenerFeatureModule.of(
             new PlayerSkinExtractionListener(),
             new HeadWorldSkinExtractionListener(),
             new HotBarSkinExtractionListener()
@@ -151,40 +153,45 @@ public final class PDAM {
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("packet_monitor")
-          .component(new PacketMonitorFeatureComponent())
+          .module(new PacketMonitorFeatureModule())
+          .module(new ToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("scoreboard_inspector")
-          .component(ImGuiListenerFeatureComponent.of(new ScoreboardInspectorWindow()))
+          .module(ImGuiListenerFeatureModule.of(new ScoreboardInspectorWindow()))
+          .module(new ToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("server_info")
-          .component(ImGuiListenerFeatureComponent.of(new ServerInfoWindow()))
+          .module(ImGuiListenerFeatureModule.of(new ServerInfoWindow()))
+          .module(new ToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("fly_booster")
-          .component(ImGuiListenerFeatureComponent.of(new FlyBoosterWindow()))
+          .module(ImGuiListenerFeatureModule.of(new FlyBoosterWindow()))
+          .module(new ToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("messaging_utilities")
-          .component(ImGuiListenerFeatureComponent.of(
+          .module(ImGuiListenerFeatureModule.of(
             new SendChatMessageWindow()
           ))
-          .component(ForgerListenerFeatureComponent.of(new ChatCopyListener()))
+          .module(new ToolbarMenuImGuiRender())
+          .module(ForgerListenerFeatureModule.of(new ChatCopyListener()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("sign_editor")
-          .component(ForgerListenerFeatureComponent.of(new SignEditorListener()))
+          .module(ForgerListenerFeatureModule.of(new SignEditorListener()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("design_tools")
-          .component(ImGuiListenerFeatureComponent.of(
+          .module(ImGuiListenerFeatureModule.of(
             new CharacterMapWindow(),
             new MessageFormatterWindow(),
             new TitleVisualizerWindow(),
@@ -192,6 +199,7 @@ public final class PDAM {
             new HologramMockupWindow(),
             new PlaySoundWindow()
           ))
+          .module(new DesignToolsMenuImguiRender())
           .build());
     }
 
