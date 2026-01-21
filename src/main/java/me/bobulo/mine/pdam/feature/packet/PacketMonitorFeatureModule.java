@@ -1,8 +1,8 @@
 package me.bobulo.mine.pdam.feature.packet;
 
 import me.bobulo.mine.pdam.PDAM;
-import me.bobulo.mine.pdam.feature.component.AbstractFeatureComponent;
-import me.bobulo.mine.pdam.feature.component.ForgerListenerFeatureComponent;
+import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
+import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.packet.interceptor.PacketDataInterceptor;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry;
@@ -10,16 +10,16 @@ import me.bobulo.mine.pdam.feature.packet.widow.PacketLogWindow;
 import me.bobulo.mine.pdam.log.LogHistory;
 import org.jetbrains.annotations.NotNull;
 
-public class PacketMonitorFeatureComponent extends AbstractFeatureComponent {
+public class PacketMonitorFeatureModule extends AbstractFeatureModule {
 
     private LogHistory<DisplayPacketLogEntry> packetEntries;
     private PacketLogWindow logWindow;
 
     @Override
-    protected void onInit() {
+    protected void onInitialize() {
         this.packetEntries = new LogHistory<>();
 
-        addChildComponent(ForgerListenerFeatureComponent.of(
+        addChildModule(ForgerListenerFeatureModule.of(
           new PacketDataInterceptor(this)
         ));
 

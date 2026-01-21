@@ -1,14 +1,17 @@
 package me.bobulo.mine.pdam.feature;
 
+import me.bobulo.mine.pdam.feature.module.FeatureModule;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Manages the registration and lifecycle of features within the mod.
@@ -74,6 +77,18 @@ public final class FeatureService {
     public List<Feature> getSortedFeatures() {
         return features.values().stream()
           .sorted(Comparator.comparing(Feature::getId))
+          .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieves all behaviors of a specific class from all registered features.
+     *
+     * @param behaviorClass The class of the behavior to retrieve.
+     * @return A list of all behaviors of the specified class from all registered features.
+     */
+    public <T extends FeatureBehavior> List<T> getAllBehaviors(@NotNull Class<T> behaviorClass) {
+        return features.values().stream()
+          .flatMap(feature -> feature.getBehaviors(behaviorClass).stream())
           .collect(Collectors.toList());
     }
 

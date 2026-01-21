@@ -4,7 +4,7 @@ package me.bobulo.mine.pdam.feature;
  * Represents a modular feature of the mod.
  * Each feature can be enabled or disabled.
  */
-public interface Feature {
+public interface Feature extends ModularFeature {
 
     /**
      * Gets the unique identifier for this feature.
@@ -34,7 +34,7 @@ public interface Feature {
     /**
      * Enables the feature.
      * This method should handle the logic to activate the feature,
-     * such as registering event listeners or components.
+     * such as registering event listeners or modules.
      */
     void enable();
 

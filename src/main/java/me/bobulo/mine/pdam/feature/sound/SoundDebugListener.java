@@ -8,9 +8,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SoundDebugListener {
 
-    private final SoundDebugFeatureComponent soundDebugFeatureComponent;
+    private final SoundDebugFeatureModule soundDebugFeatureComponent;
 
-    public SoundDebugListener(SoundDebugFeatureComponent soundDebugFeatureComponent) {
+    public SoundDebugListener(SoundDebugFeatureModule soundDebugFeatureComponent) {
         this.soundDebugFeatureComponent = soundDebugFeatureComponent;
     }
 

@@ -1,13 +1,13 @@
 package me.bobulo.mine.pdam.feature.sound;
 
 import me.bobulo.mine.pdam.PDAM;
-import me.bobulo.mine.pdam.feature.component.AbstractFeatureComponent;
+import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import me.bobulo.mine.pdam.feature.sound.log.SoundLogEntry;
 import me.bobulo.mine.pdam.feature.sound.widow.SoundDebugWindow;
 import me.bobulo.mine.pdam.log.LogHistory;
 import net.minecraftforge.common.MinecraftForge;
 
-public final class SoundDebugFeatureComponent extends AbstractFeatureComponent {
+public final class SoundDebugFeatureModule extends AbstractFeatureModule {
 
     private SoundDebugListener listener;
     private SoundDebugWindow window;

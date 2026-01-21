@@ -31,7 +31,10 @@ public final class ImGuiRenderer {
     private ImGuiImplGl2 imGuiImplGl2;
     private ImGuiInputHandler inputHandler;
 
-    private final ImGuiToolbar imGuiToolbar = new ImGuiToolbar();
+    // Flag to cancel rendering in case of error
+    private boolean cancelRender;
+
+    private ImGuiToolbar imGuiToolbar;
 
     private final List<ImGuiRenderable> frameRenders = new CopyOnWriteArrayList<>();
 
@@ -42,19 +45,11 @@ public final class ImGuiRenderer {
         if (widow instanceof ImGuiRenderable) {
             addFrameRender((ImGuiRenderable) widow);
         }
-
-        if (widow instanceof ToolbarItemWindow) {
-            imGuiToolbar.registerWindow((ToolbarItemWindow) widow);
-        }
     }
 
     public void unregisterWidow(Object widow) {
         if (widow instanceof ImGuiRenderable) {
             removeFrameRender((ImGuiRenderable) widow);
-        }
-
-        if (widow instanceof ToolbarItemWindow) {
-            imGuiToolbar.unregisterWindow((ToolbarItemWindow) widow);
         }
     }
 
@@ -101,6 +96,8 @@ public final class ImGuiRenderer {
 
         MinecraftForge.EVENT_BUS.register(new RenderGuizmoHandler());
 
+        imGuiToolbar = new ImGuiToolbar();
+
         initialized = true;
     }
 
@@ -121,14 +118,14 @@ public final class ImGuiRenderer {
             try {
                 frameRender.newFrame();
             } catch (Exception exception) {
-                try {
-                    ImGui.end();
-                } catch (Exception ignored) {
-                    break;
-                }
-
+                cancelRender = true;
                 log.error("Error while rendering ImGui frame:", exception);
             }
+        }
+
+        if (cancelRender) {
+            ImGui.endFrame();
+            return;
         }
 
         ImGui.render();
