@@ -1,9 +1,9 @@
 package me.bobulo.mine.pdam.util;
 
 /**
- * Utility class for item color conversions.
+ * Utility class for color conversions.
  */
-public final class ItemColorUtil {
+public final class ColorUtil {
 
     public static int toRgbInt(float[] rgb01) {
         int r = clampColor((int) (rgb01[0] * 255));
@@ -35,7 +35,7 @@ public final class ItemColorUtil {
         return Math.min(value, 255);
     }
 
-    private ItemColorUtil() {
+    private ColorUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
