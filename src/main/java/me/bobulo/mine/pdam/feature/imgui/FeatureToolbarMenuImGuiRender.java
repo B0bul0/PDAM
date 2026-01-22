@@ -12,7 +12,7 @@ import static imgui.ImGui.menuItem;
 /**
  * Renders toolbar item windows in the menu.
  */
-public final class ToolbarMenuImGuiRender extends AbstractFeatureModule implements MenuImGuiRender {
+public final class FeatureToolbarMenuImGuiRender extends AbstractFeatureModule implements MenuImGuiRender {
 
     private List<ToolbarItemWindow> registeredWindows;
 

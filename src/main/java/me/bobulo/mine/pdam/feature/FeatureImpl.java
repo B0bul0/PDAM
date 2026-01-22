@@ -29,7 +29,7 @@ public final class FeatureImpl implements Feature, ModularFeature {
     private final List<FeatureModule> activeModules = new CopyOnWriteArrayList<>();
     private final Map<Class<? extends FeatureBehavior>, FeatureBehavior> registry = new HashMap<>();
 
-    public FeatureImpl(String id) {
+    public FeatureImpl(@NotNull String id) {
         Validate.notBlank(id, "Feature id cannot be null or blank");
         this.id = id;
         this.name = id;

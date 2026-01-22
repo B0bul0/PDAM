@@ -8,12 +8,9 @@ import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.designtools.*;
-import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
-import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
-import me.bobulo.mine.pdam.feature.designtools.item.window.ItemBuilderWindow;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
-import me.bobulo.mine.pdam.feature.imgui.ToolbarMenuImGuiRender;
+import me.bobulo.mine.pdam.feature.imgui.FeatureToolbarMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
@@ -123,7 +120,6 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id("sound_debug")
           .module(new SoundDebugFeatureModule())
-          .module(new ToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
@@ -155,25 +151,24 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id("packet_monitor")
           .module(new PacketMonitorFeatureModule())
-          .module(new ToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("scoreboard_inspector")
           .module(ImGuiListenerFeatureModule.of(new ScoreboardInspectorWindow()))
-          .module(new ToolbarMenuImGuiRender())
+          .module(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("server_info")
           .module(ImGuiListenerFeatureModule.of(new ServerInfoWindow()))
-          .module(new ToolbarMenuImGuiRender())
+          .module(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("fly_booster")
           .module(ImGuiListenerFeatureModule.of(new FlyBoosterWindow()))
-          .module(new ToolbarMenuImGuiRender())
+          .module(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
@@ -181,7 +176,7 @@ public final class PDAM {
           .module(ImGuiListenerFeatureModule.of(
             new SendChatMessageWindow()
           ))
-          .module(new ToolbarMenuImGuiRender())
+          .module(new FeatureToolbarMenuImGuiRender())
           .module(ForgerListenerFeatureModule.of(new ChatCopyListener()))
           .build());
 
@@ -190,19 +185,7 @@ public final class PDAM {
           .module(ForgerListenerFeatureModule.of(new SignEditorListener()))
           .build());
 
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("design_tools")
-          .module(ImGuiListenerFeatureModule.of(
-            new CharacterMapWindow(),
-            new MessageFormatterWindow(),
-            new TitleVisualizerWindow(),
-            new ActionBarVisualizerWindow(),
-            new HologramMockupWindow(),
-            new PlaySoundWindow(),
-            new ItemBuilderWindow()
-          ))
-          .module(new DesignToolsMenuImguiRender())
-          .build());
+        featureService.registerFeature(DesignToolsContext.get().getFeature());
     }
 
 }
