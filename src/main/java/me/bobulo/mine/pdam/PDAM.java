@@ -8,9 +8,6 @@ import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.designtools.*;
-import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
-import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
-import me.bobulo.mine.pdam.feature.designtools.item.window.ItemBuilderWindow;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.imgui.FeatureToolbarMenuImGuiRender;
@@ -188,19 +185,7 @@ public final class PDAM {
           .module(ForgerListenerFeatureModule.of(new SignEditorListener()))
           .build());
 
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("design_tools")
-          .module(ImGuiListenerFeatureModule.of(
-            new CharacterMapWindow(),
-            new MessageFormatterWindow(),
-            new TitleVisualizerWindow(),
-            new ActionBarVisualizerWindow(),
-            new HologramMockupWindow(),
-            new PlaySoundWindow(),
-            new ItemBuilderWindow()
-          ))
-          .module(new DesignToolsMenuImguiRender())
-          .build());
+        featureService.registerFeature(DesignToolsContext.get().getFeature());
     }
 
 }

@@ -7,7 +7,8 @@ import imgui.flag.ImGuiPopupFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
-import me.bobulo.mine.pdam.config.ConfigElement;
+import me.bobulo.mine.pdam.config.ConfigProperty;
+import me.bobulo.mine.pdam.config.ConfigValue;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.mixin.GuiChatInvoker;
 import me.bobulo.mine.pdam.util.ChatColor;
@@ -24,8 +25,8 @@ import static me.bobulo.mine.pdam.imgui.util.MCFontImGui.mcText;
 
 public final class CharacterMapWindow extends AbstractRenderItemWindow {
 
-    private static final ConfigElement<FavoriteCharacters> FAVORITE_CHARACTERS =
-      ConfigElement.of("designTools.favoriteCharacters", new FavoriteCharacters());
+    private static final ConfigValue<FavoriteCharacters> FAVORITE_CHARACTERS =
+      ConfigProperty.of("designTools.favoriteCharacters", new FavoriteCharacters());
 
     private static final int MAX_CHAR = 65536;
 
