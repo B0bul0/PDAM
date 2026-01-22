@@ -68,8 +68,8 @@ public class InventorySlotListener {
 
                 fontRenderer.drawString(
                   text,
-                  x + 8 - (textWidth / 2F),
-                  y + 4,
+                  x + 8.5F - (textWidth / 2F),
+                  y + 4F,
                   InventorySlotInspector.COLOR.get(), false
                 );
             }

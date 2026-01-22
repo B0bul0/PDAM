@@ -12,7 +12,7 @@ public class InventorySlotInspectorMenuImGuiRender extends AbstractFeatureModule
 
     private static final String[] OVERLAY_PRIORITY_OPTIONS = new String[]{
             "Background",
-            "Foreground" // TOPMOST
+            "Foreground"
     };
 
     private final ImInt overlayPriorityIndex = new ImInt(OVERLAY_PRIORITY.get());
@@ -22,9 +22,11 @@ public class InventorySlotInspectorMenuImGuiRender extends AbstractFeatureModule
     public void draw() {
         if (beginMenu("Inventory Slot Inspector")) {
 
-            if (menuItem("Enable Slot Overlay", "", ENABLED.get())) {
+            if (checkbox("Enable Slot Overlay", ENABLED.get())) {
                 ENABLED.set(!ENABLED.get());
             }
+
+            separator();
 
             if (colorEdit3("Text Color", color)) {
                 COLOR.set(ColorUtil.toRgbInt(color));
