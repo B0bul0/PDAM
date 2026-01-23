@@ -35,7 +35,8 @@ public class InventorySlotInspectorMenuImGuiRender extends AbstractFeatureModule
             sameLine();
 
             if (button("Reset Color")) {
-                COLOR.set(0xFF373737);
+                COLOR.set(InventorySlotInspector.DEFAULT_COLOR);
+                color = ColorUtil.toRgb(InventorySlotInspector.DEFAULT_COLOR);
             }
 
             if (combo("Overlay Priority", overlayPriorityIndex, OVERLAY_PRIORITY_OPTIONS)) {

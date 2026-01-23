@@ -18,9 +18,11 @@ public final class InventorySlotInspector extends FeatureContext {
           }
       }).sync();
 
+    public static final int DEFAULT_COLOR = 0xFF373737;
+
     public static final ConfigValue<Integer> COLOR = ConfigProperty.of(
       "inventory_slot_inspector.color",
-      0xFF373737
+      DEFAULT_COLOR
     );
 
     public static final ConfigValue<Integer> OVERLAY_PRIORITY = ConfigProperty.of(
