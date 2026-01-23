@@ -11,6 +11,7 @@ import me.bobulo.mine.pdam.feature.designtools.*;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.imgui.FeatureToolbarMenuImGuiRender;
+import me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector;
 import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
@@ -186,6 +187,7 @@ public final class PDAM {
           .build());
 
         featureService.registerFeature(DesignToolsContext.get().getFeature());
+        featureService.registerFeature(InventorySlotInspector.context().getFeature());
     }
 
 }

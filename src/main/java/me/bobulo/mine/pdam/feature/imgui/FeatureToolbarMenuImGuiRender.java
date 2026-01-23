@@ -34,6 +34,10 @@ public final class FeatureToolbarMenuImGuiRender extends AbstractFeatureModule i
 
     @Override
     public void draw() {
+        if (registeredWindows == null || registeredWindows.isEmpty()) {
+            return;
+        }
+
         for (ToolbarItemWindow registeredWindow : registeredWindows) {
             if (menuItem(registeredWindow.getMenuName() + "##" + registeredWindow.getClass().getSimpleName(), registeredWindow.isVisible())) {
                 registeredWindow.toggleVisible();

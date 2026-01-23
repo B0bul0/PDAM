@@ -13,7 +13,7 @@ import me.bobulo.mine.pdam.feature.designtools.item.ItemDataFactory;
 import me.bobulo.mine.pdam.imgui.util.ImGuiNotificationDrawer;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.ClipboardUtils;
-import me.bobulo.mine.pdam.util.ItemColorUtil;
+import me.bobulo.mine.pdam.util.ColorUtil;
 import me.bobulo.mine.pdam.util.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -99,7 +99,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
             enchantments.put(entry.getKey(), new ImInt(entry.getValue()));
         }
-        colorRGB = ItemColorUtil.toRgb(item.getColor() == null ? 0 : item.getColor());
+        colorRGB = ColorUtil.toRgb(item.getColor() == null ? 0 : item.getColor());
         skullValue.set(item.getSkullValue());
         skullName.set(item.getSkullName());
         repairCost.set(item.getRepairCost());
@@ -301,7 +301,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
             renderSkullSection();
 
             if (colorEdit3("Color", colorRGB)) {
-                itemData.setColor(ItemColorUtil.toRgbInt(colorRGB));
+                itemData.setColor(ColorUtil.toRgbInt(colorRGB));
             }
             treePop();
         }
