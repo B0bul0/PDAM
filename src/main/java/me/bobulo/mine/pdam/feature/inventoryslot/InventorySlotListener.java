@@ -15,10 +15,6 @@ public class InventorySlotListener {
 
     @SubscribeEvent
     public void onDrawBackground(GuiScreenEvent.DrawScreenEvent.Post event) {
-        if (!InventorySlotInspector.ENABLED.get()) {
-            return;
-        }
-
         render(event.gui);
     }
 

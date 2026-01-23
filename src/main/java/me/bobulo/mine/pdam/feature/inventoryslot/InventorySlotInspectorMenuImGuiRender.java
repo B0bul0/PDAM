@@ -11,12 +11,12 @@ import static me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector.*
 public class InventorySlotInspectorMenuImGuiRender extends AbstractFeatureModule implements MenuImGuiRender {
 
     private static final String[] OVERLAY_PRIORITY_OPTIONS = new String[]{
-            "Background",
-            "Foreground"
+      "Background",
+      "Foreground"
     };
 
     private final ImInt overlayPriorityIndex = new ImInt(OVERLAY_PRIORITY.get());
-    private final float[] color = ColorUtil.toRgb(COLOR.get());
+    private float[] color = ColorUtil.toRgb(COLOR.get());
 
     @Override
     public void draw() {
@@ -35,8 +35,8 @@ public class InventorySlotInspectorMenuImGuiRender extends AbstractFeatureModule
             sameLine();
 
             if (button("Reset Color")) {
-                COLOR.set(InventorySlotInspector.DEFAULT_COLOR);
-                color = ColorUtil.toRgb(InventorySlotInspector.DEFAULT_COLOR);
+                COLOR.set(DEFAULT_COLOR);
+                color = ColorUtil.toRgb(DEFAULT_COLOR);
             }
 
             if (combo("Overlay Priority", overlayPriorityIndex, OVERLAY_PRIORITY_OPTIONS)) {
