@@ -1,7 +1,6 @@
 package me.bobulo.mine.pdam.feature.designtools.item.window;
 
 import imgui.ImGuiTextFilter;
-import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
@@ -11,6 +10,7 @@ import me.bobulo.mine.pdam.feature.designtools.item.HideFlag;
 import me.bobulo.mine.pdam.feature.designtools.item.ItemData;
 import me.bobulo.mine.pdam.feature.designtools.item.ItemDataFactory;
 import me.bobulo.mine.pdam.imgui.util.ImGuiNotificationDrawer;
+import me.bobulo.mine.pdam.imgui.util.TextSuggestionInput;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.ClipboardUtils;
 import me.bobulo.mine.pdam.util.ColorUtil;
@@ -38,7 +38,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
     private ItemData itemData = new ItemData();
 
-    private final ImString material = new ImString("", 256);
+    private final TextSuggestionInput material = new TextSuggestionInput("##Item");
 
     private final ImInt durability = new ImInt();
 
@@ -63,7 +63,7 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
     private final ImString jsonBuffer = new ImString("", 1024);
 
-    private String lastWarning = "";
+    private static final String[] ITEM_SUGGESTIONS = ItemNames.getItemNames().toArray(new String[0]);
 
     public ItemBuilderWindow() {
         super("Item Builder");
@@ -86,11 +86,11 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         itemData = item;
 
         // Update UI values
-        material.set(item.getMaterial());
+        material.setSelected(StringUtils.defaultString(item.getMaterial()));
         durability.set(item.getDurability());
         amount.set(item.getAmount());
-        customName.set(item.getCustomName());
-        customLore.set(item.getCustomLore());
+        customName.set(StringUtils.defaultString(item.getCustomName()));
+        customLore.set(StringUtils.defaultString(item.getCustomLore()));
         unbreakable.set(item.isUnbreakable());
         glowing.set(item.isGlowing());
         hideFlags.clear();
@@ -100,33 +100,18 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
             enchantments.put(entry.getKey(), new ImInt(entry.getValue()));
         }
         colorRGB = ColorUtil.toRgb(item.getColor() == null ? 0 : item.getColor());
-        skullValue.set(item.getSkullValue());
-        skullName.set(item.getSkullName());
+        skullValue.set(StringUtils.defaultString(item.getSkullValue()));
+        skullName.set(StringUtils.defaultString(item.getSkullName()));
         repairCost.set(item.getRepairCost());
     }
 
     private void renderContent() {
         notificationDrawer.draw();
 
-        renderWarningSection();
         renderImportSection();
 
         if (beginChild("##EditSection", 0, 0, true)) {
             renderEditSection();
-            endChild();
-        }
-    }
-
-    private void renderWarningSection() {
-        if (StringUtils.isEmpty(lastWarning)) {
-            return;
-        }
-
-        if (beginChild("##WarningSection", 0, 40, true)) {
-            pushStyleColor(ImGuiCol.Text, 1.0f, 0.0f, 0.0f, 1.0f);
-            textWrapped(lastWarning);
-            popStyleColor();
-
             endChild();
         }
     }
@@ -156,14 +141,10 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         if (beginPopup("ImportJson")) {
             if (button("From Clipboard")) {
                 String clipboard = ClipboardUtils.getFromClipboard();
-                if (StringUtils.isNoneBlank(clipboard)) {
-                    try {
-                        importItem(ItemDataFactory.fromJson(clipboard));
-                        closeCurrentPopup(); // Close popup on successful import
-                    } catch (Exception ignored) {
-                        notificationDrawer.addNotification("Failed to import item from JSON.");
-                    }
-                    jsonBuffer.set("");
+                if (StringUtils.isBlank(clipboard)) {
+                    notificationDrawer.error("Clipboard is empty.");
+                } else if (importItemFromJson(clipboard)) {
+                    closeCurrentPopup(); // Close popup on successful import
                 }
             }
 
@@ -172,13 +153,12 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
             text("Paste Json Below:");
             inputTextMultiline("##JsonImportText", jsonBuffer);
             if (button("Import")) {
-                try {
-                    importItem(ItemDataFactory.fromJson(jsonBuffer.get()));
+                if (StringUtils.isBlank(jsonBuffer.get())) {
+                    notificationDrawer.error("JSON input is empty.");
+                } else if (importItemFromJson(jsonBuffer.get())) {
+                    jsonBuffer.set("");
                     closeCurrentPopup(); // Close popup on successful import
-                } catch (Exception ignored) {
-                    notificationDrawer.addNotification("Failed to import item from JSON.");
                 }
-                jsonBuffer.set("");
             }
 
             endPopup();
@@ -187,6 +167,16 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
         sameLine();
         if (button("Import from Json")) {
             openPopup("ImportJson");
+        }
+    }
+
+    private boolean importItemFromJson(String json) {
+        try {
+            importItem(ItemDataFactory.fromJson(json));
+            return true;
+        } catch (Exception ignored) {
+            notificationDrawer.error("Failed to import item from JSON.");
+            return false;
         }
     }
 
@@ -209,8 +199,8 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
         text("Item:");
         sameLine();
-        if (inputText("##Item", material)) {
-            itemData.setMaterial(material.get());
+        if (material.draw(ITEM_SUGGESTIONS)) {
+            itemData.setMaterial(material.getSelected());
         }
 
         text("Amount:");
@@ -314,14 +304,34 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
             beginDisabled();
         }
 
-        if (button("Give Item", 200, 20)) {
+        if (button("Give Item", 150, 20)) {
             ItemStack itemStack = itemData.buildItem();
             if (itemStack == null) {
-                notificationDrawer.addNotification("Failed to build item. Check the material.");
+                notificationDrawer.error("Failed to build item. Check the material.");
                 return;
             }
 
-            PlayerUtils.giveItem(itemStack);
+            PlayerUtils.giveToFirstFreeSlot(itemStack);
+        }
+
+        if (isItemHovered()) {
+            setTooltip("Gives the item to the first empty slot in your inventory.");
+        }
+
+        sameLine();
+
+        if (button("Add to Hand", 150, 20)) {
+            ItemStack itemStack = itemData.buildItem();
+            if (itemStack == null) {
+                notificationDrawer.error("Failed to build item. Check the material.");
+                return;
+            }
+
+            PlayerUtils.setHeldItem(itemStack);
+        }
+
+        if (isItemHovered()) {
+            setTooltip("Adds the item directly to your hand.");
         }
 
         if (disableGiving) {
@@ -330,9 +340,14 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
         sameLine();
 
-        if (button("To Json", 200, 20)) {
+        if (button("To Json", 150, 20)) {
             String json = ItemDataFactory.toJson(itemData);
             ClipboardUtils.copyToClipboard(json);
+            notificationDrawer.info("Item JSON copied to clipboard.");
+        }
+
+        if (isItemHovered()) {
+            setTooltip("Copies the item's JSON representation to the clipboard.");
         }
 
     }

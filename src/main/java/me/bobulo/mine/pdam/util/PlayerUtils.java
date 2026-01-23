@@ -35,12 +35,46 @@ public final class PlayerUtils {
     }
 
     /**
+     * Gives the player the specified item in their first free inventory slot.
+     * Only works in creative mode.
+     *
+     * @param item The item to give the player.
+     */
+    public static void giveToFirstFreeSlot(@NotNull ItemStack item) {
+        Minecraft mc = Minecraft.getMinecraft();
+
+        if (mc.playerController == null || !mc.playerController.isInCreativeMode()) { // only works in creative
+            return;
+        }
+
+        if (mc.thePlayer == null) {
+            return;
+        }
+
+        int freeSlotIndex = mc.thePlayer.inventory.getFirstEmptyStack();
+        if (freeSlotIndex == -1) {
+            return;
+        }
+
+        int slotItem;
+
+        if (freeSlotIndex < 9) {
+            slotItem = 36 + freeSlotIndex;
+        } else {
+            slotItem = freeSlotIndex;
+        }
+
+        NetHandlerPlayClient netHandler = mc.getNetHandler();
+        netHandler.addToSendQueue(new C10PacketCreativeInventoryAction(slotItem, item));
+    }
+
+    /**
      * Gives the player the specified item in their current hotbar slot.
      * Only works in creative mode.
      *
      * @param item The item to give the player.
      */
-    public static void giveItem(@NotNull ItemStack item) {
+    public static void setHeldItem(@NotNull ItemStack item) {
         Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.playerController == null || !mc.playerController.isInCreativeMode()) { // only works in creative
