@@ -1,8 +1,8 @@
 package me.bobulo.mine.pdam.feature.packet.data.server;
 
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import net.minecraft.network.play.server.S33PacketUpdateSign;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ public final class UpdateSignServerPacketData implements ServerPacketData {
 
     private static final String PACKET_NAME = "UpdateSign";
 
-    private BlockPos pos;
+    private BlockPosition pos;
     private String[] lines;
 
     @Override
@@ -23,7 +23,7 @@ public final class UpdateSignServerPacketData implements ServerPacketData {
         @Override
         public @NotNull UpdateSignServerPacketData extract(@NotNull S33PacketUpdateSign packet) {
             UpdateSignServerPacketData data = new UpdateSignServerPacketData();
-            data.pos = packet.getPos();
+            data.pos = BlockPosition.from(packet.getPos());
 
             data.lines = new String[4];
             for (int i = 0; i < 4; i++) {

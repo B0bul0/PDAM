@@ -1,8 +1,8 @@
 package me.bobulo.mine.pdam.feature.packet.data.server;
 
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import net.minecraft.network.play.server.S25PacketBlockBreakAnim;
-import net.minecraft.util.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 public final class BlockBreakAnimServerPacketData implements ServerPacketData {
@@ -10,7 +10,7 @@ public final class BlockBreakAnimServerPacketData implements ServerPacketData {
     private static final String PACKET_NAME = "BlockBreakAnim";
 
     private int breakerId;
-    private BlockPos position;
+    private BlockPosition position;
     private int progress;
 
     @Override
@@ -24,7 +24,7 @@ public final class BlockBreakAnimServerPacketData implements ServerPacketData {
         public @NotNull BlockBreakAnimServerPacketData extract(@NotNull S25PacketBlockBreakAnim packet) {
             BlockBreakAnimServerPacketData data = new BlockBreakAnimServerPacketData();
             data.breakerId = packet.getBreakerId();
-            data.position = packet.getPosition();
+            data.position = BlockPosition.from(packet.getPosition());
             data.progress = packet.getProgress();
             return data;
         }

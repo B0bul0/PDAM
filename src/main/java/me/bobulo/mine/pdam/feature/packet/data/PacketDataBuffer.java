@@ -5,6 +5,7 @@ import me.bobulo.mine.pdam.feature.packet.data.entity.EntityMetadata;
 import me.bobulo.mine.pdam.feature.packet.data.entity.factory.EntityMetadataFactory;
 import me.bobulo.mine.pdam.feature.packet.data.item.ItemStackData;
 import me.bobulo.mine.pdam.feature.packet.data.nbt.NBTData;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -169,6 +170,11 @@ public class PacketDataBuffer {
 
     public BlockPos readBlockPos() {
         return buffer.readBlockPos();
+    }
+
+    public BlockPosition readBlockPosition() {
+        BlockPos pos = buffer.readBlockPos();
+        return new BlockPosition(pos.getX(), pos.getY(), pos.getZ());
     }
 
     public IChatComponent readChatComponent() throws IOException {

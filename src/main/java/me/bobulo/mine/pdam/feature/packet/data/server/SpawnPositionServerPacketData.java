@@ -1,15 +1,15 @@
 package me.bobulo.mine.pdam.feature.packet.data.server;
 
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import net.minecraft.network.play.server.S05PacketSpawnPosition;
-import net.minecraft.util.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 public final class SpawnPositionServerPacketData implements ServerPacketData {
 
     private static final String PACKET_NAME = "SpawnPosition";
 
-    private BlockPos spawnBlockPos;
+    private BlockPosition spawnBlockPos;
 
     @Override
     public @NotNull String getPacketName() {
@@ -21,7 +21,7 @@ public final class SpawnPositionServerPacketData implements ServerPacketData {
         @Override
         public @NotNull SpawnPositionServerPacketData extract(@NotNull S05PacketSpawnPosition packet) {
             SpawnPositionServerPacketData data = new SpawnPositionServerPacketData();
-            data.spawnBlockPos = packet.getSpawnPos();
+            data.spawnBlockPos = BlockPosition.from(packet.getSpawnPos());
             return data;
         }
 

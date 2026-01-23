@@ -1,8 +1,8 @@
 package me.bobulo.mine.pdam.feature.packet.data.server;
 
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import net.minecraft.network.play.server.S28PacketEffect;
-import net.minecraft.util.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 public final class EffectServerPacketData implements ServerPacketData {
@@ -10,7 +10,7 @@ public final class EffectServerPacketData implements ServerPacketData {
     private static final String PACKET_NAME = "Effect";
 
     private int soundType;
-    private BlockPos soundPos;
+    private BlockPosition soundPos;
     private int soundData;
     private boolean serverWide;
 
@@ -25,7 +25,7 @@ public final class EffectServerPacketData implements ServerPacketData {
         public @NotNull EffectServerPacketData extract(@NotNull S28PacketEffect packet) {
             EffectServerPacketData data = new EffectServerPacketData();
             data.soundType = packet.getSoundType();
-            data.soundPos = packet.getSoundPos();
+            data.soundPos = BlockPosition.from(packet.getSoundPos());
             data.soundData = packet.getSoundData();
             data.serverWide = packet.isSoundServerwide();
             return data;

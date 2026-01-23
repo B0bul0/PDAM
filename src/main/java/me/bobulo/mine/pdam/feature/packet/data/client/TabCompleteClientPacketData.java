@@ -1,8 +1,8 @@
 package me.bobulo.mine.pdam.feature.packet.data.client;
 
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import net.minecraft.network.play.client.C14PacketTabComplete;
-import net.minecraft.util.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 public final class TabCompleteClientPacketData implements ClientPacketData {
@@ -10,7 +10,7 @@ public final class TabCompleteClientPacketData implements ClientPacketData {
     private static final String PACKET_NAME = "TabComplete";
 
     private String message;
-    private BlockPos targetBlock;
+    private BlockPosition targetBlock;
 
     @Override
     public @NotNull String getPacketName() {
@@ -23,7 +23,7 @@ public final class TabCompleteClientPacketData implements ClientPacketData {
         public @NotNull TabCompleteClientPacketData extract(@NotNull C14PacketTabComplete packet) {
             TabCompleteClientPacketData data = new TabCompleteClientPacketData();
             data.message = packet.getMessage();
-            data.targetBlock = packet.getTargetBlock();
+            data.targetBlock = BlockPosition.from(packet.getTargetBlock());
             return data;
         }
 

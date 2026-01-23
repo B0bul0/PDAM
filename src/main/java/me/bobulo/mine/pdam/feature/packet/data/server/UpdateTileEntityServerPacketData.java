@@ -2,8 +2,8 @@ package me.bobulo.mine.pdam.feature.packet.data.server;
 
 import me.bobulo.mine.pdam.feature.packet.data.nbt.NBTData;
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.util.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ public final class UpdateTileEntityServerPacketData implements ServerPacketData 
 
     private static final String PACKET_NAME = "UpdateTileEntity";
 
-    private BlockPos pos;
+    private BlockPosition pos;
     private int metadata;
     private Map<String, Object> nbt;
 
@@ -27,7 +27,7 @@ public final class UpdateTileEntityServerPacketData implements ServerPacketData 
         @Override
         public @NotNull UpdateTileEntityServerPacketData extract(@NotNull S35PacketUpdateTileEntity packet) throws IOException {
             UpdateTileEntityServerPacketData data = new UpdateTileEntityServerPacketData();
-            data.pos = packet.getPos();
+            data.pos = BlockPosition.from(packet.getPos());
             data.metadata = packet.getTileEntityType();
             data.nbt = NBTData.from(packet.getNbtCompound());
             return data;

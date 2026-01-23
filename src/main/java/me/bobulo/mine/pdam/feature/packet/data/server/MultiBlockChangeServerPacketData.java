@@ -5,7 +5,7 @@ import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
 import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
-import net.minecraft.util.BlockPos;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ public final class MultiBlockChangeServerPacketData implements ServerPacketData 
     }
 
     public static class BlockUpdateData {
-        private BlockPos pos;
+        private BlockPosition pos;
         private int blockStateId;
     }
 
@@ -58,7 +58,7 @@ public final class MultiBlockChangeServerPacketData implements ServerPacketData 
                 int y = shortPos & 255;
                 int z = (shortPos >> 8) & 15;
 
-                update.pos = new BlockPos(data.chunkPos.x * 16 + x, y, data.chunkPos.z * 16 + z);
+                update.pos = new BlockPosition(data.chunkPos.x * 16 + x, y, data.chunkPos.z * 16 + z);
                 update.blockStateId = blockStateId;
                 data.blockUpdates[i] = update;
             }

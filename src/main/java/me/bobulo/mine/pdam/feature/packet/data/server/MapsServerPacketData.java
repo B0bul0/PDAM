@@ -5,7 +5,6 @@ import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
 import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
-import net.minecraft.util.Vec4b;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

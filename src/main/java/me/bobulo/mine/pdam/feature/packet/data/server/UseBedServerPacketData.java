@@ -5,7 +5,7 @@ import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
 import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
-import net.minecraft.util.BlockPos;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ public final class UseBedServerPacketData implements ServerPacketData {
     private static final String PACKET_NAME = "UseBed";
 
     private int playerID;
-    private BlockPos bedPos;
+    private BlockPosition bedPos;
 
     @Override
     public @NotNull String getPacketName() {
@@ -33,7 +33,7 @@ public final class UseBedServerPacketData implements ServerPacketData {
         public @NotNull UseBedServerPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
             UseBedServerPacketData data = new UseBedServerPacketData();
             data.playerID = buf.readVarIntFromBuffer();
-            data.bedPos = buf.readBlockPos();
+            data.bedPos = BlockPosition.from(buf.readBlockPos());
             return data;
         }
 

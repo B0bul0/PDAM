@@ -1,15 +1,15 @@
 package me.bobulo.mine.pdam.feature.packet.data.server;
 
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataExtractor;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import net.minecraft.network.play.server.S36PacketSignEditorOpen;
-import net.minecraft.util.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 public final class SignEditorOpenServerPacketData implements ServerPacketData {
 
     private static final String PACKET_NAME = "SignEditorOpen";
 
-    private BlockPos signPosition;
+    private BlockPosition signPosition;
 
     @Override
     public @NotNull String getPacketName() {
@@ -21,7 +21,7 @@ public final class SignEditorOpenServerPacketData implements ServerPacketData {
         @Override
         public @NotNull SignEditorOpenServerPacketData extract(@NotNull S36PacketSignEditorOpen packet) {
             SignEditorOpenServerPacketData data = new SignEditorOpenServerPacketData();
-            data.signPosition = packet.getSignPosition();
+            data.signPosition = BlockPosition.from(packet.getSignPosition());
             return data;
         }
 

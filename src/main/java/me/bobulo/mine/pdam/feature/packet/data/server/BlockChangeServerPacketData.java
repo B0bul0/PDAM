@@ -5,7 +5,7 @@ import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
 import me.bobulo.mine.pdam.feature.packet.data.SerializerKey;
 import me.bobulo.mine.pdam.feature.packet.data.reader.PacketDataSerializer;
-import net.minecraft.util.BlockPos;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public final class BlockChangeServerPacketData implements ServerPacketData {
 
     private static final String PACKET_NAME = "BlockChange";
 
-    private BlockPos blockPosition;
+    private BlockPosition blockPosition;
     private int blockState;
 
     @Override
@@ -32,7 +32,7 @@ public final class BlockChangeServerPacketData implements ServerPacketData {
         @Override
         public @NotNull BlockChangeServerPacketData read(@NotNull PacketDataBuffer buf) throws IOException {
             BlockChangeServerPacketData data = new BlockChangeServerPacketData();
-            data.blockPosition = buf.readBlockPos();
+            data.blockPosition = BlockPosition.from(buf.readBlockPos());
             data.blockState = buf.readVarIntFromBuffer();
             return data;
         }
