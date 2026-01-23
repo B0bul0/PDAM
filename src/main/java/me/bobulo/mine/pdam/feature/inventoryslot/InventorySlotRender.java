@@ -11,14 +11,9 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class InventorySlotListener {
+public class InventorySlotRender {
 
-    @SubscribeEvent
-    public void onDrawBackground(GuiScreenEvent.DrawScreenEvent.Post event) {
-        render(event.gui);
-    }
-
-    private void render(GuiScreen gui) {
+    public static void render(GuiScreen gui) {
         if (gui instanceof GuiContainer) {
 
             if (gui instanceof GuiContainerCreative) { // Skip creative mode
@@ -30,32 +25,21 @@ public class InventorySlotListener {
 
             boolean onlyBackground = InventorySlotInspector.OVERLAY_PRIORITY.get() == 0;
 
-            int guiLeft = ObfuscationReflectionHelper.getPrivateValue(
-              GuiContainer.class,
-              container,
-              "guiLeft",
-              "field_3394"
-            );
-
-            int guiTop = ObfuscationReflectionHelper.getPrivateValue(
-              GuiContainer.class,
-              container,
-              "guiTop",
-              "field_3395"
-            );
-
             if (!onlyBackground) {
                 GlStateManager.pushMatrix();
                 GlStateManager.disableDepth();
-                GlStateManager.enableBlend();
             }
 
+            GlStateManager.enableBlend();
+            GlStateManager.enableAlpha();
+
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
             GlStateManager.disableLighting();
 
             for (Slot slot : container.inventorySlots.inventorySlots) {
-                int x = slot.xDisplayPosition + guiLeft;
-                int y = slot.yDisplayPosition + guiTop;
+                int x = slot.xDisplayPosition;
+                int y = slot.yDisplayPosition;
 
                 String text = String.valueOf(slot.getSlotIndex());
 
@@ -70,9 +54,10 @@ public class InventorySlotListener {
             }
 
             GlStateManager.enableLighting();
+            GlStateManager.disableBlend();
+            GlStateManager.disableAlpha();
 
             if (!onlyBackground) {
-                GlStateManager.disableBlend();
                 GlStateManager.enableDepth();
                 GlStateManager.popMatrix();
             }

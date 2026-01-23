@@ -3,7 +3,6 @@ package me.bobulo.mine.pdam.feature.inventoryslot;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
 import me.bobulo.mine.pdam.feature.context.FeatureContext;
-import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 
 public final class InventorySlotInspector extends FeatureContext {
 
@@ -48,7 +47,6 @@ public final class InventorySlotInspector extends FeatureContext {
     @Override
     protected void setup() {
         addModules(
-          ForgerListenerFeatureModule.of(new InventorySlotListener()),
           new InventorySlotInspectorMenuImGuiRender()
         );
     }
