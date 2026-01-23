@@ -1,27 +1,22 @@
-package me.bobulo.mine.pdam.feature.sound.widow;
+package me.bobulo.mine.pdam.feature.sound.window;
 
 import imgui.ImGui;
 import imgui.ImGuiListClipper;
-import imgui.ImGuiTextFilter;
 import imgui.flag.*;
 import imgui.type.ImInt;
 import imgui.type.ImString;
 import me.bobulo.mine.pdam.feature.sound.log.SoundLogEntry;
-import me.bobulo.mine.pdam.feature.sound.mapper.SoundMapper;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.log.LogHistory;
 import me.bobulo.mine.pdam.util.PlayerUtils;
-import me.bobulo.mine.pdam.util.UniqueHistory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.*;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;

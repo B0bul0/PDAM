@@ -10,7 +10,6 @@ import me.bobulo.mine.pdam.imgui.guizmo.RenderGuizmoHandler;
 import me.bobulo.mine.pdam.imgui.guizmo.GuizmoImGui;
 import me.bobulo.mine.pdam.imgui.input.ImGuiInputHandler;
 import me.bobulo.mine.pdam.imgui.toolbar.ImGuiToolbar;
-import me.bobulo.mine.pdam.imgui.toolbar.ToolbarItemWindow;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,15 +40,15 @@ public final class ImGuiRenderer {
     public ImGuiRenderer() {
     }
 
-    public void registerWidow(Object widow) {
-        if (widow instanceof ImGuiRenderable) {
-            addFrameRender((ImGuiRenderable) widow);
+    public void registerWindow(Object window) {
+        if (window instanceof ImGuiRenderable) {
+            addFrameRender((ImGuiRenderable) window);
         }
     }
 
-    public void unregisterWidow(Object widow) {
-        if (widow instanceof ImGuiRenderable) {
-            removeFrameRender((ImGuiRenderable) widow);
+    public void unregisterWindow(Object window) {
+        if (window instanceof ImGuiRenderable) {
+            removeFrameRender((ImGuiRenderable) window);
         }
     }
 

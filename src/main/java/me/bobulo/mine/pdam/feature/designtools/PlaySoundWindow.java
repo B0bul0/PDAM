@@ -3,7 +3,7 @@ package me.bobulo.mine.pdam.feature.designtools;
 import imgui.ImGui;
 import imgui.ImGuiTextFilter;
 import imgui.flag.*;
-import me.bobulo.mine.pdam.feature.sound.widow.SoundMapperDrawer;
+import me.bobulo.mine.pdam.feature.sound.window.SoundMapperDrawer;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.UniqueHistory;
 import net.minecraft.client.Minecraft;

@@ -59,12 +59,12 @@ public final class SignViewerWindow implements ImGuiRenderable {
         end();
 
         if (!isOpen.get()) {
-            PDAM.getImGuiRenderer().unregisterWidow(this);
+            PDAM.getImGuiRenderer().unregisterWindow(this);
         }
     }
 
     private void initEditor() {
-        PDAM.getImGuiRenderer().registerWidow(this);
+        PDAM.getImGuiRenderer().registerWindow(this);
         isOpen.set(true);
     }
 

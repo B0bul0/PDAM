@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import me.bobulo.mine.pdam.PDAM;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderable;
 
-import java.util.Arrays;
 import java.util.List;
 
 public final class ImGuiListenerFeatureModule extends AbstractFeatureModule {
@@ -42,7 +41,7 @@ public final class ImGuiListenerFeatureModule extends AbstractFeatureModule {
                 continue;
             }
 
-            PDAM.getImGuiRenderer().registerWidow(window);
+            PDAM.getImGuiRenderer().registerWindow(window);
         }
     }
 
@@ -57,7 +56,7 @@ public final class ImGuiListenerFeatureModule extends AbstractFeatureModule {
                 continue;
             }
 
-            PDAM.getImGuiRenderer().unregisterWidow(window);
+            PDAM.getImGuiRenderer().unregisterWindow(window);
         }
     }
 }

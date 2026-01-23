@@ -67,13 +67,13 @@ public final class SignEditorWindow implements ImGuiRenderable {
         checkExistingSign();
 
         if (!isEditing.get()) {
-            PDAM.getImGuiRenderer().unregisterWidow(this);
+            PDAM.getImGuiRenderer().unregisterWindow(this);
             tileSign.setEditable(true);
         }
     }
 
     private void initEditor() {
-        PDAM.getImGuiRenderer().registerWidow(this);
+        PDAM.getImGuiRenderer().registerWindow(this);
         isEditing.set(true);
         tileSign.setEditable(false);
 

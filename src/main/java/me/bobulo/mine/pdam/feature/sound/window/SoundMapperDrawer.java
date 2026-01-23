@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.sound.widow;
+package me.bobulo.mine.pdam.feature.sound.window;
 
 import me.bobulo.mine.pdam.feature.sound.mapper.SoundMapper;
 

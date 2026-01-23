@@ -8,7 +8,7 @@ import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.packet.interceptor.PacketDataInterceptor;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry;
-import me.bobulo.mine.pdam.feature.packet.widow.PacketLogWindow;
+import me.bobulo.mine.pdam.feature.packet.window.PacketLogWindow;
 import me.bobulo.mine.pdam.log.LogHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +31,7 @@ public class PacketMonitorFeatureModule extends AbstractFeatureModule {
     @Override
     protected void onEnable() {
         this.logWindow = new PacketLogWindow(packetEntries);
-        PDAM.getImGuiRenderer().registerWidow(logWindow);
+        PDAM.getImGuiRenderer().registerWindow(logWindow);
         this.toolbarMenuImGuiRenderer = new ToolbarMenuImGuiRenderer(ImmutableList.of(logWindow));
 
         addChildModule(toolbarMenuImGuiRenderer);
@@ -39,7 +39,7 @@ public class PacketMonitorFeatureModule extends AbstractFeatureModule {
 
     @Override
     protected void onDisable() {
-        PDAM.getImGuiRenderer().unregisterWidow(logWindow);
+        PDAM.getImGuiRenderer().unregisterWindow(logWindow);
         this.logWindow = null;
 
         this.packetEntries.clear();

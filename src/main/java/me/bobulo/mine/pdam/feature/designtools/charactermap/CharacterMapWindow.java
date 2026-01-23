@@ -226,8 +226,8 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
     }
 
     private void charactersTable(char[] charValues) {
-        int widowWidth = (int) getWindowWidth();
-        int columns = Math.max(1, widowWidth / 64);
+        int windowWidth = (int) getWindowWidth();
+        int columns = Math.max(1, windowWidth / 64);
 
         int lines = (int) Math.ceil((double) charValues.length / columns);
 

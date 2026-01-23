@@ -1,4 +1,4 @@
-package me.bobulo.mine.pdam.feature.packet.widow;
+package me.bobulo.mine.pdam.feature.packet.window;
 
 import imgui.ImGuiListClipper;
 import imgui.flag.*;
