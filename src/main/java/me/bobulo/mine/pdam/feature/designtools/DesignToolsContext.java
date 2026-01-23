@@ -26,20 +26,17 @@ public final class DesignToolsContext extends FeatureContext {
 
     public static final ConfigValue<Boolean> ENABLED = ConfigProperty.of("design_tools.enabled", true)
       .onChange(enabled -> {
-            if (enabled) {
-                get().getFeature().enable();
-            } else {
-                get().getFeature().disable();
-            }
+          if (enabled) {
+              get().getFeature().enable();
+          } else {
+              get().getFeature().disable();
+          }
       })
       .sync();
 
     private DesignToolsContext() {
         super("design_tools");
-    }
 
-    @Override
-    protected void setup() {
         addModules(
           ImGuiListenerFeatureModule.of(
             new CharacterMapWindow(),

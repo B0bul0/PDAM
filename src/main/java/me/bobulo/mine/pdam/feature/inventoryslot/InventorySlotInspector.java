@@ -1,53 +1,41 @@
 package me.bobulo.mine.pdam.feature.inventoryslot;
 
+import lombok.Getter;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
 import me.bobulo.mine.pdam.feature.context.FeatureContext;
 
+@Getter
 public final class InventorySlotInspector extends FeatureContext {
 
-    public static final ConfigValue<Boolean> ENABLED = ConfigProperty.of(
-        "inventory_slot_inspector.enabled",
-        true
-      ).onChange(enabled -> {
-          if (enabled) {
-              get().getFeature().enable();
-          } else {
-              get().getFeature().disable();
-          }
-      }).sync();
-
-    public static final int DEFAULT_COLOR = 0x6E373737;
-
-    public static final ConfigValue<Integer> COLOR = ConfigProperty.of(
-      "inventory_slot_inspector.color",
-      DEFAULT_COLOR
-    );
-
-    public static final ConfigValue<Integer> OVERLAY_PRIORITY = ConfigProperty.of(
-      "inventory_slot_inspector.overlay_priority",
-      0
-    );
-
-    // Singleton instance
+    public static final String FEATURE_ID = "inventory_slot_inspector";
 
     private static InventorySlotInspector instance;
 
-    public static InventorySlotInspector get() {
+    public static InventorySlotInspector context() {
         if (instance == null) {
             instance = new InventorySlotInspector();
         }
+
         return instance;
     }
 
+    public static final int DEFAULT_COLOR = 0x6E373737;
+
+    private final ConfigProperty<Boolean> enabledConfig = createEnabledConfig(false).sync();
+    private final ConfigValue<Integer> colorConfig = createConfigValue("color", DEFAULT_COLOR);
+    private final ConfigValue<Integer> overlayPriorityConfig = createConfigValue("overlay_priority", 0);
+
     public InventorySlotInspector() {
-        super("inventory_slot_inspector");
+        super(FEATURE_ID);
+
+        addModules(
+          new InventorySlotInspectorMenuImGuiRender(this)
+        );
+
     }
 
-    @Override
-    protected void setup() {
-        addModules(
-          new InventorySlotInspectorMenuImGuiRender()
-        );
+    public ConfigValue<Boolean> getEnabledConfig() {
+        return enabledConfig;
     }
 }

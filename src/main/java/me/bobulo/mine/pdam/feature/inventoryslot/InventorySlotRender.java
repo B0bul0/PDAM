@@ -7,13 +7,15 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.Slot;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class InventorySlotRender {
 
     public static void render(GuiScreen gui) {
+        InventorySlotInspector context = InventorySlotInspector.context();
+        if (!context.getFeature().isEnabled()) {
+            return;
+        }
+
         if (gui instanceof GuiContainer) {
 
             if (gui instanceof GuiContainerCreative) { // Skip creative mode
@@ -23,7 +25,7 @@ public class InventorySlotRender {
             GuiContainer container = (GuiContainer) gui;
             FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
-            boolean onlyBackground = InventorySlotInspector.OVERLAY_PRIORITY.get() == 0;
+            boolean onlyBackground = context.getOverlayPriorityConfig().get() == 0;
 
             if (!onlyBackground) {
                 GlStateManager.pushMatrix();
@@ -49,7 +51,7 @@ public class InventorySlotRender {
                   text,
                   x + 8.5F - (textWidth / 2F),
                   y + 4F,
-                  InventorySlotInspector.COLOR.get(), false
+                  context.getColorConfig().get(), false
                 );
             }
 

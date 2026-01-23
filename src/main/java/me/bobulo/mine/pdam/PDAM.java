@@ -187,8 +187,7 @@ public final class PDAM {
           .build());
 
         featureService.registerFeature(DesignToolsContext.get().getFeature());
-        featureService.registerFeature(InventorySlotInspector.get().getFeature());
-
+        featureService.registerFeature(InventorySlotInspector.context().getFeature());
     }
 
 }
