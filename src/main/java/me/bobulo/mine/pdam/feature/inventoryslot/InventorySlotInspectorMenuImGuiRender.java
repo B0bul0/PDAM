@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.inventoryslot;
 
+import imgui.flag.ImGuiColorEditFlags;
 import imgui.type.ImInt;
 import me.bobulo.mine.pdam.feature.imgui.MenuImGuiRender;
 import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
@@ -16,7 +17,7 @@ public class InventorySlotInspectorMenuImGuiRender extends AbstractFeatureModule
     };
 
     private final ImInt overlayPriorityIndex = new ImInt(OVERLAY_PRIORITY.get());
-    private float[] color = ColorUtil.toRgb(COLOR.get());
+    private float[] color = ColorUtil.toRgba(COLOR.get());
 
     @Override
     public void draw() {
@@ -28,15 +29,16 @@ public class InventorySlotInspectorMenuImGuiRender extends AbstractFeatureModule
 
             separator();
 
-            if (colorEdit3("Text Color", color)) {
-                COLOR.set(ColorUtil.toRgbInt(color));
+            if (colorEdit4("Text Color", color,
+              ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreview)) {
+                COLOR.set(ColorUtil.toArgbInt(color));
             }
 
             sameLine();
 
             if (button("Reset Color")) {
                 COLOR.set(DEFAULT_COLOR);
-                color = ColorUtil.toRgb(DEFAULT_COLOR);
+                color = ColorUtil.toRgba(DEFAULT_COLOR);
             }
 
             if (combo("Overlay Priority", overlayPriorityIndex, OVERLAY_PRIORITY_OPTIONS)) {

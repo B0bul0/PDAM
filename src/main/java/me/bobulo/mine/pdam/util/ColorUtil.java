@@ -5,20 +5,30 @@ package me.bobulo.mine.pdam.util;
  */
 public final class ColorUtil {
 
-    public static int toRgbInt(float[] rgb01) {
-        int r = clampColor((int) (rgb01[0] * 255));
-        int g = clampColor((int) (rgb01[1] * 255));
-        int b = clampColor((int) (rgb01[2] * 255));
-        return (r << 16) | (g << 8) | b;
+    public static int toArgbInt(float[] rgba) {
+        int r = clamp(Math.round(rgba[0] * 255));
+        int g = clamp(Math.round(rgba[1] * 255));
+        int b = clamp(Math.round(rgba[2] * 255));
+        int a = rgba.length > 3 ? clamp(Math.round(rgba[3] * 255)) : 255;
+        return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
-    public static int toRgbInt(int r, int g, int b) {
-        int clampR = clampColor(r);
-        int clampG = clampColor(g);
-        int clampB = clampColor(b);
-        return (clampR << 16) | (g << clampG) | clampB;
+    public static float[] toRgba(int color) {
+        return new float[] {
+          ((color >> 16) & 0xFF) / 255.0f, // R
+          ((color >> 8) & 0xFF) / 255.0f,  // G
+          (color & 0xFF) / 255.0f,         // B
+          ((color >> 24) & 0xFF) / 255.0f  // A
+        };
     }
-    
+
+    public static int toRgbInt(float[] rgb) {
+        int clampR = clamp(Math.round(rgb[0] * 255));
+        int clampG = clamp(Math.round(rgb[1] * 255));
+        int clampB = clamp(Math.round(rgb[2] * 255));
+        return (clampR << 16) | (clampG << 8) | clampB;
+    }
+
     public static float[] toRgb(int color) {
         float[] rgb = new float[3];
         rgb[0] = ((color >> 16) & 0xFF) / 255.0f;
@@ -27,12 +37,8 @@ public final class ColorUtil {
         return rgb;
     }
 
-    private static int clampColor(int value) {
-        if (value < 0) {
-            return 0;
-        }
-
-        return Math.min(value, 255);
+    private static int clamp(int value) {
+        return Math.max(0, Math.min(255, value));
     }
 
     private ColorUtil() {

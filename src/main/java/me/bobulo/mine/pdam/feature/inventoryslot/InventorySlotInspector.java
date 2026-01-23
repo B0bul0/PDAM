@@ -18,7 +18,7 @@ public final class InventorySlotInspector extends FeatureContext {
           }
       }).sync();
 
-    public static final int DEFAULT_COLOR = 0xFF373737;
+    public static final int DEFAULT_COLOR = 0x6E373737;
 
     public static final ConfigValue<Integer> COLOR = ConfigProperty.of(
       "inventory_slot_inspector.color",

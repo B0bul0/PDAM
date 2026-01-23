@@ -53,7 +53,6 @@ public class InventorySlotListener {
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             GlStateManager.disableLighting();
 
-
             for (Slot slot : container.inventorySlots.inventorySlots) {
                 int x = slot.xDisplayPosition + guiLeft;
                 int y = slot.yDisplayPosition + guiTop;
