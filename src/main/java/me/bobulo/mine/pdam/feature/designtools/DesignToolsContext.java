@@ -33,7 +33,8 @@ public final class DesignToolsContext extends FeatureContext {
             new ActionBarVisualizerWindow(),
             new HologramMockupWindow(),
             new PlaySoundWindow(),
-            new ItemBuilderWindow()
+            new ItemBuilderWindow(),
+            new SpawnParticleWindow()
           ),
           new DesignToolsMenuImguiRender(this)
         );
