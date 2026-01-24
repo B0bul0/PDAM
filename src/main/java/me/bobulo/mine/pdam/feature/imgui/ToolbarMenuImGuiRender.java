@@ -10,11 +10,11 @@ import static imgui.ImGui.menuItem;
 /**
  * Renders toolbar item windows in the menu.
  */
-public final class ToolbarMenuImGuiRenderer extends AbstractFeatureModule implements MenuImGuiRender {
+public final class ToolbarMenuImGuiRender extends AbstractFeatureModule implements MenuImGuiRender {
 
     private final List<ToolbarItemWindow> registeredWindows;
 
-    public ToolbarMenuImGuiRenderer(List<ToolbarItemWindow> registeredWindows) {
+    public ToolbarMenuImGuiRender(List<ToolbarItemWindow> registeredWindows) {
         this.registeredWindows = registeredWindows;
     }
 
@@ -26,6 +26,10 @@ public final class ToolbarMenuImGuiRenderer extends AbstractFeatureModule implem
 
     @Override
     public void draw() {
+        if (registeredWindows == null || registeredWindows.isEmpty()) {
+            return;
+        }
+
         for (ToolbarItemWindow registeredWindow : registeredWindows) {
             if (menuItem(registeredWindow.getMenuName() + "##" + registeredWindow.getClass().getSimpleName(), registeredWindow.isVisible())) {
                 registeredWindow.toggleVisible();

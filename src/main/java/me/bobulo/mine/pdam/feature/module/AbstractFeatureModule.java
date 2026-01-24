@@ -4,9 +4,6 @@ import me.bobulo.mine.pdam.feature.Feature;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Base implementation of a FeatureModule.
  */
@@ -14,8 +11,6 @@ public abstract class AbstractFeatureModule implements FeatureModule {
 
     private Feature feature; // Initialized in onAttach
     private boolean enabled = false;
-
-    private final List<FeatureModule> childModules = new ArrayList<>(6);
 
     public Feature getFeature() {
         return feature;
@@ -91,25 +86,5 @@ public abstract class AbstractFeatureModule implements FeatureModule {
      * Called when the FeatureModule is disabled.
      */
     protected abstract void onDisable();
-
-    // Child Modules Management
-
-    public void addChildModule(@NotNull FeatureModule module) {
-        Validate.notNull(module, "FeatureModule cannot be null");
-        Validate.isTrue(!childModules.contains(module), "FeatureModule is already a child");
-        Validate.isTrue(module != this, "FeatureModule cannot be a child of itself");
-        Validate.isTrue(feature != null, "Parent Feature is not initialized");
-
-        childModules.add(module);
-        feature.addModule(module);
-    }
-
-    public void removeChildModule(@NotNull FeatureModule module) {
-        Validate.notNull(module, "FeatureModule cannot be null");
-        Validate.isTrue(feature != null, "Parent Feature is not initialized");
-
-        childModules.remove(module);
-        feature.removeModule(module);
-    }
 
 }

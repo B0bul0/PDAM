@@ -16,7 +16,7 @@ import me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector;
 import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
-import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureModule;
+import me.bobulo.mine.pdam.feature.packet.PacketMonitor;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
@@ -153,10 +153,7 @@ public final class PDAM {
           ))
           .build());
 
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("packet_monitor")
-          .module(new PacketMonitorFeatureModule())
-          .build());
+        featureService.registerFeature(PacketMonitor.context().getFeature());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("scoreboard_inspector")

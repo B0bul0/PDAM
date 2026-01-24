@@ -2,7 +2,7 @@ package me.bobulo.mine.pdam.feature.sound;
 
 import com.google.common.collect.ImmutableList;
 import me.bobulo.mine.pdam.PDAM;
-import me.bobulo.mine.pdam.feature.imgui.ToolbarMenuImGuiRenderer;
+import me.bobulo.mine.pdam.feature.imgui.ToolbarMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import me.bobulo.mine.pdam.feature.sound.log.SoundLogEntry;
 import me.bobulo.mine.pdam.feature.sound.window.SoundDebugWindow;
@@ -22,7 +22,7 @@ public final class SoundDebugFeatureModule extends AbstractFeatureModule {
         this.listener = new SoundDebugListener(this);
         this.window = new SoundDebugWindow(soundHistory);
 
-        addChildModule(new ToolbarMenuImGuiRenderer(ImmutableList.of(window)));
+        getFeature().addModule(new ToolbarMenuImGuiRender(ImmutableList.of(window))); // not need remove, handled in onDisable
 
         MinecraftForge.EVENT_BUS.register(this.listener);
         PDAM.getImGuiRenderer().registerWindow(this.window);

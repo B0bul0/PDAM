@@ -45,8 +45,7 @@ public class DisplayPacketLogEntry implements LogEntry {
     private final String packetName;
     private final String packetDataShort;
     private final String packetData;
-    private boolean expanded;
-    private String[] searchTerms;
+    private final String[] searchTerms;
 
     private DisplayPacketLogEntry(PacketLogEntry packetLogEntry, String formattedTime, String packetName, String packetDataShort, String packetData, String[] searchTerms) {
         this.packetLogEntry = packetLogEntry;
@@ -80,14 +79,6 @@ public class DisplayPacketLogEntry implements LogEntry {
 
     public String getPacketDataShort() {
         return packetDataShort;
-    }
-
-    public boolean isExpanded() {
-        return expanded;
-    }
-
-    public void setExpanded(boolean expanded) {
-        this.expanded = expanded;
     }
 
     public String[] getSearchTerms() {

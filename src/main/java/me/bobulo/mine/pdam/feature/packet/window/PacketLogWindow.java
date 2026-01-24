@@ -27,6 +27,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
     private final ImBoolean filterClient = new ImBoolean(true);
 
     private final ImString searchField = new ImString(256);
+    private int filteredLogCount = 0;
 
     public PacketLogWindow(LogHistory<DisplayPacketLogEntry> logHistory) {
         super("Packet Log");
@@ -50,35 +51,15 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
     }
 
     private void renderContent() {
-        text(translate("search") + ":");
-        sameLine();
-        pushItemWidth(300);
-
-        inputText("##search", searchField, ImGuiInputTextFlags.None);
-
-        popItemWidth();
+        text("Total Logs: " + logHistory.size());
 
         sameLine();
-
-        dummy(15, 0);
-
+        text(" | ");
         sameLine();
-        if (beginPopupContextItem("packetFilterPopup")) {
-            text("Direction Filter:");
-            checkbox("Server Packets", filterServer);
-            sameLine();
-            checkbox("Client Packers", filterClient);
 
-            endPopup();
-        }
+        text("Filtered Logs: " + filteredLogCount);
+        filteredLogCount = 0;
 
-        if (button("Filter")) {
-            openPopup("packetFilterPopup");
-        }
-
-        separator();
-
-        sameLine();
         if (button(translate("clear"))) {
             clearLogs();
         }
@@ -98,9 +79,28 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
             logHistory.setMaxLogLimit(maxLogs.get());
         }
 
-        text("Total Logs: " + logHistory.size());
-
         separator();
+
+        text(translate("search") + ":");
+        sameLine();
+
+        pushItemWidth(300);
+        inputText("##search", searchField, ImGuiInputTextFlags.None);
+        popItemWidth();
+
+        sameLine();
+        if (beginPopupContextItem("packetFilterPopup")) {
+            text("Direction Filter:");
+            checkbox("Server Packets", filterServer);
+            sameLine();
+            checkbox("Client Packers", filterClient);
+
+            endPopup();
+        }
+
+        if (button("Filter")) {
+            openPopup("packetFilterPopup");
+        }
 
         renderLogsTable();
     }
@@ -115,7 +115,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
 
         if (beginTable("PacketLogsTable", 4, flags)) {
             tableSetupColumn(translate("time"), ImGuiTableColumnFlags.WidthFixed, 85F);
-            tableSetupColumn(translate("packet_direcional"), ImGuiTableColumnFlags.WidthFixed, 46F);
+            tableSetupColumn("Direcional", ImGuiTableColumnFlags.WidthFixed, 46F);
             tableSetupColumn(translate("packet_name"), ImGuiTableColumnFlags.WidthFixed, 200F);
             tableSetupColumn(translate("packet_data"), ImGuiTableColumnFlags.WidthStretch);
             tableHeadersRow();
@@ -156,6 +156,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
                     }
 
                     filteredLogs.add(entry);
+                    filteredLogCount++;
                 });
             }
 
@@ -171,7 +172,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
                     tableNextColumn();
                     if (selectable(entry.getFormattedTime() + "##time" + i, false,
                       ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap, 0, 0)) {
-                        entry.setExpanded(!entry.isExpanded());
+                        new PacketInfoWindow(entry).open();
                     }
 
                     if (beginPopupContextItem("log_popup##" + i)) {
@@ -184,6 +185,10 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
                         }
 
                         endPopup();
+                    }
+
+                    if (isItemHovered()) {
+                        setTooltip("Packet Data: \n" + entry.getPacketData());
                     }
 
                     tableNextColumn();
@@ -200,13 +205,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
                     textUnformatted(entry.getPacketName());
 
                     tableNextColumn();
-                    if (entry.isExpanded()) {
-                        // show full data
-                        textWrapped(entry.getPacketData());
-                    } else {
-                        // show short data
-                        textUnformatted(entry.getPacketDataShort());
-                    }
+                    textUnformatted(entry.getPacketDataShort());
                 }
             }
 
