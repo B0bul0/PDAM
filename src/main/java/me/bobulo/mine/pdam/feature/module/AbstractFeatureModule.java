@@ -12,7 +12,7 @@ import java.util.List;
  */
 public abstract class AbstractFeatureModule implements FeatureModule {
 
-    private Feature feature;
+    private Feature feature; // Initialized in onAttach
     private boolean enabled = false;
 
     private final List<FeatureModule> childModules = new ArrayList<>(6);
@@ -63,8 +63,11 @@ public abstract class AbstractFeatureModule implements FeatureModule {
     @Override
     public final void disable(@NotNull Feature feature) {
         Validate.notNull(feature, "Feature cannot be null");
+        Validate.isTrue(this.feature != null,
+          "FeatureModule not initialized with a Feature");
         Validate.isTrue(this.feature == feature,
-          "FeatureModule is initialized with a different Feature");
+          "FeatureModule is initialized with a different Feature: " +
+            this.feature.getId() + " != " + feature.getId());
 
         if (enabled) {
             this.onDisable();

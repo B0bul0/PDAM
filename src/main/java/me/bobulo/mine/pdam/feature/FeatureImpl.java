@@ -133,11 +133,12 @@ public final class FeatureImpl implements Feature, ModularFeature {
 
         registry.remove(module.getClass());
         activeModules.remove(module);
-        module.onDetach(this);
 
         if (enabled) {
             module.disable(this);
         }
+
+        module.onDetach(this);
     }
 
     @Override
