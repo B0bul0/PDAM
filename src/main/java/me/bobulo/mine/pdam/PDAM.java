@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam;
 
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
+import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.feature.Feature;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
@@ -108,7 +109,10 @@ public final class PDAM {
 
         for (Feature feature : featureService.getSortedFeatures()) {
             try {
-                feature.enable();
+                ConfigProperty<Boolean> enabled = ConfigProperty.of(feature.getId() + ".enabled", true);
+                if (enabled.get() && !feature.isEnabled()) {
+                    feature.enable();
+                }
             } catch (Exception exception) {
                 log.error("Failed to initialize feature: {}", feature.getId(), exception);
             }

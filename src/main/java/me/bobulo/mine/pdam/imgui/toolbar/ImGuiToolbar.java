@@ -3,6 +3,7 @@ package me.bobulo.mine.pdam.imgui.toolbar;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import me.bobulo.mine.pdam.PDAM;
+import me.bobulo.mine.pdam.feature.FeatureConfigWindow;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.imgui.MenuImGuiRender;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderable;
@@ -14,6 +15,7 @@ import static imgui.ImGui.*;
 public final class ImGuiToolbar implements ImGuiRenderable {
 
     private final FeatureService featureService;
+    private FeatureConfigWindow featureConfigWindow;
 
     public ImGuiToolbar() {
         this.featureService = PDAM.getFeatureService();
@@ -38,6 +40,18 @@ public final class ImGuiToolbar implements ImGuiRenderable {
             if (beginMenuBar()) {
 
                 if (beginMenu("PDAM")) {
+
+                    // feature main config
+                    if (menuItem("Features Config", featureConfigWindow != null && featureConfigWindow.isVisible())) {
+                        if (featureConfigWindow == null) {
+                            featureConfigWindow = new FeatureConfigWindow(featureService);
+                            PDAM.getImGuiRenderer().registerWindow(featureConfigWindow);
+                        }
+
+                        featureConfigWindow.toggleVisible();
+                    }
+
+                    separator();
 
                     List<MenuImGuiRender> allComponents = featureService.getAllBehaviors(MenuImGuiRender.class);
                     for (MenuImGuiRender component : allComponents) {

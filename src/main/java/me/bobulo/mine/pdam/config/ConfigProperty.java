@@ -85,7 +85,7 @@ public final class ConfigProperty<V> implements ConfigValue<V> {
 
     @Override
     public void set(V value) {
-        V oldValue = get();
+        V oldValue = get(); // can be null or default
         config.setValue(key, value);
 
         if (config instanceof PersistentConfig) {

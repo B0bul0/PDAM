@@ -101,7 +101,7 @@ public final class ImGuiRenderer {
     }
 
     public void renderFrame() {
-        if (!initialized) {
+        if (!initialized || cancelRender) {
             return;
         }
 
