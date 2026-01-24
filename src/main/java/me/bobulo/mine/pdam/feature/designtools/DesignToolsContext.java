@@ -1,7 +1,5 @@
 package me.bobulo.mine.pdam.feature.designtools;
 
-import me.bobulo.mine.pdam.config.ConfigProperty;
-import me.bobulo.mine.pdam.config.ConfigValue;
 import me.bobulo.mine.pdam.feature.context.FeatureContext;
 import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
 import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
@@ -23,16 +21,6 @@ public final class DesignToolsContext extends FeatureContext {
         }
         return instance;
     }
-
-    public static final ConfigValue<Boolean> ENABLED = ConfigProperty.of("design_tools.enabled", true)
-      .onChange(enabled -> {
-          if (enabled) {
-              get().getFeature().enable();
-          } else {
-              get().getFeature().disable();
-          }
-      })
-      .sync();
 
     private DesignToolsContext() {
         super("design_tools");

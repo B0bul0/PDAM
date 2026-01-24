@@ -45,18 +45,9 @@ public final class DesignToolsMenuImguiRender extends AbstractFeatureModule impl
     public void draw() {
         if (beginMenu("Design Tools##DesignToolsMenuImguiRender")) {
 
-            boolean enabled = DesignToolsContext.ENABLED.get();
-            if (checkbox("Design Tools", enabled)) {
-                DesignToolsContext.ENABLED.set(!enabled);
-            }
-
-            if (context.getFeature().isEnabled()) {
-                separator();
-
-                for (ToolbarItemWindow registeredWindow : registeredWindows) {
-                    if (menuItem(registeredWindow.getMenuName() + "##" + registeredWindow.getClass().getSimpleName(), registeredWindow.isVisible())) {
-                        registeredWindow.toggleVisible();
-                    }
+            for (ToolbarItemWindow registeredWindow : registeredWindows) {
+                if (menuItem(registeredWindow.getMenuName() + "##" + registeredWindow.getClass().getSimpleName(), registeredWindow.isVisible())) {
+                    registeredWindow.toggleVisible();
                 }
             }
 
