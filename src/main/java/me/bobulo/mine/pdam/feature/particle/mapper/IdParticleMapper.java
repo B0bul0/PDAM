@@ -10,7 +10,7 @@ public class IdParticleMapper implements ParticleMapper {
     @Override
     public int reverseMapParticleId(String particleId) {
         try {
-            return Integer.getInteger(particleId);
+            return Integer.parseInt(particleId);
         } catch (NumberFormatException e) {
             return -1;
         }

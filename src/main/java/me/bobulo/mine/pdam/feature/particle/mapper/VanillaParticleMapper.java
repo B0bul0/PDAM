@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Vanilla particle name <-> particle ID mapper.
+ */
 public class VanillaParticleMapper implements ParticleMapper {
 
     private static final Map<String, EnumParticleTypes> MAPPER =

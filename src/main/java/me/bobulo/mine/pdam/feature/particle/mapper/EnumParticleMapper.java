@@ -2,11 +2,14 @@ package me.bobulo.mine.pdam.feature.particle.mapper;
 
 import net.minecraft.util.EnumParticleTypes;
 
+/**
+ * EnumParticleTypes <-> particle ID mapper.
+ */
 public class EnumParticleMapper implements ParticleMapper {
 
     @Override
-    public String mapParticleId(int particleName) {
-        EnumParticleTypes type = EnumParticleTypes.getParticleFromId(particleName);
+    public String mapParticleId(int particleId) {
+        EnumParticleTypes type = EnumParticleTypes.getParticleFromId(particleId);
         return type == null ? null : type.name();
     }
 

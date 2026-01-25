@@ -19,4 +19,19 @@ public final class ImGuiHelper {
         }
     }
 
+    public static void helpMarker(String description) {
+        textDisabled("(?)");
+        tooltip(description);
+    }
+
+    public static void separatorWithSpacing() {
+        spacing();
+        separator();
+        spacing();
+    }
+
+    private ImGuiHelper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
 }

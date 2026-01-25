@@ -1,11 +1,11 @@
 package me.bobulo.mine.pdam.feature.designtools;
 
-import imgui.ImGui;
 import imgui.ImGuiTextFilter;
 import imgui.extension.imguizmo.flag.Mode;
 import imgui.flag.ImGuiColorEditFlags;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiKey;
+import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
 import me.bobulo.mine.pdam.feature.particle.Particle;
@@ -15,7 +15,6 @@ import me.bobulo.mine.pdam.imgui.guizmo.GuizmoImGui;
 import me.bobulo.mine.pdam.imgui.util.ImGuiNotificationDrawer;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.Position;
-import me.bobulo.mine.pdam.util.UniqueHistory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumParticleTypes;
 import org.apache.logging.log4j.LogManager;
@@ -23,8 +22,15 @@ import org.apache.logging.log4j.Logger;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.helpMarker;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
+/**
+ * Window for spawning particles at a specified location with various parameters.
+ * <p>
+ * Simulates a single particle packet sent from the server to the client.
+ * Possible raw particle packet options.
+ */
 public final class SpawnParticleWindow extends AbstractRenderItemWindow {
 
     private static final Logger log = LogManager.getLogger(SpawnParticleWindow.class);
@@ -49,18 +55,16 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
     private final ImGuiTextFilter particleFilter = new ImGuiTextFilter();
     private final ImBoolean manipuleControls = new ImBoolean();
 
-    private final UniqueHistory<Particle> spawnParticleEntries = new UniqueHistory<>(25);
-
     public SpawnParticleWindow() {
         super("Spawn Particles");
     }
 
     @Override
     public void renderGui() {
-        ImGui.setNextWindowSize(525, 347, ImGuiCond.FirstUseEver);
-        ImGui.setNextWindowPos(50, 60, ImGuiCond.FirstUseEver);
+        setNextWindowSize(510, 340, ImGuiCond.Always);
+        setNextWindowPos(50, 60, ImGuiCond.FirstUseEver);
 
-        if (begin("Spawn Particles##SpawnParticleWindow", isVisible)) {
+        if (begin("Spawn Particles##SpawnParticleWindow", isVisible, ImGuiWindowFlags.NoResize)) {
             keepInScreen();
             renderContent();
         }
@@ -82,6 +86,13 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
     private void renderContent() {
         notification.draw();
 
+        renderOptionsContent();
+        renderMappingContent();
+        renderSpawnParticleContent();
+        renderActionsContent();
+    }
+
+    private void renderMappingContent() {
         separatorText("Particle Name Mapping");
 
         if (radioButton("Vanilla", particleMapper == ParticleMapper.VANILLA)) {
@@ -100,16 +111,42 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
             setParticleMapper(ParticleMapper.BUKKIT_1_8);
         }
 
-        separator();
-        renderLocationContent();
-        renderSpawnParticleContent();
-        renderActionsContent();
+        spacing();
+    }
+
+    private void renderOptionsContent() {
+        helpMarker("Simulates a single particle packet sent from the server to the client. " +
+          "Possible raw particle packet options.");
+        sameLine();
+
+        if (beginPopup("OptionsPopup")) {
+            text("Options");
+            separator();
+
+            if (button("Set Color Particle Preset")) {
+                count.set(0);
+                speed[0] = 1.0f;
+                particleToSpawn = particleMapper.mapParticleId(30); // COLOURED_DUST
+                syncParticleAnimation();
+            }
+
+            tooltip("Speed must be set to 1 and Count to 0 for color display.");
+
+
+            endPopup();
+        }
+
+        if (button("Options")) {
+            openPopup("OptionsPopup");
+        }
     }
 
     private void renderLocationContent() {
         Minecraft mc = Minecraft.getMinecraft();
 
-        separatorText("Particle Location");
+        text("Particle Location");
+        sameLine();
+
         setNextItemWidth(190);
         if (inputFloat3("##Location", position, "%.2f")) {
             syncParticleAnimation();
@@ -117,31 +154,41 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
 
         sameLine();
 
-        if (button("Set to Player Position")) {
-            if (mc.thePlayer == null) {
-                notification.error("You are not in a world!");
-            } else {
-                position[0] = (float) mc.thePlayer.posX;
-                position[1] = (float) mc.thePlayer.posY;
-                position[2] = (float) mc.thePlayer.posZ;
-                syncParticleAnimation();
+        if (beginPopup("LocationSettings")) {
+            text("Location Settings");
+            separator();
+
+            if (button("Set to Player Position")) {
+                if (mc.thePlayer == null) {
+                    notification.error("You are not in a world!");
+                } else {
+                    position[0] = (float) mc.thePlayer.posX;
+                    position[1] = (float) mc.thePlayer.posY;
+                    position[2] = (float) mc.thePlayer.posZ;
+                    syncParticleAnimation();
+                }
             }
+
+            if (checkbox("Show Movement Handles", manipuleControls.get())) {
+                manipuleControls.set(!manipuleControls.get());
+            }
+
+            endPopup();
         }
 
-        sameLine();
-
-        if (checkbox("Show Movement Handles", manipuleControls.get())) {
-            manipuleControls.set(!manipuleControls.get());
+        if (button("Location Settings")) {
+            openPopup("LocationSettings");
         }
 
         spacing();
-        separator();
     }
 
     private void renderSpawnParticleContent() {
         Particle particle = animation.getParticle();
 
         separatorText("Particle to Spawn");
+
+        renderLocationContent();
 
         text("Particle Type");
         sameLine();
@@ -176,7 +223,7 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
         text("Count");
         sameLine();
         setNextItemWidth(100);
-        if (inputInt("##Count", count)) {
+        if (inputInt("##Count", count, 1, 10)) {
             count.set(Math.max(0, count.get()));
             syncParticleAnimation();
         }
@@ -193,7 +240,7 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
 
         text("Offset");
         sameLine();
-        if (inputFloat3("##Offset", offset)) {
+        if (inputFloat3("##Offset", offset, "%.2f")) {
             syncParticleAnimation();
         }
 
@@ -203,7 +250,8 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
             syncParticleAnimation();
         }
         tooltip("Uses the RGB values as offset for red, green and blue color channels.\n" +
-          "Only works with certain particle types.");
+          "Only works with certain particle types.\n" +
+          "Speed must be set to 1 and Count to 0 for color display.");
 
         if (checkbox("Long Distance", particle.isLongDistance())) {
             particle.setLongDistance(!particle.isLongDistance());
@@ -250,7 +298,6 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
             } else {
                 syncParticleAnimation();
                 animation.spawnParticles();
-                spawnParticleEntries.push(particle.clone());
             }
         }
 
@@ -268,7 +315,7 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
         sameLine();
 
         setNextItemWidth(80);
-        if (inputInt("Interval Ticks", intervalTicks)) {
+        if (inputInt("Interval Ticks", intervalTicks, 1, 20)) {
             int newInterval = Math.max(1, intervalTicks.get());
             animation.setTicksInterval(newInterval);
             intervalTicks.set(animation.getTicksInterval());
@@ -280,6 +327,9 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
 
         int particleID = particleMapper.reverseMapParticleId(particleToSpawn);
         if (particleID == -1) {
+            if (!NONE_PARTICLE.equals(particleToSpawn)) {
+                notification.error("Particle '" + particleToSpawn + "' is not supported in the current mapping!");
+            }
             return;
         }
 
