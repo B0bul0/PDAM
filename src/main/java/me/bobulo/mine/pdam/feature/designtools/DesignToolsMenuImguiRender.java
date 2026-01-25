@@ -43,6 +43,10 @@ public final class DesignToolsMenuImguiRender extends AbstractFeatureModule impl
 
     @Override
     public void draw() {
+        if (registeredWindows.isEmpty()) {
+            return;
+        }
+
         if (beginMenu("Design Tools##DesignToolsMenuImguiRender")) {
 
             for (ToolbarItemWindow registeredWindow : registeredWindows) {

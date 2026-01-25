@@ -1,9 +1,7 @@
 package me.bobulo.mine.pdam;
 
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
-import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigService;
-import me.bobulo.mine.pdam.feature.Feature;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
@@ -14,6 +12,7 @@ import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
 import me.bobulo.mine.pdam.feature.imgui.FeatureToolbarMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector;
 import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
+import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitor;
@@ -107,33 +106,25 @@ public final class PDAM {
 
         registerFeatures();
 
-        for (Feature feature : featureService.getSortedFeatures()) {
-            try {
-                ConfigProperty<Boolean> enabled = ConfigProperty.of(feature.getId() + ".enabled", true);
-                if (enabled.get() && !feature.isEnabled()) {
-                    feature.enable();
-                }
-            } catch (Exception exception) {
-                log.error("Failed to initialize feature: {}", feature.getId(), exception);
-            }
-        }
-
         log.info("PDAM initialized");
     }
 
     private void registerFeatures() {
         featureService.registerFeature(FeatureImpl.builder()
           .id("sound_debug")
+          .module(new EnabledFeatureModule(true))
           .module(new SoundDebugFeatureModule())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("nbt_tooltip")
+          .module(new EnabledFeatureModule(true))
           .module(ForgerListenerFeatureModule.of(new NBTTagTooltipListener()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("show_invisible_entities")
+          .module(new EnabledFeatureModule(true))
           .module(CallbackFeatureModule.of(
             () -> ShowInvisibleEntities.showInvisibleEntities = true,
             () -> ShowInvisibleEntities.showInvisibleEntities = false)
@@ -141,11 +132,13 @@ public final class PDAM {
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("entity_info_overlay")
+          .module(new EnabledFeatureModule(true))
           .module(ForgerListenerFeatureModule.of(new EntityOverlayInfoListener()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("skin_extraction")
+          .module(new EnabledFeatureModule(false))
           .module(ForgerListenerFeatureModule.of(
             new PlayerSkinExtractionListener(),
             new HeadWorldSkinExtractionListener(),
@@ -157,24 +150,28 @@ public final class PDAM {
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("scoreboard_inspector")
+          .module(new EnabledFeatureModule(true))
           .module(ImGuiListenerFeatureModule.of(new ScoreboardInspectorWindow()))
           .module(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("server_info")
+          .module(new EnabledFeatureModule(true))
           .module(ImGuiListenerFeatureModule.of(new ServerInfoWindow()))
           .module(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("fly_booster")
+          .module(new EnabledFeatureModule(false))
           .module(ImGuiListenerFeatureModule.of(new FlyBoosterWindow()))
           .module(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("messaging_utilities")
+          .module(new EnabledFeatureModule(true))
           .module(ImGuiListenerFeatureModule.of(
             new SendChatMessageWindow()
           ))
@@ -184,6 +181,7 @@ public final class PDAM {
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("sign_editor")
+          .module(new EnabledFeatureModule(true))
           .module(ForgerListenerFeatureModule.of(new SignEditorListener()))
           .build());
 

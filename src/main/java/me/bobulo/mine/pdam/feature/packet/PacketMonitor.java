@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature.packet;
 
 import me.bobulo.mine.pdam.feature.context.FeatureContext;
+import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
 
 public final class PacketMonitor extends FeatureContext {
 
@@ -20,7 +21,10 @@ public final class PacketMonitor extends FeatureContext {
     private PacketMonitor() {
         super(FEATURE_ID);
 
-        addModules(new PacketMonitorFeatureModule(this));
+        addModules(
+          new EnabledFeatureModule(true),
+          new PacketMonitorFeatureModule(this)
+        );
     }
 
 }

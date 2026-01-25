@@ -3,6 +3,7 @@ package me.bobulo.mine.pdam.feature;
 import imgui.flag.ImGuiCond;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
+import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
 import me.bobulo.mine.pdam.imgui.util.ImGuiNotificationDrawer;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import org.apache.logging.log4j.LogManager;
@@ -51,19 +52,15 @@ public final class FeatureConfigWindow extends AbstractRenderItemWindow {
           separatorText("Settings");
           spacing();
 
-          if (checkbox("Enabled", feature.isEnabled())) {
-              try {
-                  ConfigProperty<Boolean> enabled = ConfigProperty.of(feature.getId() + ".enabled", Boolean.class);
-                  if (feature.isEnabled()) {
-                      feature.disable();
-                      enabled.set(false);
-                  } else {
-                      feature.enable();
-                      enabled.set(true);
+          EnabledFeatureModule enabledFeatureModule = feature.getBehavior(EnabledFeatureModule.class);
+          if (enabledFeatureModule != null) {
+              if (checkbox("Enabled", feature.isEnabled())) {
+                  try {
+                      enabledFeatureModule.getEnabledConfig().set(!feature.isEnabled());
+                  } catch (Exception exception) {
+                      log.error("Failed to toggle feature {}.", feature.getName(), exception);
+                      notificationDrawer.error("Failed to toggle feature " + feature.getName() + ".");
                   }
-              } catch (Exception exception) {
-                  log.error("Failed to toggle feature {}.", feature.getName(), exception);
-                  notificationDrawer.error("Failed to toggle feature " + feature.getName() + ".");
               }
           }
 

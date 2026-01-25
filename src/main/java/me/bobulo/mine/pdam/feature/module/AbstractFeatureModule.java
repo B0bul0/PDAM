@@ -21,7 +21,7 @@ public abstract class AbstractFeatureModule implements FeatureModule {
     }
 
     @Override
-    public void onAttach(@NotNull Feature feature) {
+    public final void onAttach(@NotNull Feature feature) {
         Validate.notNull(feature, "Feature cannot be null");
         Validate.isTrue(this.feature == null || this.feature == feature,
           "FeatureModule is initialized with a different Feature");
@@ -37,6 +37,8 @@ public abstract class AbstractFeatureModule implements FeatureModule {
         Validate.notNull(feature, "Feature cannot be null");
         Validate.isTrue(this.feature == feature,
           "FeatureModule is initialized with a different Feature");
+        Validate.isTrue(!this.enabled,
+          "FeatureModule must be disabled before detaching from Feature");
 
         this.feature = null;
     }
