@@ -82,11 +82,15 @@ public abstract class AbstractFeatureModule implements FeatureModule {
     /**
      * Called when the FeatureModule is enabled.
      */
-    protected abstract void onEnable();
+    protected void onEnable() {
+        // Optional
+    }
 
     /**
      * Called when the FeatureModule is disabled.
      */
-    protected abstract void onDisable();
+    protected void onDisable() {
+        // Optional
+    }
 
 }

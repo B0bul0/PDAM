@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
 import me.bobulo.mine.pdam.feature.context.FeatureContext;
+import me.bobulo.mine.pdam.feature.imgui.ConfigMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
 
 @Getter
@@ -32,7 +33,8 @@ public final class InventorySlotInspector extends FeatureContext {
 
         addModules(
           new EnabledFeatureModule(true),
-          new InventorySlotInspectorMenuImGuiRender(this)
+          new SlotInspectorConfigImGuiRender(this),
+          new ConfigMenuImGuiRender()
         );
 
     }
