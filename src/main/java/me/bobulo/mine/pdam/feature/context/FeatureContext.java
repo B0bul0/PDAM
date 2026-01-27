@@ -3,6 +3,7 @@ package me.bobulo.mine.pdam.feature.context;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
 import me.bobulo.mine.pdam.feature.Feature;
+import me.bobulo.mine.pdam.feature.FeatureBehavior;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.module.FeatureModule;
 import org.jetbrains.annotations.NotNull;

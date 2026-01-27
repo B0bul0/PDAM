@@ -1,10 +1,12 @@
 package me.bobulo.mine.pdam.feature;
 
+import me.bobulo.mine.pdam.attribute.Attributable;
+
 /**
  * Represents a modular feature of the mod.
  * Each feature can be enabled or disabled.
  */
-public interface Feature extends ModularFeature {
+public interface Feature extends ModularFeature, Attributable {
 
     /**
      * Gets the unique identifier for this feature.
