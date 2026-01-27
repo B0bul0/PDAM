@@ -33,6 +33,7 @@ public final class FeatureImpl implements Feature, ModularFeature {
     public FeatureImpl(@NotNull String id) {
         Validate.notBlank(id, "Feature id cannot be null or blank");
         this.id = id;
+        this.name = id;
         this.moduleManager = new ModuleManager(this);
     }
 

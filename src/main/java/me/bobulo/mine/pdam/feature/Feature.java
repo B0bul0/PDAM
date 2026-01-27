@@ -47,4 +47,14 @@ public interface Feature extends ModularFeature, Attributable {
      */
     void disable();
 
+    /**
+     * Toggles the enabled state of the feature.
+     */
+    default void toggleEnabled() {
+        if (isEnabled()) {
+            disable();
+        } else {
+            enable();
+        }
+    }
 }

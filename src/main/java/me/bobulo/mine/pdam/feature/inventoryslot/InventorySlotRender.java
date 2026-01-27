@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.inventoryslot;
 
+import me.bobulo.mine.pdam.PDAM;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,8 +12,7 @@ import net.minecraft.inventory.Slot;
 public class InventorySlotRender {
 
     public static void render(GuiScreen gui) {
-        InventorySlotInspector context = InventorySlotInspector.context();
-        if (!context.getFeature().isEnabled()) {
+        if (!PDAM.getFeatureService().isFeatureEnabled(InventorySlotInspector.FEATURE_ID)) {
             return;
         }
 
@@ -25,7 +25,7 @@ public class InventorySlotRender {
             GuiContainer container = (GuiContainer) gui;
             FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
-            boolean onlyBackground = context.getOverlayPriorityConfig().get() == 0;
+            boolean onlyBackground = InventorySlotInspector.OVERLAY_PRIORITY.get() == 0;
 
             if (!onlyBackground) {
                 GlStateManager.pushMatrix();
@@ -51,7 +51,7 @@ public class InventorySlotRender {
                   text,
                   x + 8.5F - (textWidth / 2F),
                   y + 4F,
-                  context.getColorConfig().get(), false
+                  InventorySlotInspector.COLOR.get(), false
                 );
             }
 

@@ -14,14 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PacketMonitorFeatureModule extends AbstractFeatureModule {
 
-    private final PacketMonitor packetMonitor;
     private LogHistory<DisplayPacketLogEntry> packetEntries;
     private PacketLogWindow logWindow;
-    private ToolbarMenuImGuiRender toolbarMenuImGuiRenderer;
-
-    public PacketMonitorFeatureModule(PacketMonitor packetMonitor) {
-        this.packetMonitor = packetMonitor;
-    }
 
     @Override
     protected void onInitialize() {
@@ -35,11 +29,6 @@ public final class PacketMonitorFeatureModule extends AbstractFeatureModule {
         getFeature().addModule(ImGuiListenerFeatureModule.of(logWindow));
 
         getFeature().addModule(new ToolbarMenuImGuiRender(ImmutableList.of(logWindow)));
-    }
-
-    @Override
-    protected void onEnable() {
-
     }
 
     @Override

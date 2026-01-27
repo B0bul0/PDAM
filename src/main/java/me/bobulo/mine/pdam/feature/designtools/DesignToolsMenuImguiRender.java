@@ -15,13 +15,9 @@ import static imgui.ImGui.*;
 public final class DesignToolsMenuImguiRender extends AbstractFeatureModule implements MenuImGuiRender {
 
     @NotNull
-    private final DesignToolsContext context;
-
-    @NotNull
     private List<ToolbarItemWindow> registeredWindows;
 
-    public DesignToolsMenuImguiRender(@NotNull DesignToolsContext context) {
-        this.context = context;
+    public DesignToolsMenuImguiRender() {
         this.registeredWindows = Collections.emptyList();
     }
 

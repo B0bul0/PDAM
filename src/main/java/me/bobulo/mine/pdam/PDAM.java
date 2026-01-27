@@ -7,15 +7,21 @@ import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.designtools.*;
+import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
+import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
+import me.bobulo.mine.pdam.feature.designtools.item.window.ItemBuilderWindow;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
+import me.bobulo.mine.pdam.feature.imgui.ConfigMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.imgui.FeatureToolbarMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector;
+import me.bobulo.mine.pdam.feature.inventoryslot.SlotInspectorConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
 import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitor;
+import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureModule;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
@@ -146,7 +152,13 @@ public final class PDAM {
           ))
           .build());
 
-        featureService.registerFeature(PacketMonitor.context().getFeature());
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(PacketMonitor.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(true),
+            new PacketMonitorFeatureModule()
+          )
+          .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("scoreboard_inspector")
@@ -185,8 +197,32 @@ public final class PDAM {
           .module(ForgerListenerFeatureModule.of(new SignEditorListener()))
           .build());
 
-        featureService.registerFeature(DesignToolsContext.get().getFeature());
-        featureService.registerFeature(InventorySlotInspector.context().getFeature());
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(DesignTools.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(true),
+            ImGuiListenerFeatureModule.of(
+              new CharacterMapWindow(),
+              new MessageFormatterWindow(),
+              new TitleVisualizerWindow(),
+              new ActionBarVisualizerWindow(),
+              new HologramMockupWindow(),
+              new PlaySoundWindow(),
+              new ItemBuilderWindow(),
+              new SpawnParticleWindow()
+            ),
+            new DesignToolsMenuImguiRender()
+          )
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(InventorySlotInspector.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(true),
+            new SlotInspectorConfigImGuiRender(),
+            new ConfigMenuImGuiRender()
+          )
+          .build());
     }
 
 }

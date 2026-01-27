@@ -7,48 +7,45 @@ import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import me.bobulo.mine.pdam.util.ColorUtil;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector.DEFAULT_COLOR;
+import static me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector.*;
 
-public class SlotInspectorConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class SlotInspectorConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
 
     private static final String[] OVERLAY_PRIORITY_OPTIONS = new String[]{
       "Background",
       "Foreground"
     };
 
-    private final InventorySlotInspector context;
-
     private final ImInt overlayPriorityIndex;
     private float[] color;
 
-    public SlotInspectorConfigImGuiRender(InventorySlotInspector context) {
-        this.context = context;
-        this.overlayPriorityIndex = new ImInt(context.getOverlayPriorityConfig().get());
-        this.color = ColorUtil.toRgba(context.getColorConfig().get());
+    public SlotInspectorConfigImGuiRender() {
+        this.overlayPriorityIndex = new ImInt(OVERLAY_PRIORITY.get());
+        this.color = ColorUtil.toRgba(COLOR.get());
     }
 
     @Override
     public void draw() {
-        if (checkbox("Enable Slot Overlay", context.getFeature().isEnabled())) {
-            context.getEnabledConfig().set(!context.getEnabledConfig().get());
+        if (checkbox("Enable Slot Overlay", getFeature().isEnabled())) {
+            getFeature().toggleEnabled();
         }
 
         separator();
 
         if (colorEdit4("Text Color", color,
           ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreview)) {
-            context.getColorConfig().set(ColorUtil.toArgbInt(color));
+            COLOR.set(ColorUtil.toArgbInt(color));
         }
 
         sameLine();
 
         if (button("Reset Color")) {
-            context.getColorConfig().set(DEFAULT_COLOR);
+            COLOR.set(DEFAULT_COLOR);
             color = ColorUtil.toRgba(DEFAULT_COLOR);
         }
 
         if (combo("Overlay Priority", overlayPriorityIndex, OVERLAY_PRIORITY_OPTIONS)) {
-            context.getOverlayPriorityConfig().set(overlayPriorityIndex.get());
+            OVERLAY_PRIORITY.set(overlayPriorityIndex.get());
         }
     }
 
