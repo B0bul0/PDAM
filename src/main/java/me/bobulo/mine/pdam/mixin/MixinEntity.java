@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinEntity {
 
     @Inject(method = "isInvisibleToPlayer", at = @At("HEAD"), cancellable = true)
-    public void onIsInvisibleToPlayer(EntityPlayer player, CallbackInfoReturnable<Boolean> cir) {
+    private void onIsInvisibleToPlayer(EntityPlayer player, CallbackInfoReturnable<Boolean> cir) {
         Entity self = (Entity) (Object) this;
 
         if (self.equals(Minecraft.getMinecraft().thePlayer)) {

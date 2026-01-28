@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinEntityPlayerSP {
 
     @Inject(method = "openEditSign", at = @At("HEAD"), cancellable = true)
-    public void onOpenEditSign(TileEntitySign signTile, CallbackInfo cir) {
+    private void onOpenEditSign(TileEntitySign signTile, CallbackInfo cir) {
         EntityPlayerSP self = (EntityPlayerSP) (Object) this;
 
         if (PDAM.getFeatureService().isFeatureEnabled("sign_editor")) {

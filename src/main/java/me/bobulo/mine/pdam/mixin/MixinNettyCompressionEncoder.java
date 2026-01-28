@@ -21,7 +21,6 @@ public class MixinNettyCompressionEncoder {
     private void onEncodeHead(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out, CallbackInfo ci) {
         int readerIndex = msg.readerIndex();
 
-
         try {
             if (msg.readableBytes() > 0) {
                 EnumConnectionState nmsState = ctx.channel().attr(NetworkManager.attrKeyConnectionState).get();

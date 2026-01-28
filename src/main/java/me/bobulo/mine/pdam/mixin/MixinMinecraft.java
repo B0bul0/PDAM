@@ -1,7 +1,6 @@
 package me.bobulo.mine.pdam.mixin;
 
 import me.bobulo.mine.pdam.PDAM;
-import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,10 +11,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
-public class MinecraftMixin {
+public class MixinMinecraft {
 
     @Unique
-    private static final Logger log = LogManager.getLogger(MinecraftMixin.class);
+    private static final Logger log = LogManager.getLogger(MixinMinecraft.class);
 
     @Inject(method = "startGame", at = @At("TAIL"))
     private void onStartGame(CallbackInfo ci) {
