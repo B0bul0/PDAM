@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature.player;
 
 import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiSliderFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
@@ -9,11 +10,14 @@ import net.minecraft.client.entity.EntityPlayerSP;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
 /**
  * A GUI window that allows the player to boost their flying speed in Minecraft.
  */
 public class FlyBoosterWindow extends AbstractRenderItemWindow {
+
+    private static final float DEFAULT_FLY_SPEED = 0.05f;
 
     private final ImBoolean enableFlySpeed = new ImBoolean(false);
     private final float[] flySpeed = new float[]{0.1f};
@@ -24,7 +28,7 @@ public class FlyBoosterWindow extends AbstractRenderItemWindow {
 
     @Override
     public void renderGui() {
-        setNextWindowSize(235, 80, ImGuiCond.Always);
+        setNextWindowSize(235, 100, ImGuiCond.Always);
         setNextWindowPos(50, 50, ImGuiCond.FirstUseEver);
 
         if (begin("Fly Booster##FlyBoosterWindow", isVisible, ImGuiWindowFlags.NoResize)) {
@@ -62,13 +66,17 @@ public class FlyBoosterWindow extends AbstractRenderItemWindow {
             flySpeed[0] = player.capabilities.getFlySpeed();
         }
 
+        sliderFloat("Fly Speed", flySpeed, 0.0f, 1.0f, "%.2f", ImGuiSliderFlags.AlwaysClamp);
+
+        drawSpeedButtonMultiplier(0.5f);
         sameLine();
 
-        if (button("Reset")) {
-            reset();
+        for (int i = 0; i < 4; i++) {
+            drawSpeedButtonMultiplier(i + 1f);
+            if (i < 3) {
+                sameLine();
+            }
         }
-
-        sliderFloat("Fly Speed", flySpeed, 0.0f, 1.0f);
 
         if (playerInGame) {
             if (enableFlySpeed.get()) {
@@ -83,6 +91,13 @@ public class FlyBoosterWindow extends AbstractRenderItemWindow {
             endDisabled();
         }
 
+    }
+
+    private void drawSpeedButtonMultiplier(float multiplier) {
+        if (button("x" + multiplier)) {
+            flySpeed[0] = DEFAULT_FLY_SPEED * multiplier;
+        }
+        tooltip("Set fly speed to " + (DEFAULT_FLY_SPEED * multiplier));
     }
 
     private void reset() {
