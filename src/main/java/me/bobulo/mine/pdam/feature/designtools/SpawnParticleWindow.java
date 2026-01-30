@@ -192,6 +192,7 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
 
         text("Particle Type");
         sameLine();
+        setNextItemWidth(210);
         if (beginCombo("##SelectParticleEffect", particleToSpawn)) {
 
             if (isWindowAppearing()) {
@@ -220,6 +221,24 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
             endCombo();
         }
 
+        sameLine();
+        if (button("Next Particle")) {
+            int currentId = particleMapper.reverseMapParticleId(particleToSpawn);
+            int nextId = currentId + 1;
+            String nextParticle = particleMapper.mapParticleId(nextId);
+            if (nextParticle == null) {
+                nextId = 0;
+                nextParticle = particleMapper.mapParticleId(nextId);
+            }
+
+            if (nextParticle != null) {
+                particleToSpawn = nextParticle;
+                syncParticleAnimation();
+            } else {
+                notification.error("No next particle available from ID " + currentId);
+            }
+        }
+
         text("Count");
         sameLine();
         setNextItemWidth(100);
@@ -232,7 +251,7 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
 
         text("Speed");
         sameLine();
-        setNextItemWidth(310);
+        setNextItemWidth(220);
         if (dragFloat("##Speed", speed, 0.01f, 0.0f, 10.0f, "%.2f")) {
             speed[0] = Math.max(0f, speed[0]);
             syncParticleAnimation();
