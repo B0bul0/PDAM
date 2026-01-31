@@ -6,6 +6,8 @@ import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
+import me.bobulo.mine.pdam.feature.creative.ExpandedCreativeInventory;
+import me.bobulo.mine.pdam.feature.creative.CreativeTabInjectorModule;
 import me.bobulo.mine.pdam.feature.designtools.*;
 import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
 import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
@@ -221,6 +223,14 @@ public final class PDAM {
             new EnabledFeatureModule(true),
             new SlotInspectorConfigImGuiRender(),
             new ConfigMenuImGuiRender()
+          )
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(ExpandedCreativeInventory.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(true),
+            new CreativeTabInjectorModule()
           )
           .build());
     }
