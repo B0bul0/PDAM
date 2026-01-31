@@ -24,6 +24,7 @@ import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitor;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureModule;
+import me.bobulo.mine.pdam.feature.player.CoordinatesWindow;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
@@ -232,6 +233,17 @@ public final class PDAM {
             new EnabledFeatureModule(true),
             new CreativeTabInjectorModule()
           )
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("player_utilities")
+          .modules(
+            new EnabledFeatureModule(true),
+            ImGuiListenerFeatureModule.of(
+              new CoordinatesWindow()
+            )
+          )
+          .module(new FeatureToolbarMenuImGuiRender())
           .build());
     }
 
