@@ -48,6 +48,9 @@ pdam.feature.player_utilities.description=
 pdam.feature.sign_editor.name=Sign Editor
 pdam.feature.sign_editor.description=New GUI for writing on signs.
 
+pdam.feature.item_name_debug.name=Item Name Debug
+pdam.feature.item_name_debug.description=Displays the mapped names of items in tooltips.
+
 # Entity Info
 pdam.entity.info_title=Entity Info
 pdam.entity.id=Entity ID

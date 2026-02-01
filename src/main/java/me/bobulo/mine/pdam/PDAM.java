@@ -35,6 +35,9 @@ import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureModule;
+import me.bobulo.mine.pdam.feature.itemname.AdvancedItemTooltipsListener;
+import me.bobulo.mine.pdam.feature.itemname.ItemNameMapperConfigImGuiRender;
+import me.bobulo.mine.pdam.feature.itemname.ItemNameDebug;
 import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
@@ -247,6 +250,15 @@ public final class PDAM {
             )
           )
           .module(new FeatureToolbarMenuImGuiRender())
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(ItemNameDebug.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(true),
+            ForgerListenerFeatureModule.of(new AdvancedItemTooltipsListener()),
+            new ItemNameMapperConfigImGuiRender()
+          )
           .build());
     }
 
