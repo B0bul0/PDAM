@@ -32,5 +32,22 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 `./gradlew clean build`
 4. The compiled `.jar` file will be located in the `build/libs/` directory.
 
+## Example Screenshot
+<p align="center">
+  <img src=".github/gui_screenshot.png" width="100%" alt="Mod Usage Screenshot"/>
+</p>
+
+### Inventory Slot Overlay Screenshots
+<table border="0">
+  <tr>
+    <td><img src=".github/inventory_slot_back_screenshot.png" width="300" alt="Minecraft GUI screenshot showcasing the feature"></td>
+    <td><img src=".github/inventory_slot_fore_screenshot.png" width="300" alt="Minecraft GUI screenshot showcasing the feature"></td>
+  </tr>
+  <tr>
+    <td align="center">Inventory Slot Overlay - Background</td>
+    <td align="center">Inventory Slot Overlay - Foreground</td>
+  </tr>
+</table>
+
 ---
 *Project template: [Forge1.8.9Template](https://github.com/nea89o/Forge1.8.9Template)*
