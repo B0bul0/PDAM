@@ -4,6 +4,8 @@ import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
 import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
+import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypass;
+import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypassConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
 import me.bobulo.mine.pdam.feature.creative.CreativeTabInjectorModule;
@@ -268,6 +270,15 @@ public final class PDAM {
           .modules(
             new EnabledFeatureModule(false),
             new WorldTimeConfigImGuiRender(),
+            new ConfigMenuImGuiRender(true)
+          )
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(BungeeBypass.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(false),
+            new BungeeBypassConfigImGuiRender(),
             new ConfigMenuImGuiRender(true)
           )
           .build());

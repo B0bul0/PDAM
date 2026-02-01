@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinMinecraft {
 
     @Unique
-    private static final Logger log = LogManager.getLogger(MixinMinecraft.class);
+    private static final Logger pDAM$log = LogManager.getLogger(MixinMinecraft.class);
 
     @Inject(method = "startGame", at = @At("TAIL"))
     private void onStartGame(CallbackInfo ci) {
@@ -27,7 +27,7 @@ public class MixinMinecraft {
         try {
             PDAM.getImGuiRenderer().renderFrame();
         } catch (Exception exception) {
-            log.error("ImGui frame render error", exception);
+            pDAM$log.error("ImGui frame render error", exception);
         } finally {
             Minecraft.getMinecraft().mcProfiler.endSection();
         }

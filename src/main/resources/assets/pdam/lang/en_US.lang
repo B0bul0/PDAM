@@ -54,6 +54,9 @@ pdam.feature.item_name_debug.description=Displays the mapped names of items in t
 pdam.feature.world_time.name=World Time
 pdam.feature.world_time.description=Changes the time of day in the world.
 
+pdam.feature.bungee_bypass.name=BungeeCord Bypass
+pdam.feature.bungee_bypass.description=Allows bypassing BungeeCord restrictions.
+
 # Entity Info
 pdam.entity.info_title=Entity Info
 pdam.entity.id=Entity ID
