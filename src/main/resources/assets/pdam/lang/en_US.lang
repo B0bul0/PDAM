@@ -51,6 +51,9 @@ pdam.feature.sign_editor.description=New GUI for writing on signs.
 pdam.feature.item_name_debug.name=Item Name Debug
 pdam.feature.item_name_debug.description=Displays the mapped names of items in tooltips.
 
+pdam.feature.world_time.name=World Time
+pdam.feature.world_time.description=Changes the time of day in the world.
+
 # Entity Info
 pdam.entity.info_title=Entity Info
 pdam.entity.id=Entity ID

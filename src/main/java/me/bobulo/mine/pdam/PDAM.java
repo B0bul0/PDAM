@@ -39,6 +39,8 @@ import me.bobulo.mine.pdam.feature.itemname.AdvancedItemTooltipsListener;
 import me.bobulo.mine.pdam.feature.itemname.ItemNameMapperConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.itemname.ItemNameDebug;
 import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
+import me.bobulo.mine.pdam.feature.world.WorldTime;
+import me.bobulo.mine.pdam.feature.world.WorldTimeConfigImGuiRender;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
 import me.bobulo.mine.pdam.ui.UIManager;
@@ -258,6 +260,15 @@ public final class PDAM {
             new EnabledFeatureModule(true),
             ForgerListenerFeatureModule.of(new AdvancedItemTooltipsListener()),
             new ItemNameMapperConfigImGuiRender()
+          )
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(WorldTime.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(false),
+            new WorldTimeConfigImGuiRender(),
+            new ConfigMenuImGuiRender(true)
           )
           .build());
     }
