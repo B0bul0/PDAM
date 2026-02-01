@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class SignEditorListener {
+public final class SignEditorListener {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
@@ -27,6 +27,10 @@ public class SignEditorListener {
         Block block = world.getBlockState(pos).getBlock();
 
         if (block != Blocks.standing_sign && block != Blocks.wall_sign) {
+            return;
+        }
+
+        if (!SignEditor.VIEW_GUI.get()) { // config check
             return;
         }
 

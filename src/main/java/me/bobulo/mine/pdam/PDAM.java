@@ -6,8 +6,8 @@ import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
-import me.bobulo.mine.pdam.feature.creative.ExpandedCreativeInventory;
 import me.bobulo.mine.pdam.feature.creative.CreativeTabInjectorModule;
+import me.bobulo.mine.pdam.feature.creative.ExpandedCreativeInventory;
 import me.bobulo.mine.pdam.feature.designtools.*;
 import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
 import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
@@ -28,6 +28,8 @@ import me.bobulo.mine.pdam.feature.player.CoordinatesWindow;
 import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
 import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
 import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
+import me.bobulo.mine.pdam.feature.sign.SignConfigImGuiRender;
+import me.bobulo.mine.pdam.feature.sign.SignEditor;
 import me.bobulo.mine.pdam.feature.sign.SignEditorListener;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
@@ -195,9 +197,10 @@ public final class PDAM {
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
-          .id("sign_editor")
+          .id(SignEditor.FEATURE_ID)
           .module(new EnabledFeatureModule(true))
           .module(ForgerListenerFeatureModule.of(new SignEditorListener()))
+          .module(new SignConfigImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
