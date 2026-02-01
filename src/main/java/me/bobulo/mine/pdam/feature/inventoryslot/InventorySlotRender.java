@@ -27,17 +27,18 @@ public class InventorySlotRender {
 
             boolean onlyBackground = InventorySlotInspector.OVERLAY_PRIORITY.get() == 0;
 
+            GlStateManager.pushMatrix();
+
             if (!onlyBackground) {
-                GlStateManager.pushMatrix();
                 GlStateManager.disableDepth();
             }
 
             GlStateManager.enableBlend();
             GlStateManager.enableAlpha();
+            GlStateManager.disableLighting();
 
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-            GlStateManager.disableLighting();
 
             for (Slot slot : container.inventorySlots.inventorySlots) {
                 int x = slot.xDisplayPosition;
@@ -55,15 +56,12 @@ public class InventorySlotRender {
                 );
             }
 
-            GlStateManager.enableLighting();
-            GlStateManager.disableBlend();
-            GlStateManager.disableAlpha();
-
             if (!onlyBackground) {
                 GlStateManager.enableDepth();
-                GlStateManager.popMatrix();
             }
 
+            GlStateManager.enableLighting();
+            GlStateManager.popMatrix();
         }
     }
 
