@@ -42,7 +42,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
         setNextWindowSize(1000, 600, ImGuiCond.FirstUseEver);
         setNextWindowPos(100, 100, ImGuiCond.FirstUseEver);
 
-        if (begin(translate("title") + "##PacketLogWindow", isVisible)) {
+        if (begin("Packet Log Viewer##PacketLogWindow", isVisible)) {
             keepInScreen();
             renderContent();
         }
@@ -60,14 +60,14 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
         text("Filtered Logs: " + filteredLogCount);
         filteredLogCount = 0;
 
-        if (button(translate("clear"))) {
+        if (button("Clear")) {
             clearLogs();
         }
 
         sameLine();
         String pauseResumeText = logHistory.isPaused()
-          ? translate("resume")
-          : translate("pause");
+          ? "Resume"
+          : "Pause";
         if (button(pauseResumeText)) {
             togglePause();
         }
@@ -81,7 +81,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
 
         separator();
 
-        text(translate("search") + ":");
+        text("Search:");
         sameLine();
 
         pushItemWidth(300);
@@ -114,10 +114,10 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
           | ImGuiTableFlags.Reorderable;
 
         if (beginTable("PacketLogsTable", 4, flags)) {
-            tableSetupColumn(translate("time"), ImGuiTableColumnFlags.WidthFixed, 85F);
+            tableSetupColumn("Time", ImGuiTableColumnFlags.WidthFixed, 85F);
             tableSetupColumn("Direcional", ImGuiTableColumnFlags.WidthFixed, 46F);
-            tableSetupColumn(translate("packet_name"), ImGuiTableColumnFlags.WidthFixed, 200F);
-            tableSetupColumn(translate("packet_data"), ImGuiTableColumnFlags.WidthStretch);
+            tableSetupColumn("Packet Name", ImGuiTableColumnFlags.WidthFixed, 200F);
+            tableSetupColumn("Packet Data", ImGuiTableColumnFlags.WidthStretch);
             tableHeadersRow();
 
             String searchText = searchField.get().toLowerCase().trim();
@@ -224,10 +224,6 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
 
     private void togglePause() {
         logHistory.setPaused(!logHistory.isPaused());
-    }
-
-    private String translate(String key) {
-        return translateToLocal("pdam.gui.packet_log." + key);
     }
 
 }

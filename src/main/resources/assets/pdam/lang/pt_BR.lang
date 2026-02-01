@@ -2,22 +2,6 @@
 pdam.general.copy_to_clipboard=Copiar para a Área de Transferência
 pdam.general.copied_to_clipboard=Copiado para a Área de Transferência!
 
-# Recurso de Tooltip NBT
-nbt_tooltip=Exibir NBTTag na Tooltip
-pdam.nbt_tooltip.enabled=Ativado
-
-# Recurso de Depuração de Som
-sound_debug=Debug do Som
-pdam.sound_debug.enabled=Ativado
-
-# Recurso de Exibir Entidades Invisíveis
-show_invisible_entities=Exibir Entidades Invisíveis
-pdam.show_invisible_entities.enabled=Ativado
-
-# Recurso de Informações de Entidade
-entity_info_overlay=Exibir Informações de Entidade
-pdam.entity_info_overlay.enabled=Ativado
-
 # Informações da Entidade
 pdam.entity.info_title=Informações da Entidade
 pdam.entity.id=ID da Entidade
@@ -41,29 +25,8 @@ pdam.armorstand.left_leg=Perna Esquerda
 pdam.armorstand.right_leg=Perna Direita
 
 # Informações da Skin
-skin_extraction=Extração de Skin
-pdam.skin_extraction.enabled=Ativado
 pdam.skin_extraction.skin_not_found=Nenhuma skin foi encontrada.
 pdam.skin_extraction.message.title=Informações da Skin de %1$s
 pdam.skin_extraction.message.value_data=Value
 pdam.skin_extraction.message.signature_data=Signature
 pdam.skin_extraction.message.url=URL
-
-# Packet Monitor Feature
-packet_monitor=Packet Monitor
-pdam.packet_monitor.enabled=Ativado
-pdam.packet_monitor.maxLogLimit=Limite Máximo de Logs
-pdam.packet_monitor.pauseLogging=Pausar Logs
-
-# Packet Log Gui
-pdam.gui.packet_log.title=Vizualização de Pacotes
-pdam.gui.packet_log.copy=Copiar
-pdam.gui.packet_log.close=Fechar
-pdam.gui.packet_log.clear=Limpar
-pdam.gui.packet_log.pause=Pausar
-pdam.gui.packet_log.resume=Retomar
-pdam.gui.packet_log.search=Pesquisar
-pdam.gui.packet_log.time=Horário
-pdam.gui.packet_log.packet_name=Nome
-pdam.gui.packet_log.packet_data=Dados do Pacote
-pdam.gui.packet_log.no_selection=Nenhum pacote selecionado

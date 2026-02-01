@@ -1,9 +1,9 @@
 package me.bobulo.mine.pdam.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.StatCollector;
 
 public final class LocaleUtils {
 
@@ -18,11 +18,11 @@ public final class LocaleUtils {
     }
 
     public static String translateToLocal(String translationKey) {
-        return StatCollector.translateToLocal(translationKey);
+        return I18n.format(translationKey);
     }
 
     public static String translateToLocal(String translationKey, Object... args) {
-        return StatCollector.translateToLocalFormatted(translationKey, args);
+        return I18n.format(translationKey, args);
     }
 
 }

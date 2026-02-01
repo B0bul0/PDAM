@@ -2,21 +2,51 @@
 pdam.general.copy_to_clipboard=Copy to Clipboard
 pdam.general.copied_to_clipboard=Copied to Clipboard!
 
-# NBT Tooltip Feature
-nbt_tooltip=Show NBTTag in Tooltip
-pdam.nbt_tooltip.enabled=Enabled
+# Features
+pdam.feature.nbt_tooltip.name=Show NBTTag in Tooltip
+pdam.feature.nbt_tooltip.description=Displays an item's NBT data in its tooltip.
 
-# Sound Debug Feature
-sound_debug=Sound Debug
-pdam.sound_debug.enabled=Enabled
+pdam.feature.sound_debug.name=Sound Debug
+pdam.feature.sound_debug.description=Logs all played sounds to the console for debugging purposes.
 
-# Show Invisible Entities Feature
-show_invisible_entities=Show Invisible Entities
-pdam.show_invisible_entities.enabled=Enabled
+pdam.feature.show_invisible_entities.name=Show Invisible Entities
+pdam.feature.show_invisible_entities.description=Makes invisible entities visible for easier debugging.
 
-# Entity Info Overlay Feature
-entity_info_overlay=Show Entity Info
-pdam.entity_info_overlay.enabled=Enabled
+pdam.feature.entity_info_overlay.name=Show Entity Info
+pdam.feature.entity_info_overlay.description=Displays an on-screen panel with real-time information about the entity you are looking at.
+
+pdam.feature.skin_extraction.name=Skin Extraction
+pdam.feature.skin_extraction.description=Extract skins from players and heads.
+
+pdam.feature.packet_monitor.name=Packet Monitor
+pdam.feature.packet_monitor.description=Monitors and logs incoming and outgoing packets for debugging purposes.
+
+pdam.feature.scoreboard_inspector.name=Scoreboard Inspector
+pdam.feature.scoreboard_inspector.description=Displays scoreboard information on-screen for easier debugging.
+
+pdam.feature.server_info.name=Server Info
+pdam.feature.server_info.description=
+
+pdam.feature.fly_booster.name=Fly Booster
+pdam.feature.fly_booster.description=Enhances flying speed.
+
+pdam.feature.messaging_utilities.name=Messaging Utilities
+pdam.feature.messaging_utilities.description=
+
+pdam.feature.design_tools.name=Design Tools
+pdam.feature.design_tools.description=Creative Item Builder, Character Map, Hologram Mockup, and more.
+
+pdam.feature.inventory_slot_inspector.name=Inventory Slot Inspector
+pdam.feature.inventory_slot_inspector.description=Overlays index numbers on inventory slots.
+
+pdam.feature.expanded_creative_inventory.name=Expanded Creative Inventory
+pdam.feature.expanded_creative_inventory.description=
+
+pdam.feature.player_utilities.name=Player Utilities
+pdam.feature.player_utilities.description=
+
+pdam.feature.sign_editor.name=Sign Editor
+pdam.feature.sign_editor.description=New GUI for writing on signs.
 
 # Entity Info
 pdam.entity.info_title=Entity Info
@@ -41,29 +71,8 @@ pdam.armorstand.left_leg=Left Leg
 pdam.armorstand.right_leg=Right Leg
 
 # Skin Info
-skin_extraction=Skin Extraction
-pdam.skin_extraction.enabled=Enabled
 pdam.skin_extraction.skin_not_found=No skin was found.
 pdam.skin_extraction.message.title=Info for %1$s's Skin
 pdam.skin_extraction.message.value_data=Value
 pdam.skin_extraction.message.signature_data=Signature
 pdam.skin_extraction.message.url=URL
-
-# Packet Monitor Feature
-packet_monitor=Packet Monitor
-pdam.packet_monitor.enabled=Enabled
-pdam.packet_monitor.maxLogLimit=Max Log Limit
-pdam.packet_monitor.pauseLogging=Pause Logging
-
-# Packet Log Gui
-pdam.gui.packet_log.title=Packet Log Viewer
-pdam.gui.packet_log.copy=Copy
-pdam.gui.packet_log.close=Done
-pdam.gui.packet_log.clear=Clear
-pdam.gui.packet_log.pause=Pause
-pdam.gui.packet_log.resume=Resume
-pdam.gui.packet_log.search=Search
-pdam.gui.packet_log.time=Time
-pdam.gui.packet_log.packet_name=Packet Name
-pdam.gui.packet_log.packet_data=Packet Data
-pdam.gui.packet_log.no_selection=No packet selected

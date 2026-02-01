@@ -49,6 +49,10 @@ public final class FeatureConfigWindow extends AbstractRenderItemWindow {
 
     private void renderFeatureConfig(Feature feature) {
         if (collapsingHeader(feature.getName())) {
+            if (!feature.getDescription().isEmpty()) {
+                textWrapped(feature.getDescription());
+            }
+
             spacing();
             separatorText("Settings");
             spacing();

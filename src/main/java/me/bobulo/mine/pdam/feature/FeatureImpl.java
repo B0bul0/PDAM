@@ -8,6 +8,7 @@ import me.bobulo.mine.pdam.feature.module.FeatureModule;
 import me.bobulo.mine.pdam.attribute.AttributeKey;
 import me.bobulo.mine.pdam.util.EventUtils;
 import me.bobulo.mine.pdam.util.ThreadUtils;
+import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,13 +39,18 @@ public final class FeatureImpl implements Feature, ModularFeature {
     }
 
     @Override
-    public String getId() {
+    public @NotNull String getId() {
         return id;
     }
 
     @Override
-    public String getName() {
-        return name;
+    public @NotNull String getName() {
+        return I18n.format("pdam.feature." + id + ".name", name);
+    }
+
+    @Override
+    public @NotNull String getDescription() {
+        return I18n.format("pdam.feature." + id + ".description");
     }
 
     @Override

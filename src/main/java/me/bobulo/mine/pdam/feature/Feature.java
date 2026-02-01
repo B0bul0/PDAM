@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature;
 
 import me.bobulo.mine.pdam.attribute.Attributable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a modular feature of the mod.
@@ -14,6 +15,7 @@ public interface Feature extends ModularFeature, Attributable {
      *
      * @return The unique ID of the feature.
      */
+    @NotNull
     String getId();
 
     /**
@@ -22,8 +24,20 @@ public interface Feature extends ModularFeature, Attributable {
      *
      * @return The display name of the feature.
      */
+    @NotNull
     default String getName() {
         return getId();
+    }
+
+    /**
+     * Gets the description of the feature.
+     * By default, it returns an empty string.
+     *
+     * @return The description of the feature.
+     */
+    @NotNull
+    default String getDescription() {
+        return "";
     }
 
     /**
