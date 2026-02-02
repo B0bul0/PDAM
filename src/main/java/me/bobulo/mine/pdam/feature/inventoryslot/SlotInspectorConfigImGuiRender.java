@@ -26,12 +26,6 @@ public final class SlotInspectorConfigImGuiRender extends AbstractFeatureModule 
 
     @Override
     public void draw() {
-        if (checkbox("Enable Slot Overlay", getFeature().isEnabled())) {
-            getFeature().toggleEnabled();
-        }
-
-        separator();
-
         if (colorEdit4("Text Color", color,
           ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreview)) {
             COLOR.set(ColorUtil.toArgbInt(color));
@@ -48,11 +42,5 @@ public final class SlotInspectorConfigImGuiRender extends AbstractFeatureModule 
             OVERLAY_PRIORITY.set(overlayPriorityIndex.get());
         }
     }
-
-    @Override
-    protected void onEnable() {}
-
-    @Override
-    protected void onDisable() {}
 
 }

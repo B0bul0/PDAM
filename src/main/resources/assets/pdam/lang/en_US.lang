@@ -25,13 +25,13 @@ pdam.feature.scoreboard_inspector.name=Scoreboard Inspector
 pdam.feature.scoreboard_inspector.description=Displays scoreboard information on-screen for easier debugging.
 
 pdam.feature.server_info.name=Server Info
-pdam.feature.server_info.description=
+pdam.feature.server_info.description=Shows detailed information about the connected server.
 
 pdam.feature.fly_booster.name=Fly Booster
 pdam.feature.fly_booster.description=Enhances flying speed.
 
 pdam.feature.messaging_utilities.name=Messaging Utilities
-pdam.feature.messaging_utilities.description=
+pdam.feature.messaging_utilities.description=Copy chat messages, format text, and more.
 
 pdam.feature.design_tools.name=Design Tools
 pdam.feature.design_tools.description=Creative Item Builder, Character Map, Hologram Mockup, and more.

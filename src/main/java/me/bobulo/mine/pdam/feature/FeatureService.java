@@ -41,31 +41,31 @@ public final class FeatureService {
     /**
      * Retrieves a registered feature by its unique ID.
      *
-     * @param name The ID of the feature to retrieve.
+     * @param id The ID of the feature to retrieve.
      * @return The {@link Feature} instance, or {@code null} if no feature with that ID is found.
      */
-    public Feature getFeature(String name) {
-        return features.get(name);
+    public Feature getFeature(String id) {
+        return features.get(id);
     }
 
     /**
      * Checks if a feature with the given ID is registered.
      *
-     * @param name The ID of the feature to check.
+     * @param id The ID of the feature to check.
      * @return {@code true} if the feature is registered, {@code false} otherwise.
      */
-    public boolean isFeatureRegistered(String name) {
-        return features.containsKey(name);
+    public boolean isFeatureRegistered(String id) {
+        return features.containsKey(id);
     }
 
     /**
      * Checks if a feature with the given ID is enabled.
      *
-     * @param name The ID of the feature to check.
+     * @param id The ID of the feature to check.
      * @return {@code true} if the feature is enabled, {@code false} otherwise.
      */
-    public boolean isFeatureEnabled(String name) {
-        Feature feature = getFeature(name);
+    public boolean isFeatureEnabled(String id) {
+        Feature feature = getFeature(id);
         return feature != null && feature.isEnabled();
     }
 

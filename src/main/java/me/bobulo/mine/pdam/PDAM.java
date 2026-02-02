@@ -233,7 +233,7 @@ public final class PDAM {
           .modules(
             new EnabledFeatureModule(true),
             new SlotInspectorConfigImGuiRender(),
-            new ConfigMenuImGuiRender()
+            new ConfigMenuImGuiRender(true)
           )
           .build());
 
