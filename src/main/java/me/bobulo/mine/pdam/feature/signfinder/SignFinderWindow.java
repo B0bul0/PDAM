@@ -10,6 +10,7 @@ import imgui.flag.ImGuiTableColumnFlags;
 import imgui.flag.ImGuiTableFlags;
 import imgui.type.ImBoolean;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
+import me.bobulo.mine.pdam.util.BlockPosition;
 import me.bobulo.mine.pdam.util.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -43,6 +44,9 @@ public final class SignFinderWindow extends AbstractRenderItemWindow {
     private final TIntSet selectedSignHashes = new TIntHashSet();
     private int lastSelectedSignIndex = 0;
 
+    private final ImBoolean paused = new ImBoolean(false);
+    private List<WorldSign> cachedSigns = Collections.emptyList();
+
     public SignFinderWindow() {
         super("Sign Finder");
     }
@@ -70,10 +74,15 @@ public final class SignFinderWindow extends AbstractRenderItemWindow {
         text("Filter Signs Text");
         sameLine();
         filter.draw("##FilterSignsText");
+
         checkbox("Ignore Empty Signs", ignoreEmptySigns);
+        if (button(paused.get() ? "Resume" : "Pause")) {
+            paused.set(!paused.get());
+        }
+
         separator();
 
-        List<TileEntitySign> displayedSigns = findFilteredSigns();
+        List<WorldSign> displayedSigns = findFilteredSigns();
 
         text("Found Signs: (" + displayedSigns.size() + ")");
 
@@ -87,7 +96,7 @@ public final class SignFinderWindow extends AbstractRenderItemWindow {
             tableSetupColumn("Text", ImGuiTableColumnFlags.WidthStretch);
             tableSetupColumn("Distance", ImGuiTableColumnFlags.WidthFixed);
             tableSetupColumn("Location", ImGuiTableColumnFlags.WidthFixed);
-            tableSetupColumn("Actions", ImGuiTableColumnFlags.WidthFixed);
+            tableSetupColumn("Actions", ImGuiTableColumnFlags.WidthFixed, 120F);
             tableHeadersRow();
 
             float rowHeight = getTextLineHeight() * 4F;
@@ -96,26 +105,23 @@ public final class SignFinderWindow extends AbstractRenderItemWindow {
             while (clipper.step()) {
                 for (int index = clipper.getDisplayStart(); index < clipper.getDisplayEnd(); index++) {
                     if (index >= displayedSigns.size()) break;
-                    TileEntitySign foundSign = displayedSigns.get(index);
+                    WorldSign foundSign = displayedSigns.get(index);
 
-                    String signText = Stream.of(foundSign.signText)
-                      .map(component -> {
-                          String text = component == null ? "" : component.getUnformattedText();
-                          return text == null || text.isEmpty() ? "\u00A0" : text;
-                      })
+                    String signText = Stream.of(foundSign.getText())
+                      .map(text -> text == null || text.isEmpty() ? "\u00A0" : text)
                       .collect(Collectors.joining("\n"));
 
                     pushID("SignRow" + index);
 
-                    int signX = foundSign.getPos().getX();
-                    int signY = foundSign.getPos().getY();
-                    int signZ = foundSign.getPos().getZ();
+                    int signX = foundSign.getPosition().getX();
+                    int signY = foundSign.getPosition().getY();
+                    int signZ = foundSign.getPosition().getZ();
                     double distance = player.getDistance(signX, signY, signZ);
 
                     tableNextRow(rowHeight);
                     tableNextColumn();
 
-                    int signHash = foundSign.getPos().hashCode();
+                    int signHash = foundSign.getPosition().hashCode();
                     if (selectable(signText, selectedSignHashes.contains(signHash),
                       ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap)) {
                         if (getIO().getKeyCtrl()) {
@@ -137,8 +143,8 @@ public final class SignFinderWindow extends AbstractRenderItemWindow {
                             SignESP.renderingSigns.clear();
 
                             for (int i = start; i <= end; i++) {
-                                TileEntitySign signInRange = displayedSigns.get(i);
-                                int rangeSignHash = signInRange.getPos().hashCode();
+                                WorldSign signInRange = displayedSigns.get(i);
+                                int rangeSignHash = signInRange.getPosition().hashCode();
                                 selectedSignHashes.add(rangeSignHash);
                                 SignESP.renderingSigns.add(signInRange);
                             }
@@ -182,14 +188,12 @@ public final class SignFinderWindow extends AbstractRenderItemWindow {
 
     }
 
-    private List<TileEntitySign> findFilteredSigns() {
-        List<TileEntitySign> foundSigns = findWorldSigns();
+    private List<WorldSign> findFilteredSigns() {
+        List<WorldSign> foundSigns = paused.get() ? cachedSigns : findWorldSigns();
 
-        List<TileEntitySign> displayedSigns = new ArrayList<>(foundSigns.size());
-        for (TileEntitySign foundSign : foundSigns) {
-            String signText = Stream.of(foundSign.signText)
-              .map(IChatComponent::getUnformattedText)
-              .collect(Collectors.joining("\n"));
+        List<WorldSign> displayedSigns = new ArrayList<>(foundSigns.size());
+        for (WorldSign foundSign : foundSigns) {
+            String signText = String.join("\n", foundSign.getText());
 
             if (ignoreEmptySigns.get() && signText.trim().isEmpty()) {
                 continue;
@@ -205,21 +209,34 @@ public final class SignFinderWindow extends AbstractRenderItemWindow {
         return displayedSigns;
     }
 
-    private List<TileEntitySign> findWorldSigns() {
+    private List<WorldSign> findWorldSigns() {
         Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.theWorld == null) {
             return Collections.emptyList();
         }
 
-        List<TileEntitySign> foundSigns = new ArrayList<>(mc.theWorld.loadedTileEntityList.size() / 3);
+        List<WorldSign> foundSigns = new ArrayList<>(mc.theWorld.loadedTileEntityList.size() / 3);
 
         for (TileEntity te : mc.theWorld.loadedTileEntityList) {
             if (te instanceof TileEntitySign) {
-                foundSigns.add((TileEntitySign) te);
+                IChatComponent[] signText = ((TileEntitySign) te).signText;
+
+                WorldSign sign = new WorldSign(
+                  new String[]{
+                    signText[0].getUnformattedText(),
+                    signText[1].getUnformattedText(),
+                    signText[2].getUnformattedText(),
+                    signText[3].getUnformattedText()
+                  },
+                  BlockPosition.from(te.getPos())
+                );
+
+                foundSigns.add(sign);
             }
         }
 
+        cachedSigns = foundSigns; // cache for pause functionality
         return foundSigns;
     }
 
