@@ -1,7 +1,6 @@
 package me.bobulo.mine.pdam.imgui;
 
-import imgui.ImGui;
-import imgui.ImGuiIO;
+import imgui.*;
 import imgui.flag.ImGuiConfigFlags;
 import me.bobulo.mine.pdam.PDAM;
 import me.bobulo.mine.pdam.imgui.backend.ImGuiImplGl2;
@@ -10,6 +9,7 @@ import me.bobulo.mine.pdam.imgui.guizmo.RenderGuizmoHandler;
 import me.bobulo.mine.pdam.imgui.guizmo.GuizmoImGui;
 import me.bobulo.mine.pdam.imgui.input.ImGuiInputHandler;
 import me.bobulo.mine.pdam.imgui.toolbar.ImGuiToolbar;
+import me.bobulo.mine.pdam.util.ResourceUtil;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -83,6 +83,26 @@ public final class ImGuiRenderer {
         io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
         io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
         io.setIniFilename(new File(PDAM.getConfigDirectory(), "pdam_layout.ini").getAbsolutePath());
+
+        // Font
+        try {
+            ImFontAtlas fonts = io.getFonts();
+            ImFontConfig config = new ImFontConfig();
+            ImFontGlyphRangesBuilder rangesBuilder = new ImFontGlyphRangesBuilder();
+            rangesBuilder.addRanges(fonts.getGlyphRangesDefault());
+            rangesBuilder.addRanges(new short[]{0x00A0, 0x00FF, 0});
+            short[] glyphRanges = rangesBuilder.buildRanges();
+
+            byte[] fontData = ResourceUtil.readBytes("/assets/pdam/font/ProggyClean.ttf");
+            if (fontData.length > 0) {
+                io.getFonts().addFontFromMemoryTTF(fontData, 13.0f, config, glyphRanges);
+            }
+
+            fonts.build();
+            config.destroy();
+        } catch (Exception exception) {
+            log.error("Failed to load ImGui font:", exception);
+        }
 
         imGuiImplGl2 = new ImGuiImplGl2();
         imGuiImplGl2.init();
