@@ -33,6 +33,8 @@ import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
 import me.bobulo.mine.pdam.feature.sign.SignConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.sign.SignEditor;
 import me.bobulo.mine.pdam.feature.sign.SignEditorListener;
+import me.bobulo.mine.pdam.feature.signfinder.SignESP;
+import me.bobulo.mine.pdam.feature.signfinder.SignFinderWindow;
 import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
@@ -280,6 +282,20 @@ public final class PDAM {
             new EnabledFeatureModule(false),
             new BungeeBypassConfigImGuiRender(),
             new ConfigMenuImGuiRender(true)
+          )
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id("sign_finder")
+          .modules(
+            new EnabledFeatureModule(true),
+            ImGuiListenerFeatureModule.of(
+              new SignFinderWindow()
+            ),
+            new FeatureToolbarMenuImGuiRender(),
+            ForgerListenerFeatureModule.of(
+              new SignESP()
+            )
           )
           .build());
     }

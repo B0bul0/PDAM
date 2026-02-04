@@ -14,8 +14,8 @@ public class BlockPosition {
         return new BlockPosition(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    double x;
-    double y;
-    double z;
+    int x;
+    int y;
+    int z;
 
 }
