@@ -105,9 +105,8 @@ public class MessageFormatterWindow extends AbstractRenderItemWindow {
                 mcText(formattedMessage, scale.get());
             }
 
-            endChild();
         }
-
+        endChild();
     }
 
     private String getFormattedMessage(String message) {

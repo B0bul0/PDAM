@@ -112,8 +112,8 @@ public class ItemBuilderWindow extends AbstractRenderItemWindow {
 
         if (beginChild("##EditSection", 0, 0, true)) {
             renderEditSection();
-            endChild();
         }
+        endChild();
     }
 
     private void renderImportSection() {

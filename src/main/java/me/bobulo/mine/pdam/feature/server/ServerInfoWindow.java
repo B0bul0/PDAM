@@ -57,8 +57,8 @@ public class ServerInfoWindow extends AbstractRenderItemWindow {
             if (beginTabItem("Server List")) {
                 if (beginChild("ServerListChild", 0, 0, false)) {
                     renderServerList();
-                    endChild();
                 }
+                endChild(); // tem que virar fora, corrigido
                 endTabItem();
             }
 

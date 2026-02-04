@@ -161,48 +161,48 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
             if (beginTabItem("All Characters")) {
                 if (beginChild("all_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
                     charactersTable(ALL_CHAR_VALUES);
-                    endChild();
                 }
+                endChild();
                 endTabItem();
             }
 
             if (beginTabItem("Chat Allowed Characters")) {
                 if (beginChild("allowed_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
                     charactersTable(ALLOWED_CHAT_CHAR_VALUES);
-                    endChild();
                 }
+                endChild();
                 endTabItem();
             }
 
             if (beginTabItem("Favorites")) {
                 if (beginChild("favorites_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
                     charactersTable(character -> FAVORITE_CHARACTERS.get().containsCharacter(character));
-                    endChild();
                 }
+                endChild();
                 endTabItem();
             }
 
             if (beginTabItem("Best Characters")) {
                 if (beginChild("best_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
                     charactersTable(BEST_CHAT_CHAR_VALUES);
-                    endChild();
                 }
+                endChild();
                 endTabItem();
             }
 
             if (beginTabItem("Numbers")) {
                 if (beginChild("numbers_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
                     charactersTable(NUMBERS_CHAR_VALUES);
-                    endChild();
                 }
+                endChild();
                 endTabItem();
             }
 
             if (beginTabItem("Arrows")) {
                 if (beginChild("arrows_chars_scroll", 0, 0, false, ImGuiWindowFlags.HorizontalScrollbar)) {
                     charactersTable(ARROWS_CHAR_VALUES);
-                    endChild();
                 }
+                endChild();
                 endTabItem();
             }
 
