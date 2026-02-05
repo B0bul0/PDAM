@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import java.util.Objects;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 public final class PlaySoundWindow extends AbstractRenderItemWindow {
 

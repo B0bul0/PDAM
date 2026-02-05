@@ -19,7 +19,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 /**
  * A GUI window for editing the text on a Minecraft sign.

@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 public class SendChatMessageWindow extends AbstractRenderItemWindow {
 

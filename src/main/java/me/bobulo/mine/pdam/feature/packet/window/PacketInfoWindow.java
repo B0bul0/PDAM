@@ -9,7 +9,7 @@ import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.imgui.window.AbstractPopupRenderItemWindow;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 public final class PacketInfoWindow extends AbstractPopupRenderItemWindow {
 

@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 /**
  * A GUI window for building and customizing Minecraft items.

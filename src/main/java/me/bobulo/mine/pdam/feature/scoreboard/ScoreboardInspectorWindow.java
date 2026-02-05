@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 public final class ScoreboardInspectorWindow extends AbstractRenderItemWindow {
 

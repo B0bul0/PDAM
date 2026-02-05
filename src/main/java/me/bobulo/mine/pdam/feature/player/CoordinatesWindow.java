@@ -9,7 +9,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 

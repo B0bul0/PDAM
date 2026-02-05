@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.IChatComponent;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 /**
  * A GUI window for viewing the text on a Minecraft sign.

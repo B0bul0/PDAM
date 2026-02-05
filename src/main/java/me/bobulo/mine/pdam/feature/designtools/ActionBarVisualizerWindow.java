@@ -7,7 +7,7 @@ import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import net.minecraft.client.Minecraft;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 public final class ActionBarVisualizerWindow extends AbstractRenderItemWindow {
 

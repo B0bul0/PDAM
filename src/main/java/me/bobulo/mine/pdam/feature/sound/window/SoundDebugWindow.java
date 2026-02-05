@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 public final class SoundDebugWindow extends AbstractRenderItemWindow {
 

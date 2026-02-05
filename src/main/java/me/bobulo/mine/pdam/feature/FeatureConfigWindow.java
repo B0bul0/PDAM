@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Collection;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiDrawUtil.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
 
 public final class FeatureConfigWindow extends AbstractRenderItemWindow {
 
