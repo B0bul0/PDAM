@@ -57,6 +57,9 @@ pdam.feature.world_time.description=Changes the time of day in the world.
 pdam.feature.bungee_bypass.name=BungeeCord Bypass
 pdam.feature.bungee_bypass.description=Allows bypassing BungeeCord restrictions.
 
+pdam.feature.sign_finder.name=Sign Finder
+pdam.feature.sign_finder.description=Finds and highlights signs in the world.
+
 # Entity Info
 pdam.entity.info_title=Entity Info
 pdam.entity.id=Entity ID

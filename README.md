@@ -18,6 +18,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Chat Message Formater**: Preview how messages appear in chat.
 - **Item Builder**: Create and customize items.
 - **Inventory Slot Inspector**: Overlays index numbers on inventory slots.
+- **Sign Finder**: Finds and highlights signs in the world.
 
 ## Installation
 1. Ensure you have Minecraft Forge for version 1.8.9 installed.
