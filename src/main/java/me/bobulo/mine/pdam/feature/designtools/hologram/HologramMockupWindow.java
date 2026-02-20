@@ -6,6 +6,7 @@ import imgui.type.ImBoolean;
 import imgui.type.ImFloat;
 import imgui.type.ImString;
 import me.bobulo.mine.pdam.imgui.guizmo.GuizmoImGui;
+import me.bobulo.mine.pdam.imgui.guizmo.ImObjectMatrix;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -31,6 +32,7 @@ public final class HologramMockupWindow extends AbstractRenderItemWindow {
 
     private final ImBoolean manipule = new ImBoolean();
     private final float[] manipulatePosition = new float[3];
+    private final ImObjectMatrix controlMatrix = new ImObjectMatrix();
 
     public HologramMockupWindow() {
         super("Hologram Mockup");
@@ -54,7 +56,7 @@ public final class HologramMockupWindow extends AbstractRenderItemWindow {
                     manipulatePosition[0] = position[0];
                     manipulatePosition[1] = position[1] + 2.3F; // Offset to match hologram height
                     manipulatePosition[2] = position[2];
-                    GuizmoImGui.manipulateTranslation(Mode.WORLD, manipulatePosition);
+                    GuizmoImGui.manipulateTranslation(Mode.WORLD, manipulatePosition, controlMatrix);
                     position[0] = manipulatePosition[0];
                     position[1] = manipulatePosition[1] - 2.3F; // Revert offset
                     position[2] = manipulatePosition[2];

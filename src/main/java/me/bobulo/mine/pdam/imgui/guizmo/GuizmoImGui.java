@@ -17,8 +17,6 @@ public final class GuizmoImGui {
     private static final FloatBuffer viewBuf = BufferUtils.createFloatBuffer(16);
     private static final FloatBuffer projBuf = BufferUtils.createFloatBuffer(16);
 
-    private static final float[] objectMat = new float[16];
-
     private static final float[] ignoreTranslation = new float[]{0f, 0f, 0f};
     private static final float[] ignoreScale = new float[]{1f, 1f, 1f};
     private static final float[] ignoreRotation = new float[]{0f, 0f, 0f};
@@ -48,15 +46,15 @@ public final class GuizmoImGui {
         GL11.glPopMatrix();
     }
 
-    public static boolean manipulateRotation(int mode, float[] rotation) {
-        return manipulate(Operation.ROTATE, mode, ignoreTranslation, rotation, ignoreScale);
+    public static boolean manipulateRotation(int mode, float[] rotation, ImObjectMatrix imObjectMat) {
+        return manipulate(Operation.ROTATE, mode, ignoreTranslation, rotation, ignoreScale, imObjectMat);
     }
 
-    public static boolean manipulateTranslation(int mode, float[] translation) {
-        return manipulate(Operation.TRANSLATE, mode, translation, ignoreRotation, ignoreScale);
+    public static boolean manipulateTranslation(int mode, float[] translation, ImObjectMatrix imObjectMat) {
+        return manipulate(Operation.TRANSLATE, mode, translation, ignoreRotation, ignoreScale, imObjectMat);
     }
 
-    public static boolean manipulate(int operation, int mode, float[] translation, float[] rotation, float[] scale) {
+    public static boolean manipulate(int operation, int mode, float[] translation, float[] rotation, float[] scale, ImObjectMatrix imObjectMat) {
         if (!captured) {
             return false;
         }
@@ -76,20 +74,20 @@ public final class GuizmoImGui {
           (float) (translation[2] - renderPosZ)
         };
 
-        ImGuizmo.recomposeMatrixFromComponents(relativeTranslation, rotation, scale, objectMat);
+        ImGuizmo.recomposeMatrixFromComponents(relativeTranslation, rotation, scale, imObjectMat.getData());
 
         ImGuizmo.manipulate(
-          GuizmoImGui.viewMatrix,
-          GuizmoImGui.projMatrix,
+          viewMatrix,
+          projMatrix,
           operation,
           mode,
-          objectMat
+          imObjectMat.getData()
         );
 
         boolean changed = ImGuizmo.isUsing();
 
         if (changed) {
-            ImGuizmo.decomposeMatrixToComponents(objectMat, relativeTranslation, rotation, scale);
+            ImGuizmo.decomposeMatrixToComponents(imObjectMat.getData(), relativeTranslation, rotation, scale);
 
             translation[0] = (float) (relativeTranslation[0] + renderPosX);
             translation[1] = (float) (relativeTranslation[1] + renderPosY);

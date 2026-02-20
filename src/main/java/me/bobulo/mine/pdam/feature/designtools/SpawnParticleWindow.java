@@ -12,6 +12,7 @@ import me.bobulo.mine.pdam.feature.particle.Particle;
 import me.bobulo.mine.pdam.feature.particle.ParticleAnimation;
 import me.bobulo.mine.pdam.feature.particle.mapper.ParticleMapper;
 import me.bobulo.mine.pdam.imgui.guizmo.GuizmoImGui;
+import me.bobulo.mine.pdam.imgui.guizmo.ImObjectMatrix;
 import me.bobulo.mine.pdam.imgui.util.ImGuiNotificationDrawer;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.Position;
@@ -54,6 +55,7 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
 
     private final ImGuiTextFilter particleFilter = new ImGuiTextFilter();
     private final ImBoolean manipuleControls = new ImBoolean();
+    private final ImObjectMatrix controlMatrix = new ImObjectMatrix();
 
     public SpawnParticleWindow() {
         super("Spawn Particles");
@@ -74,7 +76,7 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
         if (isVisible.get() && Minecraft.getMinecraft().theWorld != null) {
             try {
                 if (manipuleControls.get()) {
-                    GuizmoImGui.manipulateTranslation(Mode.WORLD, position);
+                    GuizmoImGui.manipulateTranslation(Mode.WORLD, position, controlMatrix);
                     syncParticleAnimationPosition();
                 }
             } catch (Exception exception) {
