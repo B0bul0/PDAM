@@ -23,3 +23,9 @@ plugins {
 }
 
 rootProject.name = "PDAM"
+
+include("common")
+include("client:forge")
+include("server:core")
+findProject(":server:core")?.name = "server-core"
+include("server:bukkit")
