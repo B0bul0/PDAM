@@ -97,6 +97,12 @@ public final class ScoreboardInspectorWindow extends AbstractRenderItemWindow {
         }
 
         text("Sidebar Title:");
+
+        sameLine();
+        if (button("Copy")) {
+            setClipboardText(objective.getDisplayName());
+        }
+
         text(objective.getDisplayName());
         separator();
 
@@ -114,6 +120,11 @@ public final class ScoreboardInspectorWindow extends AbstractRenderItemWindow {
             } else {
                 sb.append(score.getPlayerName()).append("\n");
             }
+        }
+
+        sameLine();
+        if (button("Copy")) {
+            setClipboardText(sb.toString());
         }
 
         inputTextMultiline("##SidebarText", new ImString(sb.toString()), -1, -1, ImGuiInputTextFlags.ReadOnly);
