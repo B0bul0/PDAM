@@ -23,6 +23,17 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **BungeeCord Bypass**: Allows bypassing BungeeCord restrictions for testing purposes.
 - And more...
 
+## Planned Features
+- **Server-Side Integration**
+    - [ ] **Visual Scripting**: A node-based logic system inspired by Unreal Engine Blueprints for creating plugin behaviors visually.
+    - [ ] **Content Management**: In-game interfaces to dynamically create, edit, and remove server-side content directly from the client.    - [ ] Configuration
+    - [ ] **Configuration Editor**: Live-edit plugin configurations and settings through an intuitive in-game GUI.
+    - [ ] **Particle Animation Studio**: A visual editor to design, preview, and export complex particle effects.
+    - [ ] **Armor Stand Modeler**: Advanced tools for posing, equipping, and building detailed Armor Stand structures with precision.
+- **Exploit Testing**: Expand testing tools to identify, reproduce, and mitigate known server vulnerabilities and exploits.
+- **Localization Support**: Finalize comprehensive multi-language support for all mod interfaces and features.
+- **Performance Analyzer**: Built-in profiling tools to monitor and analyze server and client performance metrics to identify bottlenecks.
+
 ## Installation
 1. Ensure you have Minecraft Forge for version 1.8.9 installed.
 2. Download the latest version of the mod from the GitHub Releases page.
@@ -32,8 +43,8 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 ## Building from Source
 1. Clone this repository to your local machine.
 2. Navigate to the project's root directory.
-3. Run the appropriate command for your operating system to build the project: 
-`./gradlew clean build`
+3. Run the appropriate command for your operating system to build the project:
+   `./gradlew clean build`
 4. The compiled `.jar` file will be located in the `build/libs/` directory.
 
 ## Example Screenshot
