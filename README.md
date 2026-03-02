@@ -40,6 +40,10 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 3. Place the downloaded `.jar` file into your `.minecraft/mods` folder.
 4. Launch Minecraft using the Forge profile.
 
+**Compatibility Note:**
+- **LabyMod 3**: Supported with the installation of the Forge version.
+- **LabyMod 4**: Not supported due to conflicts with the ImGui Java dependency.
+
 ## Building from Source
 1. Clone this repository to your local machine.
 2. Navigate to the project's root directory.
