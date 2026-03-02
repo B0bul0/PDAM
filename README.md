@@ -81,5 +81,10 @@ Replaces the item's vanilla name with a mapped name.
 ### Item NBT Inspector
 <img src=".github/item_nbt_inspector.png" width="618" alt="Minecraft GUI screenshot showcasing the feature">
 
+## Third-Party Libraries
+- **[Dear ImGui](https://github.com/ocornut/imgui)** by [ocornut](https://github.com/ocornut): Bloat-free Graphical User interface for C++ with minimal dependencies. Used for the visual interface.
+- **[ImGui-java](https://github.com/SpaiR/imgui-java)** by [SpaiR](https://github.com/SpaiR): JNI-based binding for Dear ImGui.
+- **[Sponge Mixin](https://github.com/SpongePowered/Mixin)**: A trait/mixin and bytecode weaving framework for Java.
+
 ---
 *Project template: [Forge1.8.9Template](https://github.com/nea89o/Forge1.8.9Template)*
