@@ -34,7 +34,7 @@ public final class SignESP {
         GL11.glDepthMask(false);
 
         for (WorldSign sign : renderingSigns) {
-                renderSignOutline(sign, renderManager);
+            renderSignOutline(sign, renderManager);
         }
 
         GL11.glDepthMask(true);
