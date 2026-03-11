@@ -21,6 +21,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Sign Finder**: Finds and highlights signs in the world.
 - **Item Name Debugger**: Replaces the item's vanilla name with a mapped name. ([screenshots](#item-name-debug-screenshots))
 - **BungeeCord Bypass**: Allows bypassing BungeeCord restrictions for testing purposes.
+- **Hitbox Visualizer**: Visualizes entity hitboxes for easier debugging.
 - And more...
 
 ## Planned Features

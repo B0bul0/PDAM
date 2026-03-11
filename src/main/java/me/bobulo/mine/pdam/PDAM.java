@@ -16,10 +16,16 @@ import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
 import me.bobulo.mine.pdam.feature.designtools.item.window.ItemBuilderWindow;
 import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
 import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
+import me.bobulo.mine.pdam.feature.hitbox.HitBoxes;
+import me.bobulo.mine.pdam.feature.hitbox.HitBoxesConfigImGuiRender;
+import me.bobulo.mine.pdam.feature.hitbox.HitboxesListener;
 import me.bobulo.mine.pdam.feature.imgui.ConfigMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.imgui.FeatureToolbarMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector;
 import me.bobulo.mine.pdam.feature.inventoryslot.SlotInspectorConfigImGuiRender;
+import me.bobulo.mine.pdam.feature.itemname.AdvancedItemTooltipsListener;
+import me.bobulo.mine.pdam.feature.itemname.ItemNameDebug;
+import me.bobulo.mine.pdam.feature.itemname.ItemNameMapperConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
 import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
 import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
@@ -39,9 +45,6 @@ import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureModule;
-import me.bobulo.mine.pdam.feature.itemname.AdvancedItemTooltipsListener;
-import me.bobulo.mine.pdam.feature.itemname.ItemNameMapperConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.itemname.ItemNameDebug;
 import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
 import me.bobulo.mine.pdam.feature.world.WorldTime;
 import me.bobulo.mine.pdam.feature.world.WorldTimeConfigImGuiRender;
@@ -296,6 +299,18 @@ public final class PDAM {
             ForgerListenerFeatureModule.of(
               new SignESP()
             )
+          )
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(HitBoxes.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(true),
+            ForgerListenerFeatureModule.of(
+              new HitboxesListener()
+            ),
+            new HitBoxesConfigImGuiRender(),
+            new ConfigMenuImGuiRender(true)
           )
           .build());
     }
