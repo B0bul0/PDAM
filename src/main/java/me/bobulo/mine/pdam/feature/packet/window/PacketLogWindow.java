@@ -6,6 +6,7 @@ import imgui.type.ImBoolean;
 import imgui.type.ImInt;
 import imgui.type.ImString;
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.PacketRateTracker;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.log.LogHistory;
@@ -15,11 +16,13 @@ import java.util.List;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
-import static me.bobulo.mine.pdam.util.LocaleUtils.translateToLocal;
 
 public final class PacketLogWindow extends AbstractRenderItemWindow {
 
     private final LogHistory<DisplayPacketLogEntry> logHistory;
+    private final PacketRateTracker rateTrackerServer;
+    private final PacketRateTracker rateTrackerClient;
+
     private final ImGuiListClipper logClipper = new ImGuiListClipper();
     private final ImInt maxLogs;
 
@@ -29,9 +32,11 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
     private final ImString searchField = new ImString(256);
     private int filteredLogCount = 0;
 
-    public PacketLogWindow(LogHistory<DisplayPacketLogEntry> logHistory) {
+    public PacketLogWindow(LogHistory<DisplayPacketLogEntry> logHistory, PacketRateTracker rateTrackerServer, PacketRateTracker rateTrackerClient) {
         super("Packet Log");
         this.logHistory = logHistory;
+        this.rateTrackerServer = rateTrackerServer;
+        this.rateTrackerClient = rateTrackerClient;
         this.maxLogs = new ImInt(logHistory.getMaxLogLimit());
     }
 
@@ -51,15 +56,6 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
     }
 
     private void renderContent() {
-        text("Total Logs: " + logHistory.size());
-
-        sameLine();
-        text(" | ");
-        sameLine();
-
-        text("Filtered Logs: " + filteredLogCount);
-        filteredLogCount = 0;
-
         if (button("Clear")) {
             clearLogs();
         }
@@ -78,6 +74,11 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
         if (isItemDeactivatedAfterEdit()) {
             logHistory.setMaxLogLimit(maxLogs.get());
         }
+
+        sameLine(0.0f, 42.0f);
+        textColored(1.0f, 0.5f, 0.5f, 1.0f, "Sent/s: " + rateTrackerClient.getCurrentRate()); // Green
+        sameLine();
+        textColored(0.5f, 1.0f, 0.5f, 1.0f, "Recv/s: " + rateTrackerServer.getCurrentRate()); // Red
 
         separator();
 
@@ -101,6 +102,10 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
         if (button("Filter")) {
             openPopup("packetFilterPopup");
         }
+
+        sameLine(0.0f, 15.0f);
+        text(filteredLogCount + "/" + logHistory.size() + " logs");
+        filteredLogCount = 0;
 
         renderLogsTable();
     }
@@ -128,6 +133,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
             if (searchText.isEmpty() && noDirectionFilter) {
                 filteredLogs = new ArrayList<>(logHistory.size());
                 logHistory.forEach(filteredLogs::add);
+                filteredLogCount = filteredLogs.size();
             } else {
                 filteredLogs = new ArrayList<>(logHistory.size() / 4);
                 logHistory.forEach(entry -> {
@@ -188,7 +194,9 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
                     }
 
                     if (isItemHovered()) {
-                        setTooltip("Packet Data: \n" + entry.getPacketData());
+                        setTooltip("Packet Name: " + entry.getPacketName() +
+                          "\n" +
+                          "Packet Data: \n" + entry.getPacketData());
                     }
 
                     tableNextColumn();

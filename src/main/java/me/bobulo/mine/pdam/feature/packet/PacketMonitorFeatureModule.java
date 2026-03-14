@@ -12,20 +12,28 @@ import me.bobulo.mine.pdam.feature.packet.window.PacketLogWindow;
 import me.bobulo.mine.pdam.log.LogHistory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.TimeUnit;
+
 public final class PacketMonitorFeatureModule extends AbstractFeatureModule {
 
     private LogHistory<DisplayPacketLogEntry> packetEntries;
+
+    private PacketRateTracker rateTrackerServer;
+    private PacketRateTracker rateTrackerClient;
+
     private PacketLogWindow logWindow;
 
     @Override
     protected void onInitialize() {
         this.packetEntries = new LogHistory<>();
+        this.rateTrackerServer = new PacketRateTracker(1, TimeUnit.SECONDS);
+        this.rateTrackerClient = new PacketRateTracker(1, TimeUnit.SECONDS);
 
         getFeature().addModule(ForgerListenerFeatureModule.of(
           new PacketDataInterceptor(this)
         ));
 
-        this.logWindow = new PacketLogWindow(packetEntries);
+        this.logWindow = new PacketLogWindow(packetEntries, rateTrackerServer, rateTrackerClient);
         getFeature().addModule(ImGuiListenerFeatureModule.of(logWindow));
 
         getFeature().addModule(new ToolbarMenuImGuiRender(ImmutableList.of(logWindow)));
@@ -37,6 +45,12 @@ public final class PacketMonitorFeatureModule extends AbstractFeatureModule {
     }
 
     public void addPacketEntry(@NotNull PacketLogEntry packetLogEntry) {
+        if (packetLogEntry.getDirection() == PacketDirection.SERVER) {
+            rateTrackerServer.count();
+        } else {
+            rateTrackerClient.count();
+        }
+
         if (packetEntries.isPaused()) {
             return;
         }
