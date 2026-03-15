@@ -37,7 +37,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
     private int filteredLogCount = 0;
 
     private final ImGuiTextFilter packetNameSearchField = new ImGuiTextFilter();
-    private final List<String> allPacketNames = PacketNameRegistry.getAllPacketNames(); // cache
+    private final List<String> allPacketNames = PacketNameRegistry.getAllPacketIdNames(); // cache
     private final Set<String> filteredPacketNames = new HashSet<>(allPacketNames);
 
     public PacketLogWindow(LogHistory<DisplayPacketLogEntry> logHistory, PacketRateTracker rateTrackerServer, PacketRateTracker rateTrackerClient) {

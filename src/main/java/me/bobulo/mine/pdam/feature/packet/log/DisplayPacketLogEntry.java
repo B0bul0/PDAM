@@ -26,7 +26,7 @@ public class DisplayPacketLogEntry implements LogEntry {
         String shortData = json.length() > 200 ? json.substring(0, 200) + "..." : json;
         shortData = shortData.replaceAll("\\s+", " ");
 
-        String packetName = PacketNameRegistry.getPacketName(packetLogEntry.getPacketData().getClass());
+        String packetName = PacketNameRegistry.getPacketIdName(packetLogEntry.getPacketData().getClass());
 
         return new DisplayPacketLogEntry(
           packetLogEntry,
