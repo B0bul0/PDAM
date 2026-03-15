@@ -11,8 +11,6 @@ import java.io.IOException;
 
 public final class EntityLookMoveServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityLookMove";
-
     private int entityId;
     private byte dx;
     private byte dy;
@@ -20,11 +18,6 @@ public final class EntityLookMoveServerPacketData implements ServerPacketData {
     private byte yaw;
     private byte pitch;
     private boolean onGround;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<EntityLookMoveServerPacketData> {
 
@@ -48,4 +41,3 @@ public final class EntityLookMoveServerPacketData implements ServerPacketData {
 
     }
 }
-

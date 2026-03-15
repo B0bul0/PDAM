@@ -6,16 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class AttachEntityServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "AttachEntity";
-
     private int leash;
     private int entityId;
     private int vehicleEntityId;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<AttachEntityServerPacketData, S1BPacketEntityAttach> {
 
@@ -30,4 +23,3 @@ public final class AttachEntityServerPacketData implements ServerPacketData {
 
     }
 }
-

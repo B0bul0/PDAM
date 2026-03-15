@@ -3,6 +3,7 @@ package me.bobulo.mine.pdam.feature.packet.log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
+import me.bobulo.mine.pdam.feature.packet.data.PacketNameRegistry;
 import me.bobulo.mine.pdam.log.LogEntry;
 
 import java.time.Instant;
@@ -25,14 +26,16 @@ public class DisplayPacketLogEntry implements LogEntry {
         String shortData = json.length() > 200 ? json.substring(0, 200) + "..." : json;
         shortData = shortData.replaceAll("\\s+", " ");
 
+        String packetName = PacketNameRegistry.getPacketName(packetLogEntry.getPacketData().getClass());
+
         return new DisplayPacketLogEntry(
           packetLogEntry,
           DATE_TIME_FORMATTER.format(packetLogEntry.getTimestamp()),
-          packetLogEntry.getPacketName(),
+          packetName,
           shortData,
           json,
           new String[]{
-            packetLogEntry.getPacketName().toLowerCase(),
+            packetName.toLowerCase(),
             packetLogEntry.getDirection().name().toLowerCase(),
             json.toLowerCase()
           }

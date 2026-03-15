@@ -6,16 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ConfirmTransactionServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "ConfirmTransaction";
-
     private int windowId;
     private short actionNumber;
     private boolean accepted;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<ConfirmTransactionServerPacketData, S32PacketConfirmTransaction> {
 
@@ -32,4 +25,3 @@ public final class ConfirmTransactionServerPacketData implements ServerPacketDat
 
     }
 }
-

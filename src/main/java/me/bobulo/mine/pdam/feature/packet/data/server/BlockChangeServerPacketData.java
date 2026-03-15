@@ -12,15 +12,8 @@ import java.io.IOException;
 
 public final class BlockChangeServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "BlockChange";
-
     private BlockPosition blockPosition;
     private int blockState;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<BlockChangeServerPacketData> {
 
@@ -39,4 +32,3 @@ public final class BlockChangeServerPacketData implements ServerPacketData {
 
     }
 }
-

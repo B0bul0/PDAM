@@ -11,17 +11,10 @@ import java.io.IOException;
 
 public final class ChunkDataServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "ChunkData";
-
     private int chunkX;
     private int chunkZ;
     private boolean groundUpContinuous;
     private Extracted extractedData;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extracted {
         private byte[] data;
@@ -49,5 +42,3 @@ public final class ChunkDataServerPacketData implements ServerPacketData {
     }
 
 }
-
-

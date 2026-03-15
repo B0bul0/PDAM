@@ -11,16 +11,9 @@ import java.util.Map;
 
 public final class UpdateTileEntityServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "UpdateTileEntity";
-
     private BlockPosition pos;
     private int metadata;
     private Map<String, Object> nbt;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<UpdateTileEntityServerPacketData, S35PacketUpdateTileEntity> {
 
@@ -36,4 +29,3 @@ public final class UpdateTileEntityServerPacketData implements ServerPacketData 
     }
 
 }
-

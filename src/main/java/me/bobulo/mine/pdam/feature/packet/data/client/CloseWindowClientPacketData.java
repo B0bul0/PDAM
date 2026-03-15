@@ -11,14 +11,7 @@ import java.io.IOException;
 
 public final class CloseWindowClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "CloseWindow";
-
     private int windowId;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<CloseWindowClientPacketData> {
 
@@ -37,4 +30,3 @@ public final class CloseWindowClientPacketData implements ClientPacketData {
     }
 
 }
-

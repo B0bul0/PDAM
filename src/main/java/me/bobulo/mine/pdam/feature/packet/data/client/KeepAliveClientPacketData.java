@@ -6,14 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class KeepAliveClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "KeepAlive";
-
     private int key;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<KeepAliveClientPacketData, C00PacketKeepAlive> {
 
@@ -27,4 +20,3 @@ public final class KeepAliveClientPacketData implements ClientPacketData {
     }
 
 }
-

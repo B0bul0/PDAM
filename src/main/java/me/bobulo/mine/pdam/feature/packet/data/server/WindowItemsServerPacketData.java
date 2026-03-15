@@ -12,15 +12,8 @@ import java.util.List;
 
 public final class WindowItemsServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "WindowItems";
-
     private int windowId;
     private List<ItemStackData> itemStacks;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<WindowItemsServerPacketData, S30PacketWindowItems> {
 
@@ -38,4 +31,3 @@ public final class WindowItemsServerPacketData implements ServerPacketData {
     }
 
 }
-

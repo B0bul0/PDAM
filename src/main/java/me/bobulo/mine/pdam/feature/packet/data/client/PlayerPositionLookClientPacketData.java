@@ -6,13 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PlayerPositionLookClientPacketData extends PlayerClientPacketData {
 
-    private static final String PACKET_NAME = "PlayerPositionLook";
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
-
     public static class PositionLookExtractor implements PacketDataExtractor<PlayerPositionLookClientPacketData, C03PacketPlayer.C06PacketPlayerPosLook> {
 
         @Override
@@ -32,4 +25,3 @@ public final class PlayerPositionLookClientPacketData extends PlayerClientPacket
     }
 
 }
-

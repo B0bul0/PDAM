@@ -6,14 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ClientStatusClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "ClientStatus";
-
     private C16PacketClientStatus.EnumState status;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<ClientStatusClientPacketData, C16PacketClientStatus> {
 
@@ -27,4 +20,3 @@ public final class ClientStatusClientPacketData implements ClientPacketData {
     }
 
 }
-

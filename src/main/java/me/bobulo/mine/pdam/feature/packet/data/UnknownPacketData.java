@@ -4,14 +4,14 @@ import org.jetbrains.annotations.NotNull;
 
 public final class UnknownPacketData implements PacketData {
 
+    @NotNull
     private final String packetClassName;
 
-    public UnknownPacketData(String packetClassName) {
+    public UnknownPacketData(@NotNull String packetClassName) {
         this.packetClassName = packetClassName;
     }
 
-    @Override
-    public @NotNull String getPacketName() {
+    public @NotNull String getPacketClassName() {
         return packetClassName;
     }
 }

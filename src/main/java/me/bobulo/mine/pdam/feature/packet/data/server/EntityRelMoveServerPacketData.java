@@ -11,18 +11,11 @@ import java.io.IOException;
 
 public final class EntityRelMoveServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityRelMove";
-
     private int entityId;
     private byte dx;
     private byte dy;
     private byte dz;
     private boolean onGround;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<EntityRelMoveServerPacketData> {
 
@@ -44,4 +37,3 @@ public final class EntityRelMoveServerPacketData implements ServerPacketData {
 
     }
 }
-

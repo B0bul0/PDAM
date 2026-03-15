@@ -6,15 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class DisplayScoreboardServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "DisplayScoreboard";
-
     private int position;
     private String scoreName;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<DisplayScoreboardServerPacketData, S3DPacketDisplayScoreboard> {
 
@@ -28,4 +21,3 @@ public final class DisplayScoreboardServerPacketData implements ServerPacketData
 
     }
 }
-

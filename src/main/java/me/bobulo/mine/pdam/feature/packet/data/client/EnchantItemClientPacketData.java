@@ -6,15 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EnchantItemClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "EnchantItem";
-
     private int windowId;
     private int button;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<EnchantItemClientPacketData, C11PacketEnchantItem> {
 
@@ -28,4 +21,3 @@ public final class EnchantItemClientPacketData implements ClientPacketData {
 
     }
 }
-

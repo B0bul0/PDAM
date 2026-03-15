@@ -9,15 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EntityStatusServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityStatus";
-
     private int entityId;
     private byte logicOpcode;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<EntityStatusServerPacketData> {
 
@@ -37,4 +30,3 @@ public final class EntityStatusServerPacketData implements ServerPacketData {
     }
 
 }
-

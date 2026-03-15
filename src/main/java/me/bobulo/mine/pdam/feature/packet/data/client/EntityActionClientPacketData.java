@@ -12,16 +12,9 @@ import java.io.IOException;
 
 public final class EntityActionClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "EntityAction";
-
     private int entityID;
     private C0BPacketEntityAction.Action action;
     private int auxData;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<EntityActionClientPacketData> {
 
@@ -42,4 +35,3 @@ public final class EntityActionClientPacketData implements ClientPacketData {
     }
 
 }
-

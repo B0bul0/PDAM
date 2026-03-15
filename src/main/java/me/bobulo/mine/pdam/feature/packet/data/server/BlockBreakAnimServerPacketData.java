@@ -7,16 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BlockBreakAnimServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "BlockBreakAnim";
-
     private int breakerId;
     private BlockPosition position;
     private int progress;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<BlockBreakAnimServerPacketData, S25PacketBlockBreakAnim> {
 
@@ -31,4 +24,3 @@ public final class BlockBreakAnimServerPacketData implements ServerPacketData {
 
     }
 }
-

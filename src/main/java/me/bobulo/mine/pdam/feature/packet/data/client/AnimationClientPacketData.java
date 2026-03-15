@@ -6,13 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class AnimationClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "Animation";
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
-
     public static class Extractor implements PacketDataExtractor<AnimationClientPacketData, C0APacketAnimation> {
 
         @Override

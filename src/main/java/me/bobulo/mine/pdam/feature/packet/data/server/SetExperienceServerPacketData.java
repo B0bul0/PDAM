@@ -6,16 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SetExperienceServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SetExperience";
-
     private float experienceBar;
     private int level;
     private int totalExperience;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SetExperienceServerPacketData, S1FPacketSetExperience> {
 
@@ -31,4 +24,3 @@ public final class SetExperienceServerPacketData implements ServerPacketData {
     }
 
 }
-

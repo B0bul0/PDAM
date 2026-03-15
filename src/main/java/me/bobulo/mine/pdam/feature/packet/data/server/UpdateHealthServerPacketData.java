@@ -6,16 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class UpdateHealthServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "UpdateHealth";
-
     private float health;
     private int foodLevel;
     private float saturationLevel;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<UpdateHealthServerPacketData, S06PacketUpdateHealth> {
 
@@ -31,4 +24,3 @@ public final class UpdateHealthServerPacketData implements ServerPacketData {
     }
 
 }
-

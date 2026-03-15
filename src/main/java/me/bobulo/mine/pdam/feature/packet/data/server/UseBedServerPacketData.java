@@ -12,15 +12,8 @@ import java.io.IOException;
 
 public final class UseBedServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "UseBed";
-
     private int playerID;
     private BlockPosition bedPos;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<UseBedServerPacketData> {
 
@@ -40,4 +33,3 @@ public final class UseBedServerPacketData implements ServerPacketData {
     }
 
 }
-

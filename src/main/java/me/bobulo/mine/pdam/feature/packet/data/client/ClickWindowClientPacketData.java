@@ -9,19 +9,12 @@ import java.io.IOException;
 
 public final class ClickWindowClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "ClickWindow";
-
     private int windowId;
     private int slotId;
     private int usedButton;
     private short actionNumber;
     private ItemStackData clickedItem;
     private int mode;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<ClickWindowClientPacketData, C0EPacketClickWindow> {
 
@@ -40,4 +33,3 @@ public final class ClickWindowClientPacketData implements ClientPacketData {
     }
 
 }
-

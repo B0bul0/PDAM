@@ -1,18 +1,22 @@
 package me.bobulo.mine.pdam.feature.packet.window;
 
 import imgui.ImGuiListClipper;
+import imgui.ImGuiTextFilter;
 import imgui.flag.*;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
 import imgui.type.ImString;
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.PacketRateTracker;
+import me.bobulo.mine.pdam.feature.packet.data.PacketNameRegistry;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.log.LogHistory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
@@ -32,6 +36,10 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
     private final ImString searchField = new ImString(256);
     private int filteredLogCount = 0;
 
+    private final ImGuiTextFilter packetNameSearchField = new ImGuiTextFilter();
+    private final List<String> allPacketNames = PacketNameRegistry.getAllPacketNames(); // cache
+    private final Set<String> filteredPacketNames = new HashSet<>(allPacketNames);
+
     public PacketLogWindow(LogHistory<DisplayPacketLogEntry> logHistory, PacketRateTracker rateTrackerServer, PacketRateTracker rateTrackerClient) {
         super("Packet Log");
         this.logHistory = logHistory;
@@ -42,7 +50,6 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
 
     @Override
     public void renderGui() {
-
         // Set initial window size and position
         setNextWindowSize(1000, 600, ImGuiCond.FirstUseEver);
         setNextWindowPos(100, 100, ImGuiCond.FirstUseEver);
@@ -91,10 +98,49 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
 
         sameLine();
         if (beginPopupContextItem("packetFilterPopup")) {
+            separatorText("Filters");
+
             text("Direction Filter:");
             checkbox("Server Packets", filterServer);
             sameLine();
             checkbox("Client Packers", filterClient);
+
+            text("Packet Name Filter:");
+            packetNameSearchField.draw("##packetNameSearch", 400.0f);
+
+            if (button("Select All##packetNameSelectAll")) {
+                filteredPacketNames.addAll(allPacketNames);
+            }
+
+            sameLine();
+            if (button("Deselect All##packetNameDeselectAll")) {
+                filteredPacketNames.clear();
+            }
+
+            if (beginChild("packetNameListChild", 400.0f, 300.0f, true)) {
+                columns(2, "packetNameCols", false);
+
+                for (String packetName : allPacketNames) {
+                    if (!packetNameSearchField.passFilter(packetName)) {
+                        continue;
+                    }
+
+                    if (checkbox(packetName + "##filter_" + packetName,
+                      filteredPacketNames.contains(packetName))) {
+                        if (filteredPacketNames.contains(packetName)) {
+                            filteredPacketNames.remove(packetName);
+                        } else {
+                            filteredPacketNames.add(packetName);
+                        }
+                    }
+
+                    nextColumn();
+                }
+            }
+
+            columns(1);
+            endChild();
+
 
             endPopup();
         }
@@ -129,8 +175,9 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
             List<DisplayPacketLogEntry> filteredLogs;
 
             boolean noDirectionFilter = filterServer.get() && filterClient.get();
+            boolean noPacketNameFilter = filteredPacketNames.size() >= allPacketNames.size();
 
-            if (searchText.isEmpty() && noDirectionFilter) {
+            if (searchText.isEmpty() && noDirectionFilter && noPacketNameFilter) {
                 filteredLogs = new ArrayList<>(logHistory.size());
                 logHistory.forEach(filteredLogs::add);
                 filteredLogCount = filteredLogs.size();
@@ -142,6 +189,10 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
                     }
 
                     if (!filterClient.get() && entry.getDirection() == PacketDirection.CLIENT) {
+                        return;
+                    }
+
+                    if (!filteredPacketNames.contains(entry.getPacketName())) {
                         return;
                     }
 

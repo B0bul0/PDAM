@@ -9,8 +9,6 @@ import java.util.List;
 
 public final class ExplosionServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Explosion";
-
     private double x;
     private double y;
     private double z;
@@ -19,11 +17,6 @@ public final class ExplosionServerPacketData implements ServerPacketData {
     private float motionX;
     private float motionY;
     private float motionZ;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<ExplosionServerPacketData, S27PacketExplosion> {
 
@@ -45,4 +38,3 @@ public final class ExplosionServerPacketData implements ServerPacketData {
 
     }
 }
-

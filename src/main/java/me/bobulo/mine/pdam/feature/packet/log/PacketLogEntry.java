@@ -30,8 +30,4 @@ public class PacketLogEntry implements LogEntry {
         return direction;
     }
 
-    public String getPacketName() {
-        return packetData.getPacketName();
-    }
-
 }

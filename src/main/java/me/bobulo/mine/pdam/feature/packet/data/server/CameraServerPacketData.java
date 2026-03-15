@@ -11,14 +11,7 @@ import java.io.IOException;
 
 public final class CameraServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Camera";
-
     private int entityId;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<CameraServerPacketData> {
 
@@ -36,4 +29,3 @@ public final class CameraServerPacketData implements ServerPacketData {
 
     }
 }
-

@@ -6,18 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SpawnExperienceOrbServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SpawnExperienceOrb";
-
     private int entityID;
     private int posX;
     private int posY;
     private int posZ;
     private int xpValue;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SpawnExperienceOrbServerPacketData, S11PacketSpawnExperienceOrb> {
 
@@ -35,4 +28,3 @@ public final class SpawnExperienceOrbServerPacketData implements ServerPacketDat
     }
 
 }
-

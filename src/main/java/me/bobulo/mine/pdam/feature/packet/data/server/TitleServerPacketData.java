@@ -7,18 +7,11 @@ import org.jetbrains.annotations.NotNull;
 
 public final class TitleServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Title";
-
     private S45PacketTitle.Type type;
     private IChatComponent message;
     private int fadeIn;
     private int stay;
     private int fadeOut;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<TitleServerPacketData, S45PacketTitle> {
 
@@ -36,4 +29,3 @@ public final class TitleServerPacketData implements ServerPacketData {
     }
 
 }
-

@@ -13,16 +13,9 @@ import java.io.IOException;
 
 public final class UseEntityClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "UseEntity";
-
     private int entityId;
     private C02PacketUseEntity.Action action;
     private Vec3 hitVec;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<UseEntityClientPacketData> {
 
@@ -45,4 +38,3 @@ public final class UseEntityClientPacketData implements ClientPacketData {
     }
 
 }
-

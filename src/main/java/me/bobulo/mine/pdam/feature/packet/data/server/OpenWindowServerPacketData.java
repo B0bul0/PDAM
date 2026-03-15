@@ -6,18 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 public final class OpenWindowServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "OpenWindow";
-
     private int windowId;
     private String inventoryType;
     private String windowTitle;
     private int slotCount;
     private int entityId;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<OpenWindowServerPacketData, S2DPacketOpenWindow> {
 
@@ -35,4 +28,3 @@ public final class OpenWindowServerPacketData implements ServerPacketData {
     }
 
 }
-

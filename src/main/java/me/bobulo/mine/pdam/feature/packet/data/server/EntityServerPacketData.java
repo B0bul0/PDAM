@@ -11,14 +11,7 @@ import java.io.IOException;
 
 public final class EntityServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Entity";
-
     private int entityId;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<EntityServerPacketData> {
 
@@ -37,4 +30,3 @@ public final class EntityServerPacketData implements ServerPacketData {
     }
 
 }
-

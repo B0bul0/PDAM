@@ -6,15 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ChangeGameStateServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "ChangeGameState";
-
     private int state;
     private float value;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<ChangeGameStateServerPacketData, S2BPacketChangeGameState> {
 
@@ -28,4 +21,3 @@ public final class ChangeGameStateServerPacketData implements ServerPacketData {
 
     }
 }
-

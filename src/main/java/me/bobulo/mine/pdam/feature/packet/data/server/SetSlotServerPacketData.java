@@ -9,16 +9,9 @@ import java.io.IOException;
 
 public final class SetSlotServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SetSlot";
-
     private int windowId;
     private int slot;
     private ItemStackData item;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SetSlotServerPacketData, S2FPacketSetSlot> {
 
@@ -35,4 +28,3 @@ public final class SetSlotServerPacketData implements ServerPacketData {
     }
 
 }
-

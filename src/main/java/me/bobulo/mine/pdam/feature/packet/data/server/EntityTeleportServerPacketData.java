@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EntityTeleportServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityTeleport";
-
     private int entityId;
     private int x;
     private int y;
@@ -15,11 +13,6 @@ public final class EntityTeleportServerPacketData implements ServerPacketData {
     private byte yaw;
     private byte pitch;
     private boolean onGround;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<EntityTeleportServerPacketData, S18PacketEntityTeleport> {
 
@@ -38,4 +31,3 @@ public final class EntityTeleportServerPacketData implements ServerPacketData {
     }
 
 }
-

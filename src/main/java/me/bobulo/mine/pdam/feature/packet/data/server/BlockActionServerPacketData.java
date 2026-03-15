@@ -12,17 +12,10 @@ import java.io.IOException;
 
 public final class BlockActionServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "BlockAction";
-
     private BlockPosition blockPosition;
     private int instrument;
     private int pitch;
     private int blockType;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<BlockActionServerPacketData> {
 
@@ -45,4 +38,3 @@ public final class BlockActionServerPacketData implements ServerPacketData {
 
     }
 }
-

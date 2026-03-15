@@ -7,17 +7,10 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ScoreboardObjectiveServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "ScoreboardObjective";
-
     private String objectiveName;
     private String objectiveValue;
     private IScoreObjectiveCriteria.EnumRenderType type;
     private int action;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<ScoreboardObjectiveServerPacketData, S3BPacketScoreboardObjective> {
 
@@ -34,4 +27,3 @@ public final class ScoreboardObjectiveServerPacketData implements ServerPacketDa
     }
 
 }
-

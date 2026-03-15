@@ -7,8 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ParticlesServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Particles";
-
     private EnumParticleTypes particleType;
     private float xCoord;
     private float yCoord;
@@ -20,11 +18,6 @@ public final class ParticlesServerPacketData implements ServerPacketData {
     private int particleCount;
     private boolean longDistance;
     private int[] particleArguments;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<ParticlesServerPacketData, S2APacketParticles> {
 
@@ -48,4 +41,3 @@ public final class ParticlesServerPacketData implements ServerPacketData {
     }
 
 }
-

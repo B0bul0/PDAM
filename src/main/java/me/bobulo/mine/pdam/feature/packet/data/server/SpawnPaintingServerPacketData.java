@@ -8,17 +8,10 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SpawnPaintingServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SpawnPainting";
-
     private int entityID;
     private BlockPosition position;
     private EnumFacing facing;
     private String title;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SpawnPaintingServerPacketData, S10PacketSpawnPainting> {
 
@@ -35,4 +28,3 @@ public final class SpawnPaintingServerPacketData implements ServerPacketData {
     }
 
 }
-

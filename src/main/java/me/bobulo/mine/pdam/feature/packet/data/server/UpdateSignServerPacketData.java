@@ -8,15 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class UpdateSignServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "UpdateSign";
-
     private BlockPosition pos;
     private String[] lines;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<UpdateSignServerPacketData, S33PacketUpdateSign> {
 
@@ -37,4 +30,3 @@ public final class UpdateSignServerPacketData implements ServerPacketData {
     }
 
 }
-

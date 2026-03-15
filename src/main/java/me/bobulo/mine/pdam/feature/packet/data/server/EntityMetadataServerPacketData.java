@@ -10,15 +10,8 @@ import java.io.IOException;
 
 public final class EntityMetadataServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityMetadata";
-
     private int entityId;
     private EntityMetadata metadata;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<EntityMetadataServerPacketData, S1CPacketEntityMetadata> {
 
@@ -32,4 +25,3 @@ public final class EntityMetadataServerPacketData implements ServerPacketData {
 
     }
 }
-

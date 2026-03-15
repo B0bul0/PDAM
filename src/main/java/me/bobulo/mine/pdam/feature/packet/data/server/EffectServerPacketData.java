@@ -7,17 +7,10 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EffectServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Effect";
-
     private int soundType;
     private BlockPosition soundPos;
     private int soundData;
     private boolean serverWide;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<EffectServerPacketData, S28PacketEffect> {
 
@@ -33,4 +26,3 @@ public final class EffectServerPacketData implements ServerPacketData {
 
     }
 }
-

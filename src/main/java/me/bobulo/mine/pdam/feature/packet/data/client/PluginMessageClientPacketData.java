@@ -7,15 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PluginMessageClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "PluginMessage";
-
     private String channel;
     private byte[] data;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<PluginMessageClientPacketData, C17PacketCustomPayload> {
 
@@ -34,4 +27,3 @@ public final class PluginMessageClientPacketData implements ClientPacketData {
 
     }
 }
-

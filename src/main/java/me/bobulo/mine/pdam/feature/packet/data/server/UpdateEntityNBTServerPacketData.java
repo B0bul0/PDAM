@@ -12,15 +12,8 @@ import java.util.Map;
 
 public final class UpdateEntityNBTServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "UpdateEntityNBT";
-
     private int entityId;
     private Map<String, Object> tagCompound;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<UpdateEntityNBTServerPacketData> {
 
@@ -42,4 +35,3 @@ public final class UpdateEntityNBTServerPacketData implements ServerPacketData {
     }
 
 }
-

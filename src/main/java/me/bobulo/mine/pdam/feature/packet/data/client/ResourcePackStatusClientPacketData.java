@@ -12,15 +12,8 @@ import java.io.IOException;
 
 public final class ResourcePackStatusClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "ResourcePackStatus";
-
     private String hash;
     private C19PacketResourcePackStatus.Action status;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<ResourcePackStatusClientPacketData> {
 
@@ -38,4 +31,3 @@ public final class ResourcePackStatusClientPacketData implements ClientPacketDat
         }
     }
 }
-

@@ -6,17 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 public final class UpdateScoreServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "UpdateScore";
-
     private String scoreName;
     private String objectiveName;
     private int value;
     private S3CPacketUpdateScore.Action action;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<UpdateScoreServerPacketData, S3CPacketUpdateScore> {
 
@@ -33,4 +26,3 @@ public final class UpdateScoreServerPacketData implements ServerPacketData {
     }
 
 }
-

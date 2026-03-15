@@ -9,15 +9,8 @@ import java.io.IOException;
 
 public final class CreativeInventoryActionClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "CreativeInventoryAction";
-
     private int slotId;
     private ItemStackData stack;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<CreativeInventoryActionClientPacketData, C10PacketCreativeInventoryAction> {
 
@@ -32,4 +25,3 @@ public final class CreativeInventoryActionClientPacketData implements ClientPack
     }
 
 }
-

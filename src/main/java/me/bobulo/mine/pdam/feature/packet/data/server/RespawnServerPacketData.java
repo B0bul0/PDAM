@@ -9,17 +9,10 @@ import org.jetbrains.annotations.NotNull;
 
 public final class RespawnServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Respawn";
-
     private int dimensionID;
     private EnumDifficulty difficulty;
     private WorldSettings.GameType gameType;
     private WorldType worldType;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<RespawnServerPacketData, S07PacketRespawn> {
 
@@ -36,4 +29,3 @@ public final class RespawnServerPacketData implements ServerPacketData {
     }
 
 }
-

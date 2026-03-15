@@ -10,19 +10,12 @@ import java.io.IOException;
 
 public final class PlayerBlockPlacementClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "PlayerBlockPlacement";
-
     private BlockPosition position;
     private int placedBlockDirection;
     private ItemStackData stack;
     private float facingX;
     private float facingY;
     private float facingZ;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<PlayerBlockPlacementClientPacketData, C08PacketPlayerBlockPlacement> {
 
@@ -41,4 +34,3 @@ public final class PlayerBlockPlacementClientPacketData implements ClientPacketD
     }
 
 }
-

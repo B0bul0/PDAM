@@ -6,19 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PlayerAbilitiesServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "PlayerAbilities";
-
     private boolean invulnerable;
     private boolean flying;
     private boolean allowFlying;
     private boolean creativeMode;
     private float flySpeed;
     private float walkSpeed;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<PlayerAbilitiesServerPacketData, S39PacketPlayerAbilities> {
 
@@ -37,4 +30,3 @@ public final class PlayerAbilitiesServerPacketData implements ServerPacketData {
     }
 
 }
-

@@ -12,14 +12,7 @@ import java.util.UUID;
 
 public final class SpectateClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "Spectate";
-
     private UUID id;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<SpectateClientPacketData> {
 
@@ -38,4 +31,3 @@ public final class SpectateClientPacketData implements ClientPacketData {
     }
 
 }
-

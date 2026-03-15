@@ -11,17 +11,10 @@ import java.io.IOException;
 
 public final class MapChunkBulkServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "MapChunkBulk";
-
     private boolean isOverworld;
     private int[] xChunk;
     private int[] zChunk;
     private Extracted[] chunksData;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extracted {
         private byte[] data;
@@ -71,5 +64,3 @@ public final class MapChunkBulkServerPacketData implements ServerPacketData {
     }
 
 }
-
-

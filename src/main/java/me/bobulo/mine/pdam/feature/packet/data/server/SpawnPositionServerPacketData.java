@@ -7,14 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SpawnPositionServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SpawnPosition";
-
     private BlockPosition spawnBlockPos;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SpawnPositionServerPacketData, S05PacketSpawnPosition> {
 
@@ -28,4 +21,3 @@ public final class SpawnPositionServerPacketData implements ServerPacketData {
     }
 
 }
-
