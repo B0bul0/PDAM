@@ -236,6 +236,11 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
                         text("Packet " + entry.getPacketName());
                         separator();
 
+                        if (button("Open Packet Info")) {
+                            new PacketInfoWindow(entry).open();
+                            closeCurrentPopup();
+                        }
+
                         if (button("Copy Packet Data")) {
                             setClipboardText(entry.getPacketData());
                             closeCurrentPopup();
