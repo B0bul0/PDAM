@@ -18,7 +18,7 @@ public final class ConfirmTransactionClientPacketData implements ClientPacketDat
     public static class Serializer implements PacketDataSerializer<ConfirmTransactionClientPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x0F);
         }
 

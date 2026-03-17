@@ -15,7 +15,7 @@ public final class EntityStatusServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<EntityStatusServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x1A);
         }
 

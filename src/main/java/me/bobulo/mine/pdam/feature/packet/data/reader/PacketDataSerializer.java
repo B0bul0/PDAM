@@ -20,7 +20,12 @@ import java.io.IOException;
  */
 public interface PacketDataSerializer<T extends PacketData> extends PacketDataReader<T> {
 
-    SerializerKey getKey();
+    /**
+     * Gets the unique key associated with this serializer.
+     *
+     * @return the serializer key
+     */
+    @NotNull SerializerKey getKey();
 
     /**
      * Reads and deserializes packet data from the provided buffer.

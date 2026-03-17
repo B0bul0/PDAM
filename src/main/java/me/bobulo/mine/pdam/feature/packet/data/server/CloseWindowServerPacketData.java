@@ -16,7 +16,7 @@ public final class CloseWindowServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<CloseWindowServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x2E);
         }
 

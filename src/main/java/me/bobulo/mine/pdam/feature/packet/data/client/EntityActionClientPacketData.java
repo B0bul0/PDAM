@@ -19,7 +19,7 @@ public final class EntityActionClientPacketData implements ClientPacketData {
     public static class Serializer implements PacketDataSerializer<EntityActionClientPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x0B);
         }
 

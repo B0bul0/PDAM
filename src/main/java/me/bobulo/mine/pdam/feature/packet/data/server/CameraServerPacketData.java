@@ -16,7 +16,7 @@ public final class CameraServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<CameraServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x43);
         }
 

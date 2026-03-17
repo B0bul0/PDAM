@@ -19,7 +19,7 @@ public final class EntityLookServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<EntityLookServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x16);
         }
 

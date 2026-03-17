@@ -21,7 +21,7 @@ public final class PlayerAbilitiesClientPacketData implements ClientPacketData {
     public static class Serializer implements PacketDataSerializer<PlayerAbilitiesClientPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x13);
         }
 

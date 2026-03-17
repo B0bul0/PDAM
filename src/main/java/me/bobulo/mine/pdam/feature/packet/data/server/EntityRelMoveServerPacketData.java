@@ -20,7 +20,7 @@ public final class EntityRelMoveServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<EntityRelMoveServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x15);
         }
 

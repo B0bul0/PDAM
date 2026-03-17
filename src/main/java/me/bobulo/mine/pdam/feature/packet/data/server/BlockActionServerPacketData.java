@@ -20,7 +20,7 @@ public final class BlockActionServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<BlockActionServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x24);
         }
 

@@ -24,7 +24,7 @@ public final class ChunkDataServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<ChunkDataServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x21);
         }
 

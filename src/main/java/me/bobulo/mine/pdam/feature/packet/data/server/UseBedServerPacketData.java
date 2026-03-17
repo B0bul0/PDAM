@@ -18,7 +18,7 @@ public final class UseBedServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<UseBedServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x0A);
         }
 

@@ -18,7 +18,7 @@ public final class ResourcePackStatusClientPacketData implements ClientPacketDat
     public static class Serializer implements PacketDataSerializer<ResourcePackStatusClientPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x19);
         }
 
