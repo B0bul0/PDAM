@@ -40,10 +40,10 @@ pdam.feature.inventory_slot_inspector.name=Inventory Slot Inspector
 pdam.feature.inventory_slot_inspector.description=Overlays index numbers on inventory slots.
 
 pdam.feature.expanded_creative_inventory.name=Expanded Creative Inventory
-pdam.feature.expanded_creative_inventory.description=
+pdam.feature.expanded_creative_inventory.description=Adds additional items and blocks to the creative building tabs.
 
 pdam.feature.player_utilities.name=Player Utilities
-pdam.feature.player_utilities.description=
+pdam.feature.player_utilities.description=Adds some utilities, such as a player coordinate window.
 
 pdam.feature.sign_editor.name=Sign Editor
 pdam.feature.sign_editor.description=New GUI for writing on signs.
