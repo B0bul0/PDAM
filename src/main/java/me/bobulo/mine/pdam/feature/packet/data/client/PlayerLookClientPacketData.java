@@ -6,13 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PlayerLookClientPacketData extends PlayerClientPacketData {
 
-    private static final String PACKET_NAME = "PlayerLook";
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
-
     public static class LookExtractor implements PacketDataExtractor<PlayerLookClientPacketData, C03PacketPlayer.C05PacketPlayerLook> {
 
         @Override
@@ -28,4 +21,3 @@ public final class PlayerLookClientPacketData extends PlayerClientPacketData {
     }
 
 }
-

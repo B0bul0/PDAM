@@ -12,23 +12,16 @@ import java.io.IOException;
 
 public final class ClientSettingsClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "ClientSettings";
-
     private String lang;
     private int view;
     private EntityPlayer.EnumChatVisibility chatVisibility;
     private boolean enableColors;
     private int modelPartFlags;
 
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
-
     public static class Serializer implements PacketDataSerializer<ClientSettingsClientPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x15);
         }
 
@@ -45,4 +38,3 @@ public final class ClientSettingsClientPacketData implements ClientPacketData {
     }
 
 }
-

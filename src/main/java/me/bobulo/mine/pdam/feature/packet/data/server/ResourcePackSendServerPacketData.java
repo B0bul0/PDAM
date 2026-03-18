@@ -6,15 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ResourcePackSendServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "ResourcePackSend";
-
     private String url;
     private String hash;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<ResourcePackSendServerPacketData, S48PacketResourcePackSend> {
 
@@ -29,4 +22,3 @@ public final class ResourcePackSendServerPacketData implements ServerPacketData 
     }
 
 }
-

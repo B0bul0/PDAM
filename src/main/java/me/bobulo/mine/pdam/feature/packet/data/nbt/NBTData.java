@@ -25,6 +25,75 @@ public class NBTData {
         return map;
     }
 
+    @SuppressWarnings("unchecked")
+    public static NBTTagCompound toNBT(Map<String, Object> map) {
+        NBTTagCompound compound = new NBTTagCompound();
+
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value instanceof Byte) {
+                compound.setByte(key, (Byte) value);
+            } else if (value instanceof Short) {
+                compound.setShort(key, (Short) value);
+            } else if (value instanceof Integer) {
+                compound.setInteger(key, (Integer) value);
+            } else if (value instanceof Long) {
+                compound.setLong(key, (Long) value);
+            } else if (value instanceof Float) {
+                compound.setFloat(key, (Float) value);
+            } else if (value instanceof Double) {
+                compound.setDouble(key, (Double) value);
+            } else if (value instanceof String) {
+                compound.setString(key, (String) value);
+            } else if (value instanceof byte[]) { // Adicionado
+                compound.setByteArray(key, (byte[]) value);
+            } else if (value instanceof int[]) { // Adicionado
+                compound.setIntArray(key, (int[]) value);
+            } else if (value instanceof Map) {
+                compound.setTag(key, toNBT((Map<String, Object>) value));
+            } else if (value instanceof List) {
+                compound.setTag(key, toNBTList((List<Object>) value));
+            } else if (value instanceof Boolean) {
+                compound.setByte(key, (byte) ((Boolean) value ? 1 : 0));
+            }
+        }
+
+        return compound;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static NBTTagList toNBTList(List<Object> list) {
+        NBTTagList nbtList = new NBTTagList();
+        for (Object item : list) {
+            if (item instanceof Map) {
+                nbtList.appendTag(toNBT((Map<String, Object>) item));
+            } else if (item instanceof String) {
+                nbtList.appendTag(new NBTTagString((String) item));
+            } else if (item instanceof Float) {
+                nbtList.appendTag(new NBTTagFloat((Float) item));
+            } else if (item instanceof Double) {
+                nbtList.appendTag(new NBTTagDouble((Double) item));
+            } else if (item instanceof Integer) {
+                nbtList.appendTag(new NBTTagInt((Integer) item));
+            } else if (item instanceof Byte) {
+                nbtList.appendTag(new NBTTagByte((Byte) item));
+            } else if (item instanceof Short) {
+                nbtList.appendTag(new NBTTagShort((Short) item));
+            } else if (item instanceof Long) {
+                nbtList.appendTag(new NBTTagLong((Long) item));
+            } else if (item instanceof byte[]) {
+                nbtList.appendTag(new NBTTagByteArray((byte[]) item));
+            } else if (item instanceof int[]) {
+                nbtList.appendTag(new NBTTagIntArray((int[]) item));
+            } else if (item instanceof List) {
+                nbtList.appendTag(toNBTList((List<Object>) item));
+            }
+        }
+        return nbtList;
+    }
+
     private static Object convertNBT(NBTBase base) {
         if (base == null) {
             return null;

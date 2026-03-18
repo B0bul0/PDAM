@@ -12,15 +12,8 @@ import java.util.UUID;
 
 public final class EntityPropertiesServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityProperties";
-
     private int entityId;
     private final List<Snapshot> snapshots = Lists.newArrayList();
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<EntityPropertiesServerPacketData, S20PacketEntityProperties> {
 
@@ -67,4 +60,3 @@ public final class EntityPropertiesServerPacketData implements ServerPacketData 
     }
 
 }
-

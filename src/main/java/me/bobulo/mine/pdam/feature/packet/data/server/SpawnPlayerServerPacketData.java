@@ -10,8 +10,6 @@ import java.util.UUID;
 
 public final class SpawnPlayerServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SpawnPlayer";
-
     private int entityId;
     private UUID playerId;
     private int x;
@@ -21,11 +19,6 @@ public final class SpawnPlayerServerPacketData implements ServerPacketData {
     private byte pitch;
     private int currentItem;
     private PlayerMetadata metadata;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SpawnPlayerServerPacketData, S0CPacketSpawnPlayer> {
 
@@ -48,3 +41,4 @@ public final class SpawnPlayerServerPacketData implements ServerPacketData {
     }
 
 }
+

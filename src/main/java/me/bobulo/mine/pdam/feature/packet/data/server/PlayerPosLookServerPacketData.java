@@ -8,19 +8,12 @@ import java.util.Set;
 
 public final class PlayerPosLookServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "PlayerPosLook";
-
     private double x;
     private double y;
     private double z;
     private float yaw;
     private float pitch;
     private Set<S08PacketPlayerPosLook.EnumFlags> flags;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<PlayerPosLookServerPacketData, S08PacketPlayerPosLook> {
 
@@ -40,4 +33,3 @@ public final class PlayerPosLookServerPacketData implements ServerPacketData {
     }
 
 }
-

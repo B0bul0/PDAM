@@ -8,8 +8,6 @@ import java.util.Collection;
 
 public final class TeamsServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Teams";
-
     private String teamName;
     private String teamDisplayName;
     private String teamPrefix;
@@ -19,11 +17,6 @@ public final class TeamsServerPacketData implements ServerPacketData {
     private Collection<String> players;
     private int action;
     private int friendlyFlags;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<TeamsServerPacketData, S3EPacketTeams> {
 
@@ -45,4 +38,3 @@ public final class TeamsServerPacketData implements ServerPacketData {
     }
 
 }
-

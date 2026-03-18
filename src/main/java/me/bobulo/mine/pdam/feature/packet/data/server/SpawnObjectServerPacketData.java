@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SpawnObjectServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SpawnObject";
-
     private int entityId;
     private int x;
     private int y;
@@ -19,11 +17,6 @@ public final class SpawnObjectServerPacketData implements ServerPacketData {
     private int yaw;
     private int type;
     private int data;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SpawnObjectServerPacketData, S0EPacketSpawnObject> {
 
@@ -47,4 +40,3 @@ public final class SpawnObjectServerPacketData implements ServerPacketData {
     }
 
 }
-

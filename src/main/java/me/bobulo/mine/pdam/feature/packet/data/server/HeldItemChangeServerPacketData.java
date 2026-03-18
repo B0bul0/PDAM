@@ -6,14 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class HeldItemChangeServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "HeldItemChange";
-
     private int heldItemHotbarSlot;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<HeldItemChangeServerPacketData, S09PacketHeldItemChange> {
 
@@ -27,4 +20,3 @@ public final class HeldItemChangeServerPacketData implements ServerPacketData {
     }
 
 }
-

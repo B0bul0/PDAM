@@ -13,8 +13,6 @@ import java.util.List;
 
 public final class MapsServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Maps";
-
     private int mapId;
     private byte mapScale;
     private List<MapIcon> mapVisiblePlayerIcons;
@@ -23,11 +21,6 @@ public final class MapsServerPacketData implements ServerPacketData {
     private int mapMaxX;
     private int mapMaxY;
     private byte[] mapDataBytes;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class MapIcon {
         private byte type;
@@ -46,7 +39,7 @@ public final class MapsServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<MapsServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x34);
         }
 

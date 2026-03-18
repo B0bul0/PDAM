@@ -6,6 +6,4 @@ import java.io.Serializable;
 
 public interface PacketData extends Serializable {
 
-    @NotNull String getPacketName();
-
 }

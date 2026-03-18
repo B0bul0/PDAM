@@ -6,17 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 public final class KeepAliveServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "KeepAlive";
-
     private int keepAliveId;
 
     public int getKeepAliveId() {
         return keepAliveId;
-    }
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
     }
 
     public static class Extractor implements PacketDataExtractor<KeepAliveServerPacketData, S00PacketKeepAlive> {
@@ -31,4 +24,3 @@ public final class KeepAliveServerPacketData implements ServerPacketData {
     }
 
 }
-

@@ -7,15 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ServerDifficultyServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "ServerDifficulty";
-
     private EnumDifficulty difficulty;
     private boolean difficultyLocked;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<ServerDifficultyServerPacketData, S41PacketServerDifficulty> {
 
@@ -30,4 +23,3 @@ public final class ServerDifficultyServerPacketData implements ServerPacketData 
     }
 
 }
-

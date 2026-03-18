@@ -6,18 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SpawnGlobalEntityServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SpawnGlobalEntity";
-
     private int entityId;
     private int x;
     private int y;
     private int z;
     private int type;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SpawnGlobalEntityServerPacketData, S2CPacketSpawnGlobalEntity> {
 
@@ -35,4 +28,3 @@ public final class SpawnGlobalEntityServerPacketData implements ServerPacketData
     }
 
 }
-

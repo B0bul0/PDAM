@@ -7,15 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ChatMessageServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "ChatMessage";
-
     private IChatComponent message;
     private ChatMessageType type;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public enum ChatMessageType {
         CHAT((byte) 0),
@@ -56,3 +49,4 @@ public final class ChatMessageServerPacketData implements ServerPacketData {
     }
 
 }
+

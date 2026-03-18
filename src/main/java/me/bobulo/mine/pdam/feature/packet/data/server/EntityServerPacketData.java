@@ -11,19 +11,12 @@ import java.io.IOException;
 
 public final class EntityServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Entity";
-
     private int entityId;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<EntityServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x14);
         }
 
@@ -37,4 +30,3 @@ public final class EntityServerPacketData implements ServerPacketData {
     }
 
 }
-

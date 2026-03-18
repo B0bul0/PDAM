@@ -11,15 +11,8 @@ import java.util.List;
 
 public final class PlayerListItemServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "PlayerListItem";
-
     private S38PacketPlayerListItem.Action action;
     private final List<AddPlayerData> players = new ArrayList<>();
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<PlayerListItemServerPacketData, S38PacketPlayerListItem> {
 
@@ -54,4 +47,3 @@ public final class PlayerListItemServerPacketData implements ServerPacketData {
 
     }
 }
-

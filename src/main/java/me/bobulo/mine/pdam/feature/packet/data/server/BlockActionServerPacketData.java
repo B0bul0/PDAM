@@ -12,22 +12,15 @@ import java.io.IOException;
 
 public final class BlockActionServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "BlockAction";
-
     private BlockPosition blockPosition;
     private int instrument;
     private int pitch;
     private int blockType;
 
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
-
     public static class Serializer implements PacketDataSerializer<BlockActionServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x24);
         }
 
@@ -45,4 +38,3 @@ public final class BlockActionServerPacketData implements ServerPacketData {
 
     }
 }
-

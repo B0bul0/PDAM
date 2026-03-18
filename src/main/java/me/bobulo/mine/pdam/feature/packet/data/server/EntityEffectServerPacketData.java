@@ -6,18 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EntityEffectServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityEffect";
-
     private int entityId;
     private byte effectId;
     private byte amplifier;
     private int duration;
     private byte hideParticles;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<EntityEffectServerPacketData, S1DPacketEntityEffect> {
 
@@ -35,4 +28,3 @@ public final class EntityEffectServerPacketData implements ServerPacketData {
 
     }
 }
-

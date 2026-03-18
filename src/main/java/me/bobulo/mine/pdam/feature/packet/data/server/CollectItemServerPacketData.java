@@ -6,15 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class CollectItemServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "CollectItem";
-
     private int collectedItemEntityId;
     private int entityId;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<CollectItemServerPacketData, S0DPacketCollectItem> {
 
@@ -30,4 +23,3 @@ public final class CollectItemServerPacketData implements ServerPacketData {
 
     }
 }
-

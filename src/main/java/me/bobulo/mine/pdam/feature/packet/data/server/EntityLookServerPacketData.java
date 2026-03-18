@@ -11,22 +11,15 @@ import java.io.IOException;
 
 public final class EntityLookServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityLook";
-
     private int entityId;
     private byte yaw;
     private byte pitch;
     private boolean onGround;
 
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
-
     public static class Serializer implements PacketDataSerializer<EntityLookServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x16);
         }
 
@@ -42,4 +35,3 @@ public final class EntityLookServerPacketData implements ServerPacketData {
 
     }
 }
-

@@ -33,5 +33,21 @@ public class ItemStackData {
 
         return data;
     }
+
+    public ItemStack toItemStack() {
+        Item item = Item.getItemById(itemId);
+        if (item == null) {
+            return null;
+        }
+
+        ItemStack itemStack = new ItemStack(item, count, damage);
+        if (nbt != null) {
+            NBTTagCompound nbtTag = NBTData.toNBT(nbt);
+            itemStack.setTagCompound(nbtTag);
+        }
+
+        return itemStack;
+    }
+
 }
 

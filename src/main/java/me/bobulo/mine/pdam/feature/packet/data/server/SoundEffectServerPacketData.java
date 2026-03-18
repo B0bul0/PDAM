@@ -6,19 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SoundEffectServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SoundEffect";
-
     private String soundName;
     private int posX;
     private int posY;
     private int posZ;
     private float soundVolume;
     private int soundPitch;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SoundEffectServerPacketData, S29PacketSoundEffect> {
 
@@ -37,4 +30,3 @@ public final class SoundEffectServerPacketData implements ServerPacketData {
     }
 
 }
-

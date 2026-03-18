@@ -9,16 +9,9 @@ import java.io.IOException;
 
 public final class EntityEquipmentServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityEquipment";
-
     private int entityID;
     private int slot;
     private ItemStackData itemStack;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<EntityEquipmentServerPacketData, S04PacketEntityEquipment> {
 
@@ -33,4 +26,3 @@ public final class EntityEquipmentServerPacketData implements ServerPacketData {
 
     }
 }
-

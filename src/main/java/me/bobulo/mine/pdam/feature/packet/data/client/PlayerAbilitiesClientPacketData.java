@@ -11,8 +11,6 @@ import java.io.IOException;
 
 public final class PlayerAbilitiesClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "PlayerAbilities";
-
     private boolean invulnerable;
     private boolean flying;
     private boolean allowFlying;
@@ -20,15 +18,10 @@ public final class PlayerAbilitiesClientPacketData implements ClientPacketData {
     private float flySpeed;
     private float walkSpeed;
 
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
-
     public static class Serializer implements PacketDataSerializer<PlayerAbilitiesClientPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x13);
         }
 
@@ -47,4 +40,3 @@ public final class PlayerAbilitiesClientPacketData implements ClientPacketData {
     }
 
 }
-

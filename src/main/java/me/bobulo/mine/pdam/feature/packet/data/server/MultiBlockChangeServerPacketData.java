@@ -12,15 +12,8 @@ import java.io.IOException;
 
 public final class MultiBlockChangeServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "MultiBlockChange";
-
     private ChunkCoordinates chunkPos;
     private BlockUpdateData[] blockUpdates;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class ChunkCoordinates {
         private int x;
@@ -35,7 +28,7 @@ public final class MultiBlockChangeServerPacketData implements ServerPacketData 
     public static class Serializer implements PacketDataSerializer<MultiBlockChangeServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x22);
         }
 
@@ -69,5 +62,3 @@ public final class MultiBlockChangeServerPacketData implements ServerPacketData 
     }
 
 }
-
-

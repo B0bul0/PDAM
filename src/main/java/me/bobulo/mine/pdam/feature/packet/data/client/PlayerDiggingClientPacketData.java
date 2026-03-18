@@ -8,16 +8,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PlayerDiggingClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "PlayerDigging";
-
     private BlockPosition position;
     private EnumFacing facing;
     private C07PacketPlayerDigging.Action status;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<PlayerDiggingClientPacketData, C07PacketPlayerDigging> {
 
@@ -32,4 +25,3 @@ public final class PlayerDiggingClientPacketData implements ClientPacketData {
     }
 
 }
-

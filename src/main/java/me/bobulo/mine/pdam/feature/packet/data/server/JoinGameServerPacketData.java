@@ -9,8 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class JoinGameServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "JoinGame";
-
     private int entityId;
     private boolean hardcoreMode;
     private WorldSettings.GameType gameType;
@@ -19,11 +17,6 @@ public final class JoinGameServerPacketData implements ServerPacketData {
     private int maxPlayers;
     private WorldType worldType;
     private boolean reducedDebugInfo;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<JoinGameServerPacketData, S01PacketJoinGame> {
 
@@ -43,4 +36,3 @@ public final class JoinGameServerPacketData implements ServerPacketData {
 
     }
 }
-

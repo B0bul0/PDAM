@@ -7,15 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class TabCompleteClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "TabComplete";
-
     private String message;
     private BlockPosition targetBlock;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<TabCompleteClientPacketData, C14PacketTabComplete> {
 
@@ -30,4 +23,3 @@ public final class TabCompleteClientPacketData implements ClientPacketData {
     }
 
 }
-

@@ -6,15 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class RemoveEntityEffectServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "RemoveEntityEffect";
-
     private int entityId;
     private int effectId;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<RemoveEntityEffectServerPacketData, S1EPacketRemoveEntityEffect> {
 
@@ -29,4 +22,3 @@ public final class RemoveEntityEffectServerPacketData implements ServerPacketDat
     }
 
 }
-

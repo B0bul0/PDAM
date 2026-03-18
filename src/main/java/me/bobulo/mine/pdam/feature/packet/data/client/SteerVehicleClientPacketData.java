@@ -6,17 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SteerVehicleClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "SteerVehicle";
-
     private float strafeSpeed;
     private float forwardSpeed;
     private boolean jumping;
     private boolean sneaking;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SteerVehicleClientPacketData, C0CPacketInput> {
 
@@ -33,4 +26,3 @@ public final class SteerVehicleClientPacketData implements ClientPacketData {
     }
 
 }
-

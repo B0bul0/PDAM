@@ -6,15 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class TimeUpdateServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "TimeUpdate";
-
     private long totalWorldTime;
     private long worldTime;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<TimeUpdateServerPacketData, S03PacketTimeUpdate> {
 
@@ -29,4 +22,3 @@ public final class TimeUpdateServerPacketData implements ServerPacketData {
     }
 
 }
-

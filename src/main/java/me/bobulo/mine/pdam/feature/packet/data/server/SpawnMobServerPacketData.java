@@ -10,8 +10,6 @@ import java.io.IOException;
 
 public final class SpawnMobServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "SpawnMob";
-
     private int entityId;
     private int type;
     private int x;
@@ -24,11 +22,6 @@ public final class SpawnMobServerPacketData implements ServerPacketData {
     private byte pitch;
     private byte headPitch;
     private EntityMetadata metadata;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<SpawnMobServerPacketData, S0FPacketSpawnMob> {
 

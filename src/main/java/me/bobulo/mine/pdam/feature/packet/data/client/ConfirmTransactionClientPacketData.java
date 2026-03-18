@@ -11,21 +11,14 @@ import java.io.IOException;
 
 public final class ConfirmTransactionClientPacketData implements ClientPacketData {
 
-    private static final String PACKET_NAME = "ConfirmTransaction";
-
     private int windowId;
     private short uid;
     private boolean accepted;
 
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
-
     public static class Serializer implements PacketDataSerializer<ConfirmTransactionClientPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.CLIENT, 0x0F);
         }
 
@@ -41,4 +34,3 @@ public final class ConfirmTransactionClientPacketData implements ClientPacketDat
     }
 
 }
-

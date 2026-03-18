@@ -7,14 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class DisconnectServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Disconnect";
-
     private IChatComponent reason;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<DisconnectServerPacketData, S40PacketDisconnect> {
 
@@ -27,4 +20,3 @@ public final class DisconnectServerPacketData implements ServerPacketData {
 
     }
 }
-

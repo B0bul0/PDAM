@@ -7,15 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PlayerListHeaderFooterServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "PlayerListHeaderFooter";
-
     private IChatComponent header;
     private IChatComponent footer;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<PlayerListHeaderFooterServerPacketData, S47PacketPlayerListHeaderFooter> {
 
@@ -30,4 +23,3 @@ public final class PlayerListHeaderFooterServerPacketData implements ServerPacke
     }
 
 }
-

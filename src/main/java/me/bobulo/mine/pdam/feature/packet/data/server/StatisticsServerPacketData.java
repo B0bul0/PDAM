@@ -9,14 +9,7 @@ import java.util.stream.Collectors;
 
 public final class StatisticsServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "Statistics";
-
     private Map<String, Integer> stats;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<StatisticsServerPacketData, S37PacketStatistics> {
 
@@ -31,4 +24,3 @@ public final class StatisticsServerPacketData implements ServerPacketData {
     }
 
 }
-

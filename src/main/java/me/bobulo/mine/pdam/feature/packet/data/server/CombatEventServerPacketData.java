@@ -6,18 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 public final class CombatEventServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "CombatEvent";
-
     private S42PacketCombatEvent.Event eventType;
     private int playerId;
     private int entityId;
     private int duration;
     private String deathMessage;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<CombatEventServerPacketData, S42PacketCombatEvent> {
 
@@ -34,4 +27,3 @@ public final class CombatEventServerPacketData implements ServerPacketData {
 
     }
 }
-

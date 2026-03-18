@@ -1,5 +1,6 @@
 package me.bobulo.mine.pdam.feature.packet.data;
 
+import com.google.common.collect.ImmutableList;
 import me.bobulo.mine.pdam.feature.packet.ConnectionState;
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
 import me.bobulo.mine.pdam.feature.packet.data.client.*;
@@ -11,6 +12,7 @@ import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -138,6 +140,10 @@ public final class PacketCodecRegistry {
         return extractors.get(packetClass);
     }
 
+    public static List<PacketDataExtractor<?, ?>> getExtractors() {
+        return ImmutableList.copyOf(extractors.values());
+    }
+
     @SuppressWarnings("unchecked")
     public static <T extends PacketData> T extract(Packet<?> packet) throws IOException {
         PacketDataExtractor<T, Packet<?>> extractor = (PacketDataExtractor<T, Packet<?>>) extractors.get(packet.getClass());
@@ -157,6 +163,10 @@ public final class PacketCodecRegistry {
     @SuppressWarnings("unchecked")
     public static <T extends PacketData> PacketDataSerializer<T> getSerializer(SerializerKey key) {
         return (PacketDataSerializer<T>) serializers.get(key);
+    }
+
+    public static List<PacketDataSerializer<?>> getSerializers() {
+        return ImmutableList.copyOf(serializers.values());
     }
 
     @SuppressWarnings("unchecked")

@@ -11,17 +11,10 @@ import java.io.IOException;
 
 public final class ChunkDataServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "ChunkData";
-
     private int chunkX;
     private int chunkZ;
     private boolean groundUpContinuous;
     private Extracted extractedData;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extracted {
         private byte[] data;
@@ -31,7 +24,7 @@ public final class ChunkDataServerPacketData implements ServerPacketData {
     public static class Serializer implements PacketDataSerializer<ChunkDataServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x21);
         }
 
@@ -49,5 +42,3 @@ public final class ChunkDataServerPacketData implements ServerPacketData {
     }
 
 }
-
-

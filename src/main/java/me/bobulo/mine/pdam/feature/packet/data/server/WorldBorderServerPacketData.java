@@ -12,8 +12,6 @@ import java.io.IOException;
 
 public final class WorldBorderServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "WorldBorder";
-
     private S44PacketWorldBorder.Action action;
     private int size;
     private double centerX;
@@ -24,15 +22,10 @@ public final class WorldBorderServerPacketData implements ServerPacketData {
     private int warningTime;
     private int warningDistance;
 
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
-
     public static class Serializer implements PacketDataSerializer<WorldBorderServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x44);
         }
 
@@ -77,4 +70,3 @@ public final class WorldBorderServerPacketData implements ServerPacketData {
     }
 
 }
-

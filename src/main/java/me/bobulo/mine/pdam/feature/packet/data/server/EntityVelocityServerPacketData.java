@@ -6,17 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EntityVelocityServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "EntityVelocity";
-
     private int entityID;
     private int motionX;
     private int motionY;
     private int motionZ;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Extractor implements PacketDataExtractor<EntityVelocityServerPacketData, S12PacketEntityVelocity> {
 
@@ -35,4 +28,3 @@ public final class EntityVelocityServerPacketData implements ServerPacketData {
     }
 
 }
-

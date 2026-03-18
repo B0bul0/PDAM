@@ -12,20 +12,13 @@ import java.io.IOException;
 
 public final class UseBedServerPacketData implements ServerPacketData {
 
-    private static final String PACKET_NAME = "UseBed";
-
     private int playerID;
     private BlockPosition bedPos;
-
-    @Override
-    public @NotNull String getPacketName() {
-        return PACKET_NAME;
-    }
 
     public static class Serializer implements PacketDataSerializer<UseBedServerPacketData> {
 
         @Override
-        public SerializerKey getKey() {
+        public @NotNull SerializerKey getKey() {
             return new SerializerKey(ConnectionState.PLAY, PacketDirection.SERVER, 0x0A);
         }
 
@@ -40,4 +33,3 @@ public final class UseBedServerPacketData implements ServerPacketData {
     }
 
 }
-
