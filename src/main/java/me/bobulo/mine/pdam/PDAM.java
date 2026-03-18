@@ -50,6 +50,7 @@ import me.bobulo.mine.pdam.feature.world.WorldTime;
 import me.bobulo.mine.pdam.feature.world.WorldTimeConfigImGuiRender;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
+import me.bobulo.mine.pdam.shortcut.ShortcutRegistry;
 import me.bobulo.mine.pdam.ui.UIManager;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;

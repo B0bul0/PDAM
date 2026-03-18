@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 /**
  * A configuration property that can get and set values in a configuration source.
@@ -23,6 +24,10 @@ public final class ConfigProperty<V> implements ConfigValue<V> {
     @SuppressWarnings("unchecked")
     public static <V> ConfigProperty<V> of(@NotNull String key, @NotNull V defaultValue) {
         return new ConfigProperty<>(key, (Class<V>) defaultValue.getClass(), () -> defaultValue, PDAM.getConfigService().getMainConfig(), null);
+    }
+
+    public static <V> ConfigProperty<V> of(@NotNull String key, @NotNull Class<V> valueType, @NotNull Supplier<V> defaultValue) {
+        return new ConfigProperty<>(key, valueType, defaultValue, PDAM.getConfigService().getMainConfig(), null);
     }
 
     public static ConfigProperty<String> ofString(@NotNull String key) {
@@ -63,6 +68,8 @@ public final class ConfigProperty<V> implements ConfigValue<V> {
 
     /* Instance fields and methods */
 
+    private static final Pattern KEY_PATTERN = Pattern.compile("^[\\p{L}\\p{N}._\\-]+$");
+
     private final String key;
     private final Class<V> valueType;
     private final Supplier<V> defaultValue;
@@ -70,6 +77,10 @@ public final class ConfigProperty<V> implements ConfigValue<V> {
     private final Consumer<V> onChange;
 
     private ConfigProperty(String key, Class<V> valueType, Supplier<V> defaultValue, Config config, Consumer<V> onChange) {
+        if (!KEY_PATTERN.matcher(key).matches()) {
+            throw new IllegalArgumentException("Invalid config key: " + key + ". " +
+              "Keys must only contain letters, numbers, dots, hyphens and underscores.");
+        }
         this.key = key;
         this.valueType = valueType;
         this.defaultValue = defaultValue;
