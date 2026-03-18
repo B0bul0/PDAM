@@ -3,11 +3,12 @@
 A mod for Minecraft 1.8.9, designed to assist with server plugin development and configuration.
 
 ## Features
-- **Item NBT Inspector**: Displays an item's NBT data in its tooltip. **([screenshots](#item-nbt-inspector))**
+- **Item NBT Inspector**: Displays an item's NBT data in its tooltip. ([screenshots](#item-nbt-inspector))
 - **Sound Debugger**: Logs all played sounds to the console for debugging purposes.
 - **Invisible Entity Highlighter**: Makes invisible entities visible for easier debugging.
 - **Entity Information Panel**: Displays an on-screen panel with real-time information about the entity you are looking at.
 - **Skin Extraction**: Extract skins from players and heads.
+- **Particle Effect Previewer**: Allows previewing particle effects in the world. ([video](#particle-effect-previewer))
 - **Copy Chat Messages**: Allows copying chat messages to clipboard by holding CTRL and clicking on the message.
 - **Packet Monitoring**: Monitors and logs incoming and outgoing packets for debugging purposes.
 - **Character Map**: Provides a GUI to browse and copy characters.
@@ -57,6 +58,23 @@ Various feature GUIs being displayed.
 <p align="center">
   <img src=".github/images/gui_screenshot.png" width="100%" alt="Mod Usage Screenshot"/>
 </p>
+
+### Particle Effect Previewer
+
+<details>
+  <summary>🎬 Video Demonstration</summary>
+  <br>
+
+  <p align="center">
+    <b>Usage Demonstration</b><br>
+    <video src="https://github.com/user-attachments/assets/ea8fe5f5-f4f3-4929-bb15-8351288c910d" width="80%"></video>
+  </p>
+
+  <p align="center">
+    <b>Colored particles showcase</b><br>
+    <video src="https://github.com/user-attachments/assets/3c146739-496a-455a-b59f-9b50d639b98d" width="80%"></video>
+  </p>
+</details>
 
 ### Inventory Slot Overlay Screenshots
 <table border="0">
