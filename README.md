@@ -55,7 +55,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 ## Example Screenshot
 Various feature GUIs being displayed.
 <p align="center">
-  <img src=".github/gui_screenshot.png" width="100%" alt="Mod Usage Screenshot"/>
+  <img src=".github/images/gui_screenshot.png" width="100%" alt="Mod Usage Screenshot"/>
 </p>
 
 ### Inventory Slot Overlay Screenshots
@@ -65,8 +65,8 @@ Various feature GUIs being displayed.
     <td align="center">Foreground</td>
   </tr>
   <tr>
-    <td><img src=".github/inventory_slot_back_screenshot.png" width="349" alt="Minecraft GUI screenshot showcasing the feature" title="Background"></td>
-    <td><img src=".github/inventory_slot_fore_screenshot.png" width="300" alt="Minecraft GUI screenshot showcasing the feature" title="Foreground"></td>
+    <td><img src=".github/images/inventory_slot_back_screenshot.png" width="349" alt="Minecraft GUI screenshot showcasing the feature" title="Background"></td>
+    <td><img src=".github/images/inventory_slot_fore_screenshot.png" width="300" alt="Minecraft GUI screenshot showcasing the feature" title="Foreground"></td>
   </tr>
 </table>
 
@@ -78,13 +78,13 @@ Replaces the item's vanilla name with a mapped name.
     <td align="center">Bukkit 1.8 Mapping - Override</td>
   </tr>
   <tr>
-    <td><img src=".github/item_name_debugger_interface.png" width="291" alt="Minecraft GUI screenshot showcasing the feature"></td>
-    <td><img src=".github/item_name_debugger_interface_override.png" width="297" alt="Minecraft GUI screenshot showcasing the feature"></td>
+    <td><img src=".github/images/item_name_debugger_interface.png" width="291" alt="Minecraft GUI screenshot showcasing the feature"></td>
+    <td><img src=".github/images/item_name_debugger_interface_override.png" width="297" alt="Minecraft GUI screenshot showcasing the feature"></td>
   </tr>
 </table>
 
 ### Item NBT Inspector
-<img src=".github/item_nbt_inspector.png" width="618" alt="Minecraft GUI screenshot showcasing the feature">
+<img src=".github/images/item_nbt_inspector.png" width="618" alt="Minecraft GUI screenshot showcasing the feature">
 
 ## Third-Party Libraries
 - **[Dear ImGui](https://github.com/ocornut/imgui)** by [ocornut](https://github.com/ocornut): Bloat-free Graphical User interface for C++ with minimal dependencies. Used for the visual interface.
