@@ -63,7 +63,7 @@ Various feature GUIs being displayed.
 <img width="912" height="548" alt="image" src="https://github.com/user-attachments/assets/a09c49ff-c479-4412-bc76-1a1ce5188fcc" />
 
 ### Particle Effect Previewer
-
+Simulates sending particle packets from the server to the client, with configurations equivalent to the packet settings.
 <details>
   <summary>🎬 Video Demonstration</summary>
   <br>
