@@ -1,28 +1,41 @@
 package me.bobulo.mine.pdam.feature.designtools;
 
+import com.google.common.collect.ImmutableList;
 import imgui.ImGui;
 import imgui.ImGuiTextFilter;
-import imgui.flag.*;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiKey;
+import imgui.flag.ImGuiTableColumnFlags;
+import imgui.flag.ImGuiTableFlags;
 import me.bobulo.mine.pdam.feature.sound.window.SoundMapperDrawer;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.UniqueHistory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.*;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundEventAccessorComposite;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.keepInScreen;
+import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.*;
 
 public final class PlaySoundWindow extends AbstractRenderItemWindow {
+
+    private static final Random RANDOM = new Random();
+    private static final String NONE_SOUND = "none";
 
     private final SoundMapperDrawer soundMapper = new SoundMapperDrawer();
 
     // Sound playing controls
-    private String soundToPlay = "none";
+    private String soundToPlay = NONE_SOUND;
     private final float[] pitch = new float[]{1.0f};
+
     private final ImGuiTextFilter soundFilter = new ImGuiTextFilter();
     private final UniqueHistory<PlaySoundEntry> playSoundEntries = new UniqueHistory<>(25);
 
@@ -78,7 +91,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             setNextItemShortcut(ImGuiKey.ModCtrl | ImGuiKey.F);
 
             if (soundFilter.draw("Filter")) {
-                soundToPlay = "none";
+                soundToPlay = NONE_SOUND;
             }
 
             for (SoundEventAccessorComposite soundEventAccessorComposite : soundRegistry) {
@@ -94,19 +107,45 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
         sliderFloat("Pitch", pitch, 0.5f, 2.0f);
 
-        if (button("Play Test Sound")) {
-            if (!"none".equals(soundToPlay)) {
-                String originalSound = reverseMapSoundName(soundToPlay);
-
-                mc.getSoundHandler().playSound(
-                  PositionedSoundRecord.create(
-                    new ResourceLocation(originalSound), pitch[0]
-                  )
-                );
-
-                playSoundEntries.push(new PlaySoundEntry(originalSound, pitch[0]));
-            }
+        text("Play Test Sound:");
+        if (button("Current Sound")) {
+            playSelectedSound(mc);
         }
+
+        verticalSeparator();
+
+        sameLine();
+        if (button("Next Sound")) {
+            String currentSound = soundToPlay;
+            boolean foundCurrent = false;
+            String nextSound = null;
+            for (SoundEventAccessorComposite soundEventAccessorComposite : soundRegistry) {
+                ResourceLocation soundEventLocation = soundEventAccessorComposite.getSoundEventLocation();
+                String soundName = mapSoundName(soundEventLocation.toString());
+
+                if (foundCurrent) {
+                    nextSound = soundName;
+                    break;
+                } else if (soundName.equals(currentSound) || NONE_SOUND.equals(currentSound)) {
+                    foundCurrent = true;
+                }
+            }
+
+            soundToPlay = nextSound == null ? NONE_SOUND : nextSound;
+            playSelectedSound(mc);
+        }
+
+        tooltip("Play the next sound in the list after the currently selected one.");
+
+        sameLine();
+        if (button("Random Sound")) {
+            List<ResourceLocation> keys = ImmutableList.copyOf(soundRegistry.getKeys());
+            int randomIndex = RANDOM.nextInt(keys.size());
+            soundToPlay = mapSoundName(keys.get(randomIndex).toString());
+            playSelectedSound(mc);
+        }
+
+        tooltip("Play a random sound from the registry.");
 
         separator();
 
@@ -129,7 +168,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
                 tableNextColumn();
                 text(String.format("%.2f", entry.pitch));
                 tableNextColumn();
-                if (button("Play##" + entry.soundName + "_" + entry.pitch)) {
+                if (smallButton("Play##" + entry.soundName + "_" + entry.pitch)) {
                     mc.getSoundHandler().playSound(
                       PositionedSoundRecord.create(
                         new ResourceLocation(entry.soundName), entry.pitch
@@ -140,6 +179,22 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
             endTable();
         }
+    }
+
+    private void playSelectedSound(Minecraft mc) {
+        if (soundToPlay == null || soundToPlay.isEmpty() || NONE_SOUND.equals(soundToPlay)) {
+            return;
+        }
+
+        String originalSound = reverseMapSoundName(soundToPlay);
+
+        mc.getSoundHandler().playSound(
+          PositionedSoundRecord.create(
+            new ResourceLocation(originalSound), pitch[0]
+          )
+        );
+
+        playSoundEntries.push(new PlaySoundEntry(originalSound, pitch[0]));
     }
 
     private String mapSoundName(String vanillaName) {
