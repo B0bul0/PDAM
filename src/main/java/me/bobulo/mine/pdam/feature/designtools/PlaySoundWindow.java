@@ -12,7 +12,6 @@ import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.UniqueHistory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.audio.SoundEventAccessorComposite;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.util.ResourceLocation;
@@ -30,6 +29,11 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
     private static final Random RANDOM = new Random();
     private static final String NONE_SOUND = "none";
 
+    // Cache of sound event locations for filtering and selection
+    private boolean initialized = false;
+    private SoundRegistry soundRegistry;
+    private List<ResourceLocation> soundEventLocations;
+
     private final SoundMapperDrawer soundMapper = new SoundMapperDrawer();
 
     // Sound playing controls
@@ -43,6 +47,27 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
         super("Play Sound");
     }
 
+    private void initialize() {
+        if (initialized) {
+            return;
+        }
+        initialized = true;
+
+        this.soundRegistry = ObfuscationReflectionHelper.getPrivateValue(
+          SoundHandler.class,
+          Minecraft.getMinecraft().getSoundHandler(),
+          "sndRegistry",
+          "field_147697_e"
+        );
+
+        // Cache sound event location
+        if (soundRegistry != null) {
+            this.soundEventLocations = ImmutableList.copyOf(soundRegistry.getKeys());
+        } else {
+            this.soundEventLocations = ImmutableList.of();
+        }
+    }
+
     @Override
     public void renderGui() {
         ImGui.setNextWindowSize(600, 400, ImGuiCond.FirstUseEver);
@@ -54,34 +79,29 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
         }
 
         keepInScreen();
+        initialize();
 
-        Minecraft mc = Minecraft.getMinecraft();
-
-        SoundRegistry soundRegistry = ObfuscationReflectionHelper.getPrivateValue(
-          SoundHandler.class,
-          mc.getSoundHandler(),
-          "sndRegistry",
-          "field_147697_e"
-        );
+        if (soundRegistry == null) {
+            text("Sound registry not available.");
+            end();
+            return;
+        }
 
         soundMapper.draw();
 
         separator();
 
-        renderPlaySound(mc, soundRegistry);
+        renderPlaySound();
 
         end();
     }
 
-    private void renderPlaySound(Minecraft mc, SoundRegistry soundRegistry) {
-        if (soundRegistry == null) {
-            text("Sound registry not available.");
-            return;
-        }
+    private void renderPlaySound() {
+        Minecraft mc = Minecraft.getMinecraft();
 
         text("Play sound");
 
-        if (beginCombo("Select Sound", soundToPlay)) {
+        if (beginCombo("Select Sound", mapSoundName(soundToPlay))) {
 
             if (isWindowAppearing()) {
                 setKeyboardFocusHere();
@@ -94,20 +114,22 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
                 soundToPlay = NONE_SOUND;
             }
 
-            for (SoundEventAccessorComposite soundEventAccessorComposite : soundRegistry) {
-                ResourceLocation soundEventLocation = soundEventAccessorComposite.getSoundEventLocation();
+            for (ResourceLocation soundEventLocation : soundEventLocations) {
                 String soundName = mapSoundName(soundEventLocation.toString());
 
                 if (soundFilter.passFilter(soundName) && selectable(soundName, soundName.equals(soundToPlay))) {
-                    soundToPlay = soundName;
+                    soundToPlay = soundEventLocation.toString();
                 }
             }
+
             endCombo();
         }
 
+        // 0.5x to 2x pitch range matching Minecraft's sound pitch limits
         sliderFloat("Pitch", pitch, 0.5f, 2.0f);
 
         text("Play Test Sound:");
+        sameLine();
         if (button("Current Sound")) {
             playSelectedSound(mc);
         }
@@ -119,9 +141,9 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             String currentSound = soundToPlay;
             boolean foundCurrent = false;
             String nextSound = null;
-            for (SoundEventAccessorComposite soundEventAccessorComposite : soundRegistry) {
-                ResourceLocation soundEventLocation = soundEventAccessorComposite.getSoundEventLocation();
-                String soundName = mapSoundName(soundEventLocation.toString());
+
+            for (ResourceLocation soundEventLocation : soundEventLocations) {
+                String soundName = soundEventLocation.toString();
 
                 if (foundCurrent) {
                     nextSound = soundName;
@@ -139,9 +161,8 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
         sameLine();
         if (button("Random Sound")) {
-            List<ResourceLocation> keys = ImmutableList.copyOf(soundRegistry.getKeys());
-            int randomIndex = RANDOM.nextInt(keys.size());
-            soundToPlay = mapSoundName(keys.get(randomIndex).toString());
+            int randomIndex = RANDOM.nextInt(soundEventLocations.size());
+            soundToPlay = soundEventLocations.get(randomIndex).toString();
             playSelectedSound(mc);
         }
 
@@ -186,7 +207,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             return;
         }
 
-        String originalSound = reverseMapSoundName(soundToPlay);
+        String originalSound = soundToPlay;
 
         mc.getSoundHandler().playSound(
           PositionedSoundRecord.create(
