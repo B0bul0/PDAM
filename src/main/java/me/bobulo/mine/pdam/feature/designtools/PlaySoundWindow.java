@@ -11,18 +11,18 @@ import me.bobulo.mine.pdam.feature.sound.window.SoundMapperDrawer;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.util.UniqueHistory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.audio.SoundRegistry;
+import net.minecraft.client.audio.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.*;
+import static net.minecraft.client.audio.SoundCategory.RECORDS;
 
 public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
@@ -32,7 +32,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
     // Cache of sound event locations for filtering and selection
     private boolean initialized = false;
     private SoundRegistry soundRegistry;
-    private List<ResourceLocation> soundEventLocations;
+    private List<SoundEventAccessorComposite> soundEventLocations;
 
     private final SoundMapperDrawer soundMapper = new SoundMapperDrawer();
 
@@ -62,7 +62,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
         // Cache sound event location
         if (soundRegistry != null) {
-            this.soundEventLocations = ImmutableList.copyOf(soundRegistry.getKeys());
+            this.soundEventLocations = ImmutableList.copyOf(soundRegistry.iterator());
         } else {
             this.soundEventLocations = ImmutableList.of();
         }
@@ -114,8 +114,8 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
                 soundToPlay = NONE_SOUND;
             }
 
-            for (ResourceLocation soundEventLocation : soundEventLocations) {
-                String soundName = mapSoundName(soundEventLocation.toString());
+            for (SoundEventAccessorComposite soundEventLocation : soundEventLocations) {
+                String soundName = mapSoundName(soundEventLocation.getSoundEventLocation().toString());
 
                 if (soundFilter.passFilter(soundName) && selectable(soundName, soundName.equals(soundToPlay))) {
                     soundToPlay = soundEventLocation.toString();
@@ -142,8 +142,13 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             boolean foundCurrent = false;
             String nextSound = null;
 
-            for (ResourceLocation soundEventLocation : soundEventLocations) {
-                String soundName = soundEventLocation.toString();
+            for (SoundEventAccessorComposite soundEventLocation : soundEventLocations) {
+                if (soundEventLocation.getSoundCategory() == SoundCategory.RECORDS ||
+                  soundEventLocation.getSoundCategory() == SoundCategory.MUSIC) {
+                    continue; // Skip music and record sounds to avoid long-playing audio during testing
+                }
+
+                String soundName = soundEventLocation.getSoundEventLocation().toString();
 
                 if (foundCurrent) {
                     nextSound = soundName;
@@ -161,8 +166,15 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
         sameLine();
         if (button("Random Sound")) {
-            int randomIndex = RANDOM.nextInt(soundEventLocations.size());
-            soundToPlay = soundEventLocations.get(randomIndex).toString();
+            List<SoundEventAccessorComposite> list = soundEventLocations.stream()
+              .filter(loc ->
+                loc.getSoundCategory() != RECORDS &&
+                  loc.getSoundCategory() != SoundCategory.MUSIC
+              )
+              .collect(Collectors.toList());
+
+            int randomIndex = RANDOM.nextInt(list.size());
+            soundToPlay = list.get(randomIndex).getSoundEventLocation().toString();
             playSelectedSound(mc);
         }
 
