@@ -92,6 +92,8 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
         separator();
 
         renderPlaySound();
+        separator();
+        renderTestedSound();
 
         end();
     }
@@ -127,6 +129,8 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
         // 0.5x to 2x pitch range matching Minecraft's sound pitch limits
         sliderFloat("Pitch", pitch, 0.5f, 2.0f);
+
+        spacing();
 
         text("Play Test Sound:");
         sameLine();
@@ -179,8 +183,10 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
         }
 
         tooltip("Play a random sound from the registry.");
+    }
 
-        separator();
+    private void renderTestedSound() {
+        Minecraft mc = Minecraft.getMinecraft();
 
         // Table history
         text("Tested Sounds:");
