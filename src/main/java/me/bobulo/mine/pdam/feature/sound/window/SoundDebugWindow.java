@@ -101,11 +101,12 @@ public final class SoundDebugWindow extends AbstractRenderItemWindow {
 
         text("Active Sounds: " + playingSounds.size());
         separator();
-        if (beginTable("PacketLogsTable", 4, flags)) {
+        if (beginTable("PacketLogsTable", 5, flags)) {
             tableSetupColumn("Sound Name", ImGuiTableColumnFlags.WidthStretch);
             tableSetupColumn("Volume", ImGuiTableColumnFlags.WidthFixed);
             tableSetupColumn("Pitch", ImGuiTableColumnFlags.WidthFixed);
             tableSetupColumn("Location", ImGuiTableColumnFlags.WidthFixed, 255F);
+            tableSetupColumn("Stop", ImGuiTableColumnFlags.WidthFixed, 38F);
             tableHeadersRow();
 
             for (ISound sound : playingSounds.values()) {
@@ -129,6 +130,11 @@ public final class SoundDebugWindow extends AbstractRenderItemWindow {
                     ));
                 } else {
                     text("N/A");
+                }
+
+                tableNextColumn();
+                if (smallButton("Stop##Stop" + soundName)) {
+                    Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
                 }
 
             }

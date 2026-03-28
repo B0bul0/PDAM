@@ -149,12 +149,17 @@ public final class SignFinderWindow extends AbstractRenderItemWindow {
                                 SignESP.renderingSigns.add(signInRange);
                             }
                         } else {
+                            boolean alreadySelected = selectedSignHashes.contains(signHash);
+
                             selectedSignHashes.clear();
                             SignESP.renderingSigns.clear();
 
                             // Select only this sign
-                            selectedSignHashes.add(signHash);
-                            SignESP.renderingSigns.add(foundSign);
+                            if (!alreadySelected) {
+                                selectedSignHashes.add(signHash);
+                                SignESP.renderingSigns.add(foundSign);
+                            }
+
                             lastSelectedSignIndex = index;
                         }
 

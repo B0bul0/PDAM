@@ -3,13 +3,14 @@
 A mod for Minecraft 1.8.9, designed to assist with server plugin development and configuration.
 
 ## Features
-- **Item NBT Inspector**: Displays an item's NBT data in its tooltip. **([screenshots](#item-nbt-inspector))**
+- **Item NBT Inspector**: Displays an item's NBT data in its tooltip. ([screenshots](#item-nbt-inspector))
 - **Sound Debugger**: Logs all played sounds to the console for debugging purposes.
 - **Invisible Entity Highlighter**: Makes invisible entities visible for easier debugging.
 - **Entity Information Panel**: Displays an on-screen panel with real-time information about the entity you are looking at.
 - **Skin Extraction**: Extract skins from players and heads.
+- **Particle Effect Previewer**: Allows previewing particle effects in the world. ([video](#particle-effect-previewer))
 - **Copy Chat Messages**: Allows copying chat messages to clipboard by holding CTRL and clicking on the message.
-- **Packet Monitoring**: Monitors and logs incoming and outgoing packets for debugging purposes.
+- **Packet Monitoring**: Monitors and logs incoming and outgoing packets for debugging purposes. ([screenshot](#packet-monitoring))
 - **Character Map**: Provides a GUI to browse and copy characters.
 - **Hologram Mockup**: Edit personal hologram for prototyping preview.
 - **Scoreboard Inspector**: Displays scoreboard information on-screen for easier debugging.
@@ -18,7 +19,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Chat Message Formater**: Preview how messages appear in chat.
 - **Item Builder**: Create and customize items.
 - **Inventory Slot Inspector**: Overlays index numbers on inventory slots. ([screenshots](#inventory-slot-overlay-screenshots))
-- **Sign Finder**: Finds and highlights signs in the world.
+- **Sign Finder**: Finds and highlights signs in the world. ([screenshot](#sign-finder-screenshot))
 - **Item Name Debugger**: Replaces the item's vanilla name with a mapped name. ([screenshots](#item-name-debug-screenshots))
 - **BungeeCord Bypass**: Allows bypassing BungeeCord restrictions for testing purposes.
 - **Hitbox Visualizer**: Visualizes entity hitboxes for easier debugging.
@@ -58,6 +59,26 @@ Various feature GUIs being displayed.
   <img src=".github/images/gui_screenshot.png" width="100%" alt="Mod Usage Screenshot"/>
 </p>
 
+### Packet Monitoring
+<img width="912" height="548" alt="image" src="https://github.com/user-attachments/assets/a09c49ff-c479-4412-bc76-1a1ce5188fcc" />
+
+### Particle Effect Previewer
+Simulates sending particle packets from the server to the client, with configurations equivalent to the packet settings.
+<details>
+  <summary>🎬 Video Demonstration</summary>
+  <br>
+
+  <p align="center">
+    <b>Usage Demonstration</b><br>
+    <video src="https://github.com/user-attachments/assets/ea8fe5f5-f4f3-4929-bb15-8351288c910d" width="80%"></video>
+  </p>
+
+  <p align="center">
+    <b>Colored particles showcase</b><br>
+    <video src="https://github.com/user-attachments/assets/3c146739-496a-455a-b59f-9b50d639b98d" width="80%"></video>
+  </p>
+</details>
+
 ### Inventory Slot Overlay Screenshots
 <table border="0">
   <tr>
@@ -85,6 +106,9 @@ Replaces the item's vanilla name with a mapped name.
 
 ### Item NBT Inspector
 <img src=".github/images/item_nbt_inspector.png" width="618" alt="Minecraft GUI screenshot showcasing the feature">
+
+### Sign Finder Screenshot
+<img width="929" height="355" alt="image" src="https://github.com/user-attachments/assets/273c7dda-6ab2-46d9-b9bd-9b90dbd56287" />
 
 ## Third-Party Libraries
 - **[Dear ImGui](https://github.com/ocornut/imgui)** by [ocornut](https://github.com/ocornut): Bloat-free Graphical User interface for C++ with minimal dependencies. Used for the visual interface.
