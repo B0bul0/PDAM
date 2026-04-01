@@ -24,6 +24,7 @@ import me.bobulo.mine.pdam.feature.hitbox.HitBoxesConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.hitbox.HitboxesListener;
 import me.bobulo.mine.pdam.feature.imgui.ConfigMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.imgui.FeatureToolbarMenuImGuiRender;
+import me.bobulo.mine.pdam.feature.imgui.ToggleEnabledMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector;
 import me.bobulo.mine.pdam.feature.inventoryslot.SlotInspectorConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.itemname.AdvancedItemTooltipsListener;
@@ -325,7 +326,7 @@ public final class PDAM {
               new ChunkBoundaryListener()
             ),
             new ChunkConfigImGuiRender(),
-            new ConfigMenuImGuiRender(true)
+            new ToggleEnabledMenuImGuiRender()
           )
           .build());
     }
