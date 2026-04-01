@@ -23,6 +23,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 - **Item Name Debugger**: Replaces the item's vanilla name with a mapped name. ([screenshots](#item-name-debug-screenshots))
 - **BungeeCord Bypass**: Allows bypassing BungeeCord restrictions for testing purposes.
 - **Hitbox Visualizer**: Visualizes entity hitboxes for easier debugging.
+- **Chunk Border Display**: Displays chunk borders for easier navigation and debugging.
 - And more...
 
 ## Planned Features

@@ -63,6 +63,9 @@ pdam.feature.sign_finder.description=Finds and highlights signs in the world.
 pdam.feature.hitboxes.name=Hitbox Visualizer
 pdam.feature.hitboxes.description=Visualizes entity hitboxes for easier debugging.
 
+pdam.feature.chunk_viewer.name=Chunk Viewer
+pdam.feature.chunk_viewer.description=Visualizes chunk boundaries for easier debugging.
+
 # Entity Info
 pdam.entity.info_title=Entity Info
 pdam.entity.id=Entity ID

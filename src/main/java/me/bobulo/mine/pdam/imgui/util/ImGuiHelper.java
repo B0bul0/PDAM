@@ -86,6 +86,24 @@ public final class ImGuiHelper {
         spacing();
     }
 
+    public static void beginDisableIf(boolean condition) {
+        if (condition) {
+            beginDisabled();
+        }
+    }
+
+    public static void endDisableIf(boolean condition) {
+        if (condition) {
+            endDisabled();
+        }
+    }
+
+    public static void disableIf(boolean condition, Runnable action) {
+        beginDisableIf(condition);
+        action.run();
+        endDisableIf(condition);
+    }
+
     private ImGuiHelper() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }

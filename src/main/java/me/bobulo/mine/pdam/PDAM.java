@@ -8,6 +8,9 @@ import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypass;
 import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypassConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
 import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
+import me.bobulo.mine.pdam.feature.chunk.ChunkBoundaryListener;
+import me.bobulo.mine.pdam.feature.chunk.ChunkConfigImGuiRender;
+import me.bobulo.mine.pdam.feature.chunk.ChunkViewer;
 import me.bobulo.mine.pdam.feature.creative.CreativeTabInjectorModule;
 import me.bobulo.mine.pdam.feature.creative.ExpandedCreativeInventory;
 import me.bobulo.mine.pdam.feature.designtools.*;
@@ -21,6 +24,7 @@ import me.bobulo.mine.pdam.feature.hitbox.HitBoxesConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.hitbox.HitboxesListener;
 import me.bobulo.mine.pdam.feature.imgui.ConfigMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.imgui.FeatureToolbarMenuImGuiRender;
+import me.bobulo.mine.pdam.feature.imgui.ToggleEnabledMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector;
 import me.bobulo.mine.pdam.feature.inventoryslot.SlotInspectorConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.itemname.AdvancedItemTooltipsListener;
@@ -305,12 +309,24 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id(HitBoxes.FEATURE_ID)
           .modules(
-            new EnabledFeatureModule(true),
+            new EnabledFeatureModule(false),
             ForgerListenerFeatureModule.of(
               new HitboxesListener()
             ),
             new HitBoxesConfigImGuiRender(),
             new ConfigMenuImGuiRender(true)
+          )
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(ChunkViewer.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(true),
+            ForgerListenerFeatureModule.of(
+              new ChunkBoundaryListener()
+            ),
+            new ChunkConfigImGuiRender(),
+            new ToggleEnabledMenuImGuiRender()
           )
           .build());
     }
