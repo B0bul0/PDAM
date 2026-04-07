@@ -30,7 +30,7 @@ public final class ChunkConfigImGuiRender extends AbstractFeatureModule implemen
     @Override
     public void draw() {
 
-        if (inputFloat("Line Width", lineWidth)) {
+        if (inputFloat("Line Thickness", lineWidth)) {
             lineWidth.set(Math.max(0.0f, lineWidth.get()));
             LINE_WIDTH.set(lineWidth.get());
         }
