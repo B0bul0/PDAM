@@ -40,7 +40,6 @@ public final class UpdateConfigImGuiRender extends AbstractFeatureModule impleme
 
         String current = updateChecker.getCurrentVersion();
         String latest = updateChecker.getLatestVersion();
-        boolean updateAvailable = updateChecker.isUpdateAvailable();
 
         text("Current Version: " + current);
         text("Latest Version: " + (latest != null ? latest : "Unknown"));
