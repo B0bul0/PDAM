@@ -109,6 +109,7 @@ public final class SoundDebugWindow extends AbstractRenderItemWindow {
             tableSetupColumn("Stop", ImGuiTableColumnFlags.WidthFixed, 38F);
             tableHeadersRow();
 
+            int indexSound = 0;
             for (ISound sound : playingSounds.values()) {
                 tableNextRow();
                 tableNextColumn();
@@ -133,10 +134,11 @@ public final class SoundDebugWindow extends AbstractRenderItemWindow {
                 }
 
                 tableNextColumn();
-                if (smallButton("Stop##Stop" + soundName)) {
+                if (smallButton("Stop##Stop_" + indexSound)) {
                     Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
                 }
 
+                indexSound++;
             }
 
             endTable();
@@ -154,10 +156,8 @@ public final class SoundDebugWindow extends AbstractRenderItemWindow {
         }
 
         sameLine();
-        boolean copyAll = false;
-        if (button("Copy All")) {
-            copyAll = true;
-        }
+
+        boolean copyAll = button("Copy All");
 
         sameLine();
         String pauseResumeText = logHistory.isPaused() ? "Resume" : "Pause";
