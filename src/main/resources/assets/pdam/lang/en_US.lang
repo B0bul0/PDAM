@@ -66,6 +66,9 @@ pdam.feature.hitboxes.description=Visualizes entity hitboxes for easier debuggin
 pdam.feature.chunk_viewer.name=Chunk Viewer
 pdam.feature.chunk_viewer.description=Visualizes chunk boundaries for easier debugging.
 
+pdam.feature.update.name=Update Checker
+pdam.feature.update.description=Checks for updates to the mod.
+
 # Entity Info
 pdam.entity.info_title=Entity Info
 pdam.entity.id=Entity ID

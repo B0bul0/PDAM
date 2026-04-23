@@ -50,6 +50,8 @@ import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
 import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureModule;
 import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
+import me.bobulo.mine.pdam.feature.update.Update;
+import me.bobulo.mine.pdam.feature.update.UpdateFeatureModule;
 import me.bobulo.mine.pdam.feature.world.WorldTime;
 import me.bobulo.mine.pdam.feature.world.WorldTimeConfigImGuiRender;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
@@ -327,6 +329,14 @@ public final class PDAM {
             ),
             new ChunkConfigImGuiRender(),
             new ToggleEnabledMenuImGuiRender()
+          )
+          .build());
+
+        featureService.registerFeature(FeatureImpl.builder()
+          .id(Update.FEATURE_ID)
+          .modules(
+            new EnabledFeatureModule(true),
+            new UpdateFeatureModule()
           )
           .build());
     }
