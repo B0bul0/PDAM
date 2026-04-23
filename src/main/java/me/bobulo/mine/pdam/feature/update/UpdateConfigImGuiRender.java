@@ -62,7 +62,7 @@ public final class UpdateConfigImGuiRender extends AbstractFeatureModule impleme
 
         sameLine();
 
-        disableIf(!updateAvailable && isBrowserSupported(), () -> {
+        disableIf(isBrowserSupported(), () -> {
             String url = String.format(Update.GITHUB_URL_DOWNLOAD, Update.GITHUB_USER, Update.GITHUB_REPO);
             if (button("Open Download Page")) {
                 openUrl(url);
