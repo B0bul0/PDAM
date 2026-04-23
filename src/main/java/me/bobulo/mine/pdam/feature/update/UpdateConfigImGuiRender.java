@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.net.URI;
+import java.util.concurrent.CompletableFuture;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.disableIf;
@@ -16,6 +17,8 @@ public final class UpdateConfigImGuiRender extends AbstractFeatureModule impleme
 
     private static final Logger log = LogManager.getLogger(UpdateConfigImGuiRender.class);
     private final UpdateChecker updateChecker;
+
+    private boolean checkingForUpdates = false;
 
     public UpdateConfigImGuiRender(UpdateChecker updateChecker) {
         this.updateChecker = updateChecker;
@@ -41,16 +44,26 @@ public final class UpdateConfigImGuiRender extends AbstractFeatureModule impleme
 
         text("Current Version: " + current);
         text("Latest Version: " + (latest != null ? latest : "Unknown"));
-        text("Is Update Available: " + (updateAvailable ? "Yes" : "No"));
 
-        if (button("Check for Updates")) {
-            updateChecker.asyncCheckForUpdates();
+        if (button(checkingForUpdates ? "Checking for Updates..." : "Check for Updates")) {
+            if (!checkingForUpdates) {
+                checkingForUpdates = true;
+                updateChecker.asyncCheckForUpdates()
+                  .whenComplete((result, ex) -> {
+                      checkingForUpdates = false;
+                      if (ex != null) {
+                          log.error("Failed to check for updates", ex);
+                      }
+                  });
+            } else {
+                log.debug("Already checking for updates, please wait...");
+            }
         }
 
         sameLine();
 
         disableIf(!updateAvailable && isBrowserSupported(), () -> {
-            String url = String.format(ChatUpdateWarning.GITHUB_URL_DOWNLOAD, Update.GITHUB_USER, Update.GITHUB_REPO);
+            String url = String.format(Update.GITHUB_URL_DOWNLOAD, Update.GITHUB_USER, Update.GITHUB_REPO);
             if (button("Open Download Page")) {
                 openUrl(url);
             }

@@ -10,8 +10,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public final class ChatUpdateWarning {
 
-    public static final String GITHUB_URL_DOWNLOAD = "https://github.com/%s/%s/releases/latest";
-
     private final UpdateChecker updateChecker;
     private boolean alreadyWarned = false;
 
@@ -30,7 +28,7 @@ public final class ChatUpdateWarning {
         }
 
         String latestVersion = updateChecker.getLatestVersion();
-        String url = String.format(GITHUB_URL_DOWNLOAD, Update.GITHUB_USER, Update.GITHUB_REPO);
+        String url = String.format(Update.GITHUB_URL_DOWNLOAD, Update.GITHUB_USER, Update.GITHUB_REPO);
 
         ChatStyle style = new ChatStyle();
         style.setColor(EnumChatFormatting.AQUA);

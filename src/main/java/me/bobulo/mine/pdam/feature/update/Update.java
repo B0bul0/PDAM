@@ -9,6 +9,7 @@ public final class Update {
 
     public static final String GITHUB_USER = "B0bul0";
     public static final String GITHUB_REPO = "PDAM";
+    public static final String GITHUB_URL_DOWNLOAD = "https://github.com/%s/%s/releases/latest";
 
     // Disable chat update warning
     public static final ConfigValue<Boolean> CHAT_WARNING = ConfigProperty.of(FEATURE_ID + ".chat_warning", true);

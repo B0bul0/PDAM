@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.CompletableFuture;
 
 public final class UpdateChecker {
 
@@ -36,8 +37,12 @@ public final class UpdateChecker {
         return updateAvailable;
     }
 
-    public void asyncCheckForUpdates() {
-        new Thread(this::checkForUpdates, "UpdateCheckerThread").start();
+    public CompletableFuture<Void> asyncCheckForUpdates() {
+        return CompletableFuture.runAsync(this::checkForUpdates)
+          .exceptionally(ex -> {
+              log.error("Failed to check for updates", ex);
+              return null;
+          });
     }
 
     public void checkForUpdates() {
