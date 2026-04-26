@@ -103,8 +103,9 @@ public final class ConfigProperty<V> implements ConfigValue<V> {
             ((PersistentConfig) config).saveConfig();
         }
 
-        if (onChange != null && !Objects.equals(oldValue, value)) {
-            onChange.accept(value);
+        V newValue = get(); // get the new value after setting, which may be different due to type conversion or validation
+        if (onChange != null && !Objects.equals(oldValue, newValue)) {
+            onChange.accept(newValue);
         }
     }
 

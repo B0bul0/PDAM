@@ -1,6 +1,9 @@
 package me.bobulo.mine.pdam.imgui.util;
 
+import imgui.ImDrawList;
 import imgui.ImGuiIO;
+import imgui.ImVec2;
+import imgui.flag.ImGuiCol;
 
 import static imgui.ImGui.*;
 
@@ -68,10 +71,37 @@ public final class ImGuiHelper {
         tooltip(description);
     }
 
+    public static void verticalSeparator() {
+        sameLine();
+        ImVec2 p = getCursorScreenPos();
+        ImDrawList windowDrawList = getWindowDrawList();
+        windowDrawList.addLine(p, new ImVec2(p.x, p.y + getFontSize()), getColorU32(ImGuiCol.Separator));
+        dummy(new ImVec2(2.0f, 0.0f));
+        sameLine();
+    }
+
     public static void separatorWithSpacing() {
         spacing();
         separator();
         spacing();
+    }
+
+    public static void beginDisableIf(boolean condition) {
+        if (condition) {
+            beginDisabled();
+        }
+    }
+
+    public static void endDisableIf(boolean condition) {
+        if (condition) {
+            endDisabled();
+        }
+    }
+
+    public static void disableIf(boolean condition, Runnable action) {
+        beginDisableIf(condition);
+        action.run();
+        endDisableIf(condition);
     }
 
     private ImGuiHelper() {

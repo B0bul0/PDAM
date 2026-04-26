@@ -1,6 +1,7 @@
 package me.bobulo.mine.pdam.feature.player;
 
 import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiMouseButton;
 import imgui.flag.ImGuiWindowFlags;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import me.bobulo.mine.pdam.notification.Notifier;
@@ -89,8 +90,8 @@ public final class CoordinatesWindow extends AbstractRenderItemWindow {
 
     private void drawCoord(String label, double value) {
         text(String.format("%.2f", value));
-        tooltip(label);
-        if (isItemClicked()) {
+        tooltip(String.format("%s: %.2f", label, value));
+        if (isItemClicked(ImGuiMouseButton.Left) || isItemClicked(ImGuiMouseButton.Right)) {
             setClipboardText(String.format("%.2f", value));
             Notifier.showSuccess(translateToLocal("pdam.general.copied_to_clipboard"));
         }
@@ -98,8 +99,8 @@ public final class CoordinatesWindow extends AbstractRenderItemWindow {
 
     private void drawCoord(String label, int value) {
         text(String.format("%d", value));
-        tooltip(label);
-        if (isItemClicked()) {
+        tooltip(String.format("%s: %d", label, value));
+        if (isItemClicked(ImGuiMouseButton.Left) || isItemClicked(ImGuiMouseButton.Right)) {
             setClipboardText(String.format("%d", value));
             Notifier.showSuccess(translateToLocal("pdam.general.copied_to_clipboard"));
         }
