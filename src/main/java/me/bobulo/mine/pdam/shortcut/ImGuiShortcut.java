@@ -58,7 +58,7 @@ public class ImGuiShortcut {
                 }
             }
         } else {
-            if (button( keyName + "##editShortcut_" + shortcut.getNameKey())) {
+            if (button(keyName + "##editShortcut_" + shortcut.getNameKey())) {
                 editing = true;
             }
         }
