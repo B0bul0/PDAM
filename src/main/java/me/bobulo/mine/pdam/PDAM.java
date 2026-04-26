@@ -321,7 +321,7 @@ public final class PDAM {
         featureService.registerFeature(FeatureImpl.builder()
           .id(ChunkViewer.FEATURE_ID)
           .modules(
-            new EnabledFeatureModule(true),
+            new EnabledFeatureModule(false),
             ForgerListenerFeatureModule.of(
               new ChunkBoundaryListener()
             ),
