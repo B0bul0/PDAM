@@ -16,7 +16,7 @@ val version: String by project
 val mixinGroup = "$baseGroup.mixin"
 val modid: String by project
 val transformerFile = file("src/main/resources/accesstransformer.cfg")
-val imguiVersion = "1.90.0"
+val imguiVersion = "1.92.0"
 
 // Toolchains:
 java {

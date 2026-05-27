@@ -232,7 +232,7 @@ public final class SoundDebugWindow extends AbstractRenderItemWindow {
 
                         tableSetColumnIndex(0);
                         selectable(DATE_TIME_FORMATTER.format(logEntry.getTimestamp()) + "##time" + i, false,
-                          ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap);
+                          ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowOverlap);
 
                         if (beginPopupContextItem("log_popup##" + i)) {
                             text("Log #" + i);

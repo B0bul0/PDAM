@@ -228,7 +228,7 @@ public final class PacketLogWindow extends AbstractRenderItemWindow {
                     // Time column
                     tableNextColumn();
                     if (selectable(entry.getFormattedTime() + "##time" + i, false,
-                      ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap, 0, 0)) {
+                      ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowOverlap, 0, 0)) {
                         new PacketInfoWindow(entry).open();
                     }
 
