@@ -69,8 +69,8 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
     @Override
     public void renderGui() {
-        ImGui.setNextWindowSize(600, 400, ImGuiCond.FirstUseEver);
-        ImGui.setNextWindowPos(50, 60, ImGuiCond.FirstUseEver);
+        setNextWindowSize(600, 400, ImGuiCond.FirstUseEver);
+        setNextWindowPos(50, 60, ImGuiCond.FirstUseEver);
 
         if (!begin("Play Sound##PlaySoundWindow", isVisible)) {
             end();
