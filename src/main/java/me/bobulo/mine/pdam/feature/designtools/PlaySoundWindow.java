@@ -107,8 +107,8 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             String currentSound = soundToPlay;
             String previousSound = null;
 
-            for (SoundEventAccessorComposite soundEventLocation : soundEventLocations) {
-                String soundName = soundEventLocation.getSoundEventLocation().toString();
+            for (ResourceLocation soundEventLocation : getPlayableSounds()) {
+                String soundName = soundEventLocation.toString();
 
                 if (soundName.equals(currentSound) || NONE_SOUND.equals(currentSound)) {
                     break;
@@ -127,8 +127,8 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             boolean foundCurrent = false;
             String nextSound = null;
 
-            for (SoundEventAccessorComposite soundEventLocation : soundEventLocations) {
-                String soundName = soundEventLocation.getSoundEventLocation().toString();
+            for (ResourceLocation soundEventLocation : getPlayableSounds()) {
+                String soundName = soundEventLocation.toString();
 
                 if (foundCurrent) {
                     nextSound = soundName;
@@ -311,6 +311,12 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
     private String mapSoundName(String vanillaName) {
         return soundMapper.mapSoundName(vanillaName);
+    }
+
+    private List<ResourceLocation> getAllSoundEventLocations() {
+        return soundEventLocations.stream()
+          .map(SoundEventAccessorComposite::getSoundEventLocation)
+          .collect(Collectors.toList());
     }
 
     private List<ResourceLocation> getPlayableSounds() {
