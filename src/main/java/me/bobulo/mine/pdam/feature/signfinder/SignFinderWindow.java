@@ -123,7 +123,7 @@ public final class SignFinderWindow extends AbstractRenderItemWindow {
 
                     int signHash = foundSign.getPosition().hashCode();
                     if (selectable(signText, selectedSignHashes.contains(signHash),
-                      ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap)) {
+                      ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowOverlap)) {
                         if (getIO().getKeyCtrl()) {
                             // Toggle selection on Ctrl
                             if (selectedSignHashes.contains(signHash)) {

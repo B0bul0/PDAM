@@ -150,7 +150,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
                 soundFilter.clear();
             }
 
-            setNextItemShortcut(ImGuiKey.ModCtrl | ImGuiKey.F);
+            setNextItemShortcut(ImGuiKey.ImGuiMod_Ctrl | ImGuiKey.F);
 
             if (soundFilter.draw("Filter")) {
                 soundToPlay = NONE_SOUND;

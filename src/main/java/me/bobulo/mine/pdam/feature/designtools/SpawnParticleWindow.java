@@ -202,7 +202,7 @@ public final class SpawnParticleWindow extends AbstractRenderItemWindow {
                 particleFilter.clear();
             }
 
-            setNextItemShortcut(ImGuiKey.ModCtrl | ImGuiKey.F);
+            setNextItemShortcut(ImGuiKey.ImGuiMod_Ctrl | ImGuiKey.F);
 
             if (particleFilter.draw("Filter")) {
                 particleToSpawn = NONE_PARTICLE;
