@@ -111,6 +111,9 @@ Replaces the item's vanilla name with a mapped name.
 ### Sign Finder Screenshot
 <img width="929" height="355" alt="image" src="https://github.com/user-attachments/assets/273c7dda-6ab2-46d9-b9bd-9b90dbd56287" />
 
+### Play Sound
+<img width="652" height="427" alt="image" src="https://github.com/user-attachments/assets/e4e0a1af-2ad0-4d6c-aa02-a54e3cb42bb3" />
+
 ## Third-Party Libraries
 - **[Dear ImGui](https://github.com/ocornut/imgui)** by [ocornut](https://github.com/ocornut): Bloat-free Graphical User interface for C++ with minimal dependencies. Used for the visual interface.
 - **[ImGui-java](https://github.com/SpaiR/imgui-java)** by [SpaiR](https://github.com/SpaiR): JNI-based binding for Dear ImGui.
