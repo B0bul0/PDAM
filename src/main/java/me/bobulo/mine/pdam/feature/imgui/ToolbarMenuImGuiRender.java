@@ -19,12 +19,6 @@ public final class ToolbarMenuImGuiRender extends AbstractFeatureModule implemen
     }
 
     @Override
-    protected void onEnable() {}
-
-    @Override
-    protected void onDisable() {}
-
-    @Override
     public void draw() {
         if (registeredWindows == null || registeredWindows.isEmpty()) {
             return;
