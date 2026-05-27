@@ -1,10 +1,8 @@
 package me.bobulo.mine.pdam.feature.inventoryslot;
 
-import lombok.Getter;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
 
-@Getter
 public final class InventorySlotInspector {
 
     public static final String FEATURE_ID = "inventory_slot_inspector";

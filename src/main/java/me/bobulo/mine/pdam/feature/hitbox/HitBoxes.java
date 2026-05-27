@@ -1,6 +1,5 @@
 package me.bobulo.mine.pdam.feature.hitbox;
 
-import lombok.Getter;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
 
@@ -8,7 +7,6 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
 public final class HitBoxes {
 
     public static final String FEATURE_ID = "hitboxes";

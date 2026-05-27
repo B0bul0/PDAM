@@ -1,6 +1,5 @@
 package me.bobulo.mine.pdam.feature.chunk;
 
-import lombok.Getter;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
 
@@ -9,7 +8,6 @@ import java.awt.*;
 /**
  * Feature for visualizing chunk boundaries and sections in the Minecraft world.
  */
-@Getter
 public final class ChunkViewer {
 
     public static final String FEATURE_ID = "chunk_viewer";
