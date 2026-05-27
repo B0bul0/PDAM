@@ -108,11 +108,6 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             String previousSound = null;
 
             for (SoundEventAccessorComposite soundEventLocation : soundEventLocations) {
-                if (soundEventLocation.getSoundCategory() == SoundCategory.RECORDS ||
-                  soundEventLocation.getSoundCategory() == SoundCategory.MUSIC) {
-                    continue; // Skip music and record sounds to avoid long-playing audio during testing
-                }
-
                 String soundName = soundEventLocation.getSoundEventLocation().toString();
 
                 if (soundName.equals(currentSound) || NONE_SOUND.equals(currentSound)) {
@@ -123,7 +118,6 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             }
 
             soundToPlay = previousSound == null ? NONE_SOUND : previousSound;
-            playSelectedSound();
         }
 
        sameLine(0F, spacing);
@@ -134,11 +128,6 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             String nextSound = null;
 
             for (SoundEventAccessorComposite soundEventLocation : soundEventLocations) {
-                if (soundEventLocation.getSoundCategory() == SoundCategory.RECORDS ||
-                  soundEventLocation.getSoundCategory() == SoundCategory.MUSIC) {
-                    continue; // Skip music and record sounds to avoid long-playing audio during testing
-                }
-
                 String soundName = soundEventLocation.getSoundEventLocation().toString();
 
                 if (foundCurrent) {
@@ -150,10 +139,9 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
             }
 
             soundToPlay = nextSound == null ? NONE_SOUND : nextSound;
-            playSelectedSound();
         }
 
-        sameLine();
+        sameLine(0F, spacing);
 
         if (beginCombo("Select Sound", mapSoundName(soundToPlay), beginComboFlags)) {
 
@@ -186,7 +174,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
         tooltip("Pitch 1.0 is normal, less than 1.0 is lower pitch, greater than 1.0 is higher pitch.");
 
         sameLine();
-        if (smallButton("Reset Pitch")) {
+        if (button("Reset")) {
             pitch[0] = 1.0f;
         }
         tooltip("Reset pitch to normal (1.0).");
@@ -197,7 +185,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
           "Values above 1.0 will not increase volume but allow the sound to be heard from farther away.");
 
         sameLine();
-        if (smallButton("Reset Volume")) {
+        if (button("Reset")) {
             volume[0] = 1.0f;
         }
         tooltip("Reset volume to normal (1.0).");
@@ -213,18 +201,15 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
         verticalSeparator();
 
         sameLine();
-        if (button("Next Sound")) {
+        if (button("Next Sound##PlayNextSound")) {
             String currentSound = soundToPlay;
             boolean foundCurrent = false;
             String nextSound = null;
 
-            for (SoundEventAccessorComposite soundEventLocation : soundEventLocations) {
-                if (soundEventLocation.getSoundCategory() == SoundCategory.RECORDS ||
-                  soundEventLocation.getSoundCategory() == SoundCategory.MUSIC) {
-                    continue; // Skip music and record sounds to avoid long-playing audio during testing
-                }
+            List<ResourceLocation> playableSounds = getPlayableSounds();
 
-                String soundName = soundEventLocation.getSoundEventLocation().toString();
+            for (ResourceLocation soundEventLocation : playableSounds) {
+                String soundName = soundEventLocation.toString();
 
                 if (foundCurrent) {
                     nextSound = soundName;
@@ -241,22 +226,17 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
         tooltip("Play the next sound in the list after the currently selected one.");
 
         sameLine();
-        if (button("Random Sound")) {
-            List<SoundEventAccessorComposite> list = soundEventLocations.stream()
-              .filter(loc ->
-                loc.getSoundCategory() != RECORDS &&
-                  loc.getSoundCategory() != SoundCategory.MUSIC
-              )
-              .collect(Collectors.toList());
+        if (button("Random Sound##PlayRandomSound")) {
+            List<ResourceLocation> playableSounds = getPlayableSounds();
 
             float randomPitch = 0.5f + RANDOM.nextFloat() * 1.5f; // Random pitch between 0.5 and 2.0
             pitch[0] = randomPitch;
 
-            if (list.isEmpty()) { // no valid sounds to play
+            if (playableSounds.isEmpty()) { // no valid sounds to play
                 soundToPlay = NONE_SOUND;
             } else {
-                int randomIndex = RANDOM.nextInt(list.size());
-                soundToPlay = list.get(randomIndex).getSoundEventLocation().toString();
+                int randomIndex = RANDOM.nextInt(playableSounds.size());
+                soundToPlay = playableSounds.get(randomIndex).toString();
                 playSelectedSound();
             }
 
@@ -266,8 +246,6 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
     }
 
     private void renderTestedSound() {
-        Minecraft mc = Minecraft.getMinecraft();
-
         // Table history
         text("Tested Sounds:");
         int flags = ImGuiTableFlags.Borders
@@ -333,6 +311,14 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
 
     private String mapSoundName(String vanillaName) {
         return soundMapper.mapSoundName(vanillaName);
+    }
+
+    private List<ResourceLocation> getPlayableSounds() {
+        return soundEventLocations.stream()
+          // Exclude music and record sounds to avoid long-playing audio during testing
+          .filter(loc -> loc.getSoundCategory() != RECORDS && loc.getSoundCategory() != SoundCategory.MUSIC)
+          .map(SoundEventAccessorComposite::getSoundEventLocation)
+          .collect(Collectors.toList());
     }
 
     static class PlaySoundEntry {
