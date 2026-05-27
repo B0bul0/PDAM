@@ -4,6 +4,7 @@ A mod for Minecraft 1.8.9, designed to assist with server plugin development and
 
 ## Features
 - **Item NBT Inspector**: Displays an item's NBT data in its tooltip. ([screenshots](#item-nbt-inspector))
+- **Play Sound**: Play any sound in the game with custom parameters. ([screenshot](#play-sound-screenshot))
 - **Sound Debugger**: Logs all played sounds to the console for debugging purposes.
 - **Invisible Entity Highlighter**: Makes invisible entities visible for easier debugging.
 - **Entity Information Panel**: Displays an on-screen panel with real-time information about the entity you are looking at.
@@ -110,6 +111,9 @@ Replaces the item's vanilla name with a mapped name.
 
 ### Sign Finder Screenshot
 <img width="929" height="355" alt="image" src="https://github.com/user-attachments/assets/273c7dda-6ab2-46d9-b9bd-9b90dbd56287" />
+
+### Play Sound Screenshot
+<img width="652" height="427" alt="image" src="https://github.com/user-attachments/assets/e4e0a1af-2ad0-4d6c-aa02-a54e3cb42bb3" />
 
 ## Third-Party Libraries
 - **[Dear ImGui](https://github.com/ocornut/imgui)** by [ocornut](https://github.com/ocornut): Bloat-free Graphical User interface for C++ with minimal dependencies. Used for the visual interface.
