@@ -58,7 +58,7 @@ public class ServerInfoWindow extends AbstractRenderItemWindow {
                 if (beginChild("ServerListChild", 0, 0, false)) {
                     renderServerList();
                 }
-                endChild(); // tem que virar fora, corrigido
+                endChild();
                 endTabItem();
             }
 
@@ -113,11 +113,11 @@ public class ServerInfoWindow extends AbstractRenderItemWindow {
                 continue;
             }
 
-            if (collapsingHeader(serverData.serverName + "##serverHeader_" + index++)) {
-                pushID("server_" + index);
+            pushID("server_" + index++);
+            if (collapsingHeader(serverData.serverName + "##serverHeader")) {
                 renderServer(serverData);
-                popID();
             }
+            popID();
         }
     }
 
@@ -192,6 +192,10 @@ public class ServerInfoWindow extends AbstractRenderItemWindow {
     }
 
     private boolean isConnected(ServerData serverData) {
+        if (Minecraft.getMinecraft().theWorld == null) {
+            return false;
+        }
+
         ServerData currentServer = getCurrentServer();
         if (currentServer == null || serverData == null) {
             return false;
