@@ -264,7 +264,7 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
 
                     mcText(formatedText, 0xFFFFFFFF, false, 3F);
 
-                    if (beginPopupContextItem("char_popup##" + i, ImGuiPopupFlags.MouseButtonLeft | ImGuiPopupFlags.MouseButtonRight)) {
+                    if (beginPopupContextItem("char_popup##" + i, ImGuiPopupFlags.MouseButtonRight)) {
                         text("Char: " + c);
                         text("ID: " + (int) c);
                         text("Hex: 0x" + Integer.toHexString(c).toUpperCase());
