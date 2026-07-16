@@ -6,6 +6,7 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiPopupFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
+import imgui.type.ImFloat;
 import imgui.type.ImInt;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
@@ -89,6 +90,8 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
 
     private final ImInt selectedColor = new ImInt(15);
 
+    private final ImFloat charScale = new ImFloat(3F);
+
     private final ImGuiListClipper clipper = new ImGuiListClipper();
 
     public CharacterMapWindow() {
@@ -108,34 +111,50 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
     }
 
     private void renderContent() {
-        text("Color:");
+        if (button("Formatting Options")) {
+            openPopup("options_popup");
+        }
 
-        int splitCount = 8;
-        for (EnumChatFormatting chatFormatting : EnumChatFormatting.values()) {
-            if (!chatFormatting.isColor()) {
-                continue;
+        if (beginPopup("options_popup")) {
+            separatorText("Formatting Options");
+
+            setNextItemWidth(100);
+            inputFloat("Char scale", charScale, 0.1F, 1F, "%.1f");
+
+            separator();
+
+            text("Color:");
+
+            int splitCount = 8;
+            for (EnumChatFormatting chatFormatting : EnumChatFormatting.values()) {
+                if (!chatFormatting.isColor()) {
+                    continue;
+                }
+
+                int colorIndex = chatFormatting.getColorIndex();
+                radioButton(chatFormatting.name() + "##color" + colorIndex, selectedColor, colorIndex);
+
+                if ((colorIndex + 1) % splitCount != 0) {
+                    sameLine();
+                }
             }
 
-            int colorIndex = chatFormatting.getColorIndex();
-            radioButton(chatFormatting.name() + "##color" + colorIndex, selectedColor, colorIndex);
+            separator();
 
-            if ((colorIndex + 1) % splitCount != 0) {
-                sameLine();
-            }
+            text("Style:");
+            checkbox("Bold", bold);
+            sameLine();
+            checkbox("Italic", italic);
+            sameLine();
+            checkbox("Underline", underline);
+            sameLine();
+            checkbox("Strikethrough", strikethrough);
+
+            endPopup();
         }
 
         separator();
 
-        text("Style:");
-        checkbox("Bold", bold);
-        sameLine();
-        checkbox("Italic", italic);
-        sameLine();
-        checkbox("Underline", underline);
-        sameLine();
-        checkbox("Strikethrough", strikethrough);
-
-        separator();
         text("Colors preview:");
 
         for (ChatColor color : ChatColor.ALL) {
@@ -262,7 +281,7 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
 
                     String formatedText = styleText.toString();
 
-                    mcText(formatedText, 0xFFFFFFFF, false, 3F);
+                    mcText(formatedText, 0xFFFFFFFF, false, charScale.get());
 
                     if (beginPopupContextItem("char_popup##" + i, ImGuiPopupFlags.MouseButtonRight)) {
                         text("Char: " + c);
@@ -325,7 +344,7 @@ public final class CharacterMapWindow extends AbstractRenderItemWindow {
                     if (isItemHovered()) {
                         setTooltip(
                           "Char: " + c + "\n" +
-                            "ID: " + ((int)c) + "\n" +
+                            "ID: " + ((int) c) + "\n" +
                             "Hex: 0x" + Integer.toHexString(c).toUpperCase()
                         );
                     }
