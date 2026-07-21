@@ -1,7 +1,6 @@
 package me.bobulo.mine.pdam.feature.designtools;
 
 import imgui.flag.ImGuiCond;
-import imgui.flag.ImGuiInputTextFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImFloat;
 import imgui.type.ImInt;
@@ -57,7 +56,7 @@ public class MessageFormatterWindow extends AbstractRenderItemWindow {
                 beginDisabled();
             }
 
-            inputInt("Wrap Width (px)", wrapWidth, 10, 30, ImGuiInputTextFlags.EnterReturnsTrue);
+            inputInt("Wrap Width (px)", wrapWidth, 10, 30);
             if (wrapWidth.get() < 40) {
                 wrapWidth.set(40);
             }
