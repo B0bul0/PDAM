@@ -99,7 +99,7 @@ public final class ScoreboardInspectorWindow extends AbstractRenderItemWindow {
         text("Sidebar Title:");
 
         sameLine();
-        if (button("Copy")) {
+        if (button("Copy##SidebarTitle")) {
             setClipboardText(objective.getDisplayName());
         }
 
@@ -123,7 +123,7 @@ public final class ScoreboardInspectorWindow extends AbstractRenderItemWindow {
         }
 
         sameLine();
-        if (button("Copy")) {
+        if (button("Copy##SidebarContent")) {
             setClipboardText(sb.toString());
         }
 

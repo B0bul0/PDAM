@@ -168,7 +168,7 @@ public final class SignEditorWindow implements ImGuiRenderable {
     private TileEntitySign getUpdatedTileSign() {
         Minecraft mc = Minecraft.getMinecraft();
         World world = mc.theWorld;
-        if (!mc.theWorld.isBlockLoaded(tileSign.getPos())) {
+        if (world == null || !world.isBlockLoaded(tileSign.getPos())) {
             return null;
         }
 

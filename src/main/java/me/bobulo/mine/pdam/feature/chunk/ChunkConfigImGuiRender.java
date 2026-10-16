@@ -70,7 +70,7 @@ public final class ChunkConfigImGuiRender extends AbstractFeatureModule implemen
         beginDisableIf(!SHOW_SURROUNDING.get());
 
         if (inputInt("Surrounding Radius", radius)) {
-            radius.set(Math.min(0, radius.get()));
+            radius.set(Math.max(0, radius.get()));
             SURROUNDING_RADIUS.set(radius.get());
         }
 

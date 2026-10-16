@@ -1,7 +1,6 @@
 package me.bobulo.mine.pdam.feature.designtools;
 
 import com.google.common.collect.ImmutableList;
-import imgui.ImGui;
 import imgui.ImGuiTextFilter;
 import imgui.flag.*;
 import me.bobulo.mine.pdam.feature.sound.window.SoundMapperDrawer;
@@ -174,7 +173,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
         tooltip("Pitch 1.0 is normal, less than 1.0 is lower pitch, greater than 1.0 is higher pitch.");
 
         sameLine();
-        if (button("Reset")) {
+        if (button("Reset##Pitch")) {
             pitch[0] = 1.0f;
         }
         tooltip("Reset pitch to normal (1.0).");
@@ -185,7 +184,7 @@ public final class PlaySoundWindow extends AbstractRenderItemWindow {
           "Values above 1.0 will not increase volume but allow the sound to be heard from farther away.");
 
         sameLine();
-        if (button("Reset")) {
+        if (button("Reset##Volume")) {
             volume[0] = 1.0f;
         }
         tooltip("Reset volume to normal (1.0).");

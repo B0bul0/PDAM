@@ -26,6 +26,8 @@ public final class ImGuiToolbar implements ImGuiRenderable {
         int windowFlags = ImGuiWindowFlags.NoTitleBar
           | ImGuiWindowFlags.NoResize
           | ImGuiWindowFlags.NoMove
+          | ImGuiWindowFlags.NoDocking
+          | ImGuiWindowFlags.NoSavedSettings
           | ImGuiWindowFlags.NoCollapse
           | ImGuiWindowFlags.NoScrollbar
           | ImGuiWindowFlags.NoScrollWithMouse
@@ -63,8 +65,8 @@ public final class ImGuiToolbar implements ImGuiRenderable {
 
                 endMenuBar();
             }
-            end();
         }
+        end();
     }
 
 }
