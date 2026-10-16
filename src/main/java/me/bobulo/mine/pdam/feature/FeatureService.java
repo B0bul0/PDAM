@@ -6,12 +6,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Manages the registration and lifecycle of features within the mod.
@@ -24,7 +24,7 @@ public final class FeatureService {
     private final Map<String, Feature> features = new ConcurrentHashMap<>();
 
     /**
-     * Registers a new feature with the service.
+     * Registers a new feature with the service. Modules attach when added to the feature.
      *
      * @param feature The feature to register. Must not be null, and its ID must not be blank.
      * @throws IllegalArgumentException if a feature with the same ID is already registered.
@@ -36,6 +36,33 @@ public final class FeatureService {
 
         features.put(feature.getId(), feature);
         log.debug("Registered feature: {}", feature.getId());
+    }
+
+    /**
+     * Disables a feature, detaches its modules and cleans up its lifetime scope before removal.
+     * For example, {@code service.unregisterFeature(id)} ends both scopes.
+     * An unknown identifier has no effect.
+     */
+    public void unregisterFeature(@NotNull String id) {
+        Feature feature = features.get(id);
+        if (feature != null) {
+            feature.disable();
+            Collection<FeatureModule> modules = feature.getModules();
+            while (!modules.isEmpty()) {
+                feature.removeModule(modules.iterator().next());
+            }
+            feature.getLoadScope().cleanup();
+            features.remove(id);
+        }
+    }
+
+    /**
+     * Removes all features with their resources, for example {@code service.unregisterAll()}.
+     */
+    public void unregisterAll() {
+        for (Feature feature : features.values()) {
+            unregisterFeature(feature.getId());
+        }
     }
 
     /**

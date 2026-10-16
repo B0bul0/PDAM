@@ -1,11 +1,12 @@
 package me.bobulo.mine.pdam.feature;
 
+import me.bobulo.mine.pdam.attribute.AttributeKey;
 import me.bobulo.mine.pdam.feature.event.FeatureDisabledEvent;
 import me.bobulo.mine.pdam.feature.event.FeatureEnabledEvent;
 import me.bobulo.mine.pdam.feature.event.FeatureModuleDisabledEvent;
 import me.bobulo.mine.pdam.feature.event.FeatureModuleEnabledEvent;
 import me.bobulo.mine.pdam.feature.module.FeatureModule;
-import me.bobulo.mine.pdam.attribute.AttributeKey;
+import me.bobulo.mine.pdam.scope.Scope;
 import me.bobulo.mine.pdam.util.EventUtils;
 import me.bobulo.mine.pdam.util.ThreadUtils;
 import net.minecraft.client.resources.I18n;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,6 +29,9 @@ public final class FeatureImpl implements Feature, ModularFeature {
     private final String id;
     private final String name;
     private boolean enabled = false;
+
+    private final Scope loadScope = new Scope();
+    private Scope enableScope;
 
     private final ModuleManager moduleManager;
     private final Map<AttributeKey<?>, Object> attributes = new ConcurrentHashMap<>();
@@ -54,6 +59,16 @@ public final class FeatureImpl implements Feature, ModularFeature {
     }
 
     @Override
+    public @NotNull Scope getLoadScope() {
+        return loadScope;
+    }
+
+    @Override
+    public @Nullable Scope getEnableScope() {
+        return enableScope;
+    }
+
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
@@ -65,8 +80,9 @@ public final class FeatureImpl implements Feature, ModularFeature {
         if (!enabled) {
             log.info("Enabling feature {}", id);
 
-            onEnable();
+            enableScope = new Scope();
             enabled = true;
+            onEnable();
 
             EventUtils.callEvent(new FeatureEnabledEvent(this));
 
@@ -81,8 +97,10 @@ public final class FeatureImpl implements Feature, ModularFeature {
         if (enabled) {
             log.info("Disabling feature {}", id);
 
-            onDisable();
             enabled = false;
+            onDisable();
+            enableScope.cleanup();
+            enableScope = null;
 
             EventUtils.callEvent(new FeatureDisabledEvent(this));
 

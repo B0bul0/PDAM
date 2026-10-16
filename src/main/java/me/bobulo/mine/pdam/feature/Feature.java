@@ -1,11 +1,13 @@
 package me.bobulo.mine.pdam.feature;
 
 import me.bobulo.mine.pdam.attribute.Attributable;
+import me.bobulo.mine.pdam.scope.Scope;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a modular feature of the mod.
- * Each feature can be enabled or disabled.
+ * Modules use onAttach/onDetach for their lifetime and enable/disable for activation.
  */
 public interface Feature extends ModularFeature, Attributable {
 
@@ -41,6 +43,19 @@ public interface Feature extends ModularFeature, Attributable {
     }
 
     /**
+     * Returns the lifetime scope, available before modules attach and preserved while disabled.
+     * For example, register persistent bindings in {@code feature.getLoadScope()} during onAttach.
+     * The service cleans it up after detaching the modules when removing this feature.
+     */
+    @NotNull Scope getLoadScope();
+
+    /**
+     * Returns the scope of the current activation, or {@code null} while disabled.
+     * For example, register activation bindings in {@code feature.getEnableScope()} during enable.
+     */
+    @Nullable Scope getEnableScope();
+
+    /**
      * Checks if the feature is currently enabled.
      *
      * @return {@code true} if the feature is enabled, {@code false} otherwise.
@@ -49,6 +64,7 @@ public interface Feature extends ModularFeature, Attributable {
 
     /**
      * Enables the feature.
+     * Creates a new enable scope.
      * This method should handle the logic to activate the feature,
      * such as registering event listeners or modules.
      */

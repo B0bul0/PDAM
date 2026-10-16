@@ -29,10 +29,10 @@ public final class ModuleManager implements ModularFeature {
         Validate.isTrue(!activeModules.contains(module),
           "Module instance " + module + " is already registered in feature " + feature.getId());
 
-        activeModules.add(module);
         registry.put(module.getClass(), module);
 
         module.onAttach(feature);
+        activeModules.add(module);
 
         if (feature.isEnabled()) {
             module.enable(feature);
