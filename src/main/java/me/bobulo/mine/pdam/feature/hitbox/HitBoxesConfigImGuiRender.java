@@ -2,8 +2,8 @@ package me.bobulo.mine.pdam.feature.hitbox;
 
 import imgui.ImGuiTextFilter;
 import imgui.flag.ImGuiColorEditFlags;
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import me.bobulo.mine.pdam.util.ColorUtil;
 import net.minecraft.entity.EntityList;
 
@@ -14,12 +14,12 @@ import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.feature.hitbox.HitBoxes.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
-public final class HitBoxesConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class HitBoxesConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
     private float[] color;
 
-    private List<String> entityNameList;
-    private ImGuiTextFilter entityFilter = new ImGuiTextFilter();
+    private final List<String> entityNameList;
+    private final ImGuiTextFilter entityFilter = new ImGuiTextFilter();
 
     public HitBoxesConfigImGuiRender() {
         this.color = ColorUtil.toRgba(COLOR.get());
@@ -93,7 +93,9 @@ public final class HitBoxesConfigImGuiRender extends AbstractFeatureModule imple
             separator();
 
             for (String entityName : entityNameList) {
-                if (!entityFilter.passFilter(entityName)) continue;
+                if (!entityFilter.passFilter(entityName)) {
+                    continue;
+                }
 
                 EntityConfig entityConfig = getByEntity(entityName);
                 if (checkbox("##Enabled" + entityName, entityConfig.enabled.get())) {

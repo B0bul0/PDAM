@@ -1,12 +1,12 @@
 package me.bobulo.mine.pdam.feature.sign;
 
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 
 import static imgui.ImGui.checkbox;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
-public final class SignConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class SignConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
     @Override
     public void draw() {

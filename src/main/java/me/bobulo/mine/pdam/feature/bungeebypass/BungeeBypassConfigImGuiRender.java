@@ -2,15 +2,13 @@ package me.bobulo.mine.pdam.feature.bungeebypass;
 
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.type.ImString;
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
-import me.bobulo.mine.pdam.feature.sign.SignEditor;
 
-import static imgui.ImGui.checkbox;
 import static imgui.ImGui.inputText;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
-public final class BungeeBypassConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class BungeeBypassConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
     private final ImString spoofedIp = new ImString(BungeeBypass.SPOOFED_IP.get(), 256);
     private final ImString spoofedUuid = new ImString(BungeeBypass.SPOOFED_UUID.get(), 256);

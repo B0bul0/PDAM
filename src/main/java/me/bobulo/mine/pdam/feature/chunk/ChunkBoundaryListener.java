@@ -75,7 +75,9 @@ public final class ChunkBoundaryListener {
     private void renderSurroundingChunks(int playerChunkX, int playerChunkZ, int radius) {
         for (int xOffset = -radius; xOffset <= radius; xOffset++) {
             for (int zOffset = -radius; zOffset <= radius; zOffset++) {
-                if (xOffset == 0 && zOffset == 0) continue;
+                if (xOffset == 0 && zOffset == 0) {
+                    continue;
+                }
 
                 int chunkX = playerChunkX + (xOffset * 16);
                 int chunkZ = playerChunkZ + (zOffset * 16);
@@ -126,9 +128,13 @@ public final class ChunkBoundaryListener {
 
         int chunkSize = 16;
         for (int y = minY; y <= maxY; y += 16) {
-            if (!showSections && y % chunkSize == 0) continue;
+            if (!showSections && y % chunkSize == 0) {
+                continue;
+            }
 
-            if (y == playerSectionY || y == playerSectionY + 16) continue;
+            if (y == playerSectionY || y == playerSectionY + 16) {
+                continue;
+            }
 
             float[] color = ColorUtil.toRgba(ChunkViewer.SECTION_COLOR.get());
 

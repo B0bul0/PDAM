@@ -1,10 +1,14 @@
 package me.bobulo.mine.pdam.feature.packet;
 
 import com.google.common.collect.ImmutableList;
+import me.bobulo.mine.pdam.binding.ForgeListenerBinding;
+import me.bobulo.mine.pdam.binding.ImGuiListenerBinding;
 import me.bobulo.mine.pdam.feature.imgui.ToolbarMenuImGuiRender;
 import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
-import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
-import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
+import me.bobulo.mine.pdam.feature.module.context.FeatureModuleAttachContext;
+import me.bobulo.mine.pdam.feature.module.context.FeatureModuleDetachContext;
+import me.bobulo.mine.pdam.feature.module.context.FeatureModuleDisableContext;
+import me.bobulo.mine.pdam.feature.module.context.FeatureModuleEnableContext;
 import me.bobulo.mine.pdam.feature.packet.interceptor.PacketDataInterceptor;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry;
@@ -22,25 +26,37 @@ public final class PacketMonitorFeatureModule extends AbstractFeatureModule {
     private PacketRateTracker rateTrackerClient;
 
     private PacketLogWindow logWindow;
+    private ToolbarMenuImGuiRender menu;
+    private ForgeListenerBinding listenerBinding;
+    private ImGuiListenerBinding windowBinding;
 
     @Override
-    protected void onInitialize() {
+    protected void onInitialize(@NotNull FeatureModuleAttachContext context) {
         this.packetEntries = new LogHistory<>();
         this.rateTrackerServer = new PacketRateTracker(1, TimeUnit.SECONDS);
         this.rateTrackerClient = new PacketRateTracker(1, TimeUnit.SECONDS);
 
-        getFeature().addModule(ForgerListenerFeatureModule.of(
-          new PacketDataInterceptor(this)
-        ));
-
         this.logWindow = new PacketLogWindow(packetEntries, rateTrackerServer, rateTrackerClient);
-        getFeature().addModule(ImGuiListenerFeatureModule.of(logWindow));
-
-        getFeature().addModule(new ToolbarMenuImGuiRender(ImmutableList.of(logWindow)));
+        this.menu = new ToolbarMenuImGuiRender(ImmutableList.of(logWindow));
+        context.getScope().registerBehavior(menu);
     }
 
     @Override
-    protected void onDisable() {
+    protected void onEnable(@NotNull FeatureModuleEnableContext context) {
+        listenerBinding = new ForgeListenerBinding(new PacketDataInterceptor(this));
+        windowBinding = new ImGuiListenerBinding(logWindow);
+        context.getScope().registerBindings(listenerBinding, windowBinding);
+    }
+
+    @Override
+    protected void onUninitialize(@NotNull FeatureModuleDetachContext context) {
+        context.getScope().unregisterBehavior(menu);
+    }
+
+    @Override
+    protected void onDisable(@NotNull FeatureModuleDisableContext context) {
+        context.getScope().unregisterBinding(listenerBinding);
+        context.getScope().unregisterBinding(windowBinding);
         this.packetEntries.clear();
     }
 

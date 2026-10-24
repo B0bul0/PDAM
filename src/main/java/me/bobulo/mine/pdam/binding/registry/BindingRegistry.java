@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Registers bindings immediately and owns their disposal. Access from the owning lifecycle thread.
@@ -20,14 +21,15 @@ public final class BindingRegistry {
      * Creates a registry, for example {@code new BindingRegistry(new BindingContext(scope))}.
      */
     public BindingRegistry(@NotNull BindingContext context) {
-        this.context = context;
+        this.context = Objects.requireNonNull(context, "Binding context");
     }
 
     /**
      * Initializes and records a binding, for example {@code registry.registerBinding(binding)}.
      */
     public void registerBinding(@NotNull Binding<?> binding) {
-        if (bindings.contains(binding)) {
+        Objects.requireNonNull(binding, "Binding");
+        if (indexOf(binding) >= 0) {
             throw new IllegalArgumentException("Binding already registered: " + binding);
         }
 
@@ -71,11 +73,22 @@ public final class BindingRegistry {
      * Removes and closes a binding, for example {@code registry.unregisterBinding(binding)}.
      */
     public void unregisterBinding(@NotNull Binding<?> binding) {
-        if (!bindings.remove(binding)) {
+        int index = indexOf(binding);
+        if (index < 0) {
             throw new IllegalArgumentException("Binding not registered: " + binding);
         }
 
+        bindings.remove(index);
         binding.close();
+    }
+
+    private int indexOf(Binding<?> binding) {
+        for (int i = 0; i < bindings.size(); i++) {
+            if (bindings.get(i) == binding) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -100,10 +113,51 @@ public final class BindingRegistry {
      * Closes all registered bindings, for example during {@code scope.cleanup()}.
      */
     public void unregisterAll() {
-        for (Binding<?> binding : bindings) {
-            binding.close();
+        RuntimeException failure = null;
+        while (!bindings.isEmpty()) {
+            Binding<?> binding = bindings.remove(0);
+            try {
+                binding.close();
+            } catch (RuntimeException exception) {
+                if (failure == null) {
+                    failure = exception;
+                } else if (failure != exception) {
+                    failure.addSuppressed(exception);
+                }
+            }
         }
-        bindings.clear();
+        if (failure != null) {
+            throw failure;
+        }
+    }
+
+    /**
+     * Returns the first assignable bound value, e.g. registry.get(Listener.class), or null.
+     */
+    public <T> T get(@NotNull Class<T> type) {
+        Objects.requireNonNull(type, "Bound value type");
+        for (Binding<?> binding : bindings) {
+            Object value = binding.get();
+            if (type.isInstance(value)) {
+                return type.cast(value);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns all assignable bound values in registration order, e.g. registry.gets(Listener.class).
+     */
+    public <T> List<T> gets(@NotNull Class<T> type) {
+        Objects.requireNonNull(type, "Bound value type");
+        List<T> values = new ArrayList<>();
+        for (Binding<?> binding : bindings) {
+            Object value = binding.get();
+            if (type.isInstance(value)) {
+                values.add(type.cast(value));
+            }
+        }
+        return values;
     }
 
     /**

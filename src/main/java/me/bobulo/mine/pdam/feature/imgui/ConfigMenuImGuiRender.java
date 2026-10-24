@@ -1,7 +1,7 @@
 package me.bobulo.mine.pdam.feature.imgui;
 
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
-import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
+import me.bobulo.mine.pdam.feature.behavior.EnabledFeatureBehavior;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,12 +12,11 @@ import static imgui.ImGui.*;
 /**
  * Renders a configuration menu for a feature using ImGui.
  */
-public final class ConfigMenuImGuiRender extends AbstractFeatureModule implements MenuImGuiRender {
+public final class ConfigMenuImGuiRender extends AbstractFeatureBehavior implements MenuImGuiRender {
 
     private static final Logger log = LogManager.getLogger(ConfigMenuImGuiRender.class);
 
     private final boolean includeEnableToggle;
-    private List<FeatureConfigImGuiRender> configs;
 
     public ConfigMenuImGuiRender() {
         this.includeEnableToggle = false;
@@ -28,13 +27,9 @@ public final class ConfigMenuImGuiRender extends AbstractFeatureModule implement
     }
 
     @Override
-    protected void onInitialize() {
-        this.configs = getFeature().getBehaviors(FeatureConfigImGuiRender.class);
-    }
-
-    @Override
     public void draw() {
-        if (!includeEnableToggle && (configs == null || configs.isEmpty())) {
+        List<FeatureConfigImGuiRender> configs = getFeature().getBehavior(FeatureConfigImGuiRender.class);
+        if (!includeEnableToggle && configs.isEmpty()) {
             return; // Nothing to render
         }
 
@@ -42,10 +37,9 @@ public final class ConfigMenuImGuiRender extends AbstractFeatureModule implement
 
             if (includeEnableToggle) {
                 // Enabled toggle
-                EnabledFeatureModule enabledFeatureModule = getFeature().getBehavior(EnabledFeatureModule.class);
-                if (enabledFeatureModule != null && checkbox("Enabled", getFeature().isEnabled())) {
+                if (getFeature().hasBehavior(EnabledFeatureBehavior.class) && checkbox("Enabled", getFeature().isEnabled())) {
                     try {
-                        enabledFeatureModule.getEnabledConfig().set(!getFeature().isEnabled());
+                        getFeature().toggleEnabled();
                     } catch (Exception exception) {
                         log.error("Failed to toggle feature {}.", getFeature().getName(), exception);
                     }
@@ -58,10 +52,8 @@ public final class ConfigMenuImGuiRender extends AbstractFeatureModule implement
                 beginDisabled();
             }
 
-            if (configs != null) {
-                for (FeatureConfigImGuiRender config : configs) {
-                    config.draw();
-                }
+            for (FeatureConfigImGuiRender config : configs) {
+                config.draw();
             }
 
             if (includeEnableToggle && !getFeature().isEnabled()) {

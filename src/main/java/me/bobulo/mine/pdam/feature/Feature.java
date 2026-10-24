@@ -1,15 +1,20 @@
 package me.bobulo.mine.pdam.feature;
 
 import me.bobulo.mine.pdam.attribute.Attributable;
+import me.bobulo.mine.pdam.feature.module.FeatureModule;
 import me.bobulo.mine.pdam.scope.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
- * Represents a modular feature of the mod.
- * Modules use onAttach/onDetach for their lifetime and enable/disable for activation.
+ * A feature owns scopes for unique modules, repeatable behaviors and lifecycle bindings.
+ * Load registrations persist while disabled; enable registrations last for one activation.
  */
-public interface Feature extends ModularFeature, Attributable {
+public interface Feature extends Attributable {
 
     /**
      * Gets the unique identifier for this feature.
@@ -86,5 +91,101 @@ public interface Feature extends ModularFeature, Attributable {
         } else {
             enable();
         }
+    }
+
+    /**
+     * Adds a lifetime module, e.g. feature.addModule(module). Its concrete type must be unique.
+     */
+    default void addModule(@NotNull FeatureModule module) {
+        getLoadScope().registerModule(module);
+    }
+
+    /**
+     * Removes a registered module from its owning scope.
+     */
+    default void removeModule(@NotNull FeatureModule module) {
+        Scope owner = getLoadScope().getModule(module.getClass()) == module ? getLoadScope() : getEnableScope();
+        if (owner == null) {
+            throw new IllegalArgumentException("Module not registered: " + module);
+        }
+        owner.unregisterModule(module);
+    }
+
+    /**
+     * Retrieves one exact module type in constant time, e.g. feature.getModule(MyModule.class).
+     */
+    default <T extends FeatureModule> T getModule(@NotNull Class<T> type) {
+        T module = getLoadScope().getModule(type);
+        return module != null || getEnableScope() == null ? module : getEnableScope().getModule(type);
+    }
+
+    /**
+     * Returns modules from both current scopes for inspection.
+     */
+    default Collection<FeatureModule> getModules() {
+        List<FeatureModule> result = new ArrayList<>();
+        result.addAll(getLoadScope().getModuleRegistry().getModules());
+        if (getEnableScope() != null) {
+            result.addAll(getEnableScope().getModuleRegistry().getModules());
+        }
+        return result;
+    }
+
+    /**
+     * Adds a repeatable lifetime behavior, e.g. feature.addBehavior(behavior).
+     */
+    default void addBehavior(@NotNull FeatureBehavior behavior) {
+        getLoadScope().registerBehavior(behavior);
+    }
+
+    /**
+     * Removes an exact behavior instance from its owning scope.
+     */
+    default void removeBehavior(@NotNull FeatureBehavior behavior) {
+        if (getLoadScope().getBehaviorRegistry().contains(behavior)) {
+            getLoadScope().unregisterBehavior(behavior);
+        } else if (getEnableScope() != null) {
+            getEnableScope().unregisterBehavior(behavior);
+        } else {
+            throw new IllegalArgumentException("Behavior not registered: " + behavior);
+        }
+    }
+
+    /**
+     * Returns all matching behaviors, e.g. feature.getBehavior(MenuImGuiRender.class).
+     */
+    default <T extends FeatureBehavior> List<T> getBehavior(@NotNull Class<T> type) {
+        List<T> result = new ArrayList<>();
+        getLoadScope().getBehaviorRegistry().collectBehaviors(type, result);
+        if (getEnableScope() != null) {
+            getEnableScope().getBehaviorRegistry().collectBehaviors(type, result);
+        }
+        return result;
+    }
+
+    /**
+     * Alias for the multiple-instance query, e.g. feature.getBehaviors(MenuImGuiRender.class).
+     */
+    default <T extends FeatureBehavior> List<T> getBehaviors(@NotNull Class<T> type) {
+        return getBehavior(type);
+    }
+
+    /**
+     * Whether either scope contains a behavior assignable to this type.
+     */
+    default boolean hasBehavior(@NotNull Class<? extends FeatureBehavior> type) {
+        for (FeatureBehavior behavior : getLoadScope().getBehaviorRegistry().getBehaviors()) {
+            if (type.isInstance(behavior)) {
+                return true;
+            }
+        }
+        if (getEnableScope() != null) {
+            for (FeatureBehavior behavior : getEnableScope().getBehaviorRegistry().getBehaviors()) {
+                if (type.isInstance(behavior)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

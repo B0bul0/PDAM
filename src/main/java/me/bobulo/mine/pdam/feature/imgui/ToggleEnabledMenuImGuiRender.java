@@ -1,14 +1,14 @@
 package me.bobulo.mine.pdam.feature.imgui;
 
 import me.bobulo.mine.pdam.feature.Feature;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 
 import static imgui.ImGui.menuItem;
 
 /**
  * Renders a menu item in the ImGui menu to toggle the enabled state of a feature.
  */
-public final class ToggleEnabledMenuImGuiRender extends AbstractFeatureModule implements MenuImGuiRender {
+public final class ToggleEnabledMenuImGuiRender extends AbstractFeatureBehavior implements MenuImGuiRender {
 
     @Override
     public void draw() {

@@ -3,8 +3,12 @@ package me.bobulo.mine.pdam.feature;
 import me.bobulo.mine.pdam.PDAM;
 import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.config.InMemoryConfig;
+import me.bobulo.mine.pdam.feature.behavior.EnabledFeatureBehavior;
 import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
-import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
+import me.bobulo.mine.pdam.feature.module.context.FeatureModuleAttachContext;
+import me.bobulo.mine.pdam.feature.module.context.FeatureModuleDetachContext;
+import me.bobulo.mine.pdam.feature.module.context.FeatureModuleDisableContext;
+import me.bobulo.mine.pdam.feature.module.context.FeatureModuleEnableContext;
 import me.bobulo.mine.pdam.scope.Scope;
 import me.bobulo.mine.pdam.support.RecordingBinding;
 import me.bobulo.mine.pdam.util.EventUtils;
@@ -71,9 +75,9 @@ public class FeatureLifecycleTest {
     @Test
     public void ca03AutomaticEnableWaitsForTheModuleToFinishAttaching() {
         FeatureImpl automatic = FeatureImpl.builder()
-          .id("automatic")
-          .module(new AutomaticEnableModule(calls))
-          .build();
+                .id("automatic")
+                .module(new AutomaticEnableModule(calls))
+                .build();
 
         assertTrue(automatic.isEnabled());
         assertEquals(Arrays.asList("attach", "init:load", "enable", "init:enable"), calls);
@@ -87,10 +91,10 @@ public class FeatureLifecycleTest {
         try (MockedStatic<PDAM> application = mockStatic(PDAM.class)) {
             application.when(PDAM::getConfigService).thenReturn(configuration);
             FeatureImpl configured = FeatureImpl.builder()
-              .id("configured")
-              .module(new EnabledFeatureModule(true))
-              .module(new RecordingModule(calls))
-              .build();
+                    .id("configured")
+                    .behavior(new EnabledFeatureBehavior(true))
+                    .module(new RecordingModule(calls))
+                    .build();
 
             assertTrue(configured.isEnabled());
             assertEquals(Arrays.asList("attach", "init:load", "enable", "init:enable"), calls);
@@ -104,8 +108,8 @@ public class FeatureLifecycleTest {
 
         try (MockedStatic<PDAM> application = mockStatic(PDAM.class)) {
             application.when(PDAM::getConfigService).thenReturn(configuration);
-            EnabledFeatureModule enabled = new EnabledFeatureModule(false);
-            feature.addModule(enabled);
+            EnabledFeatureBehavior enabled = new EnabledFeatureBehavior(false);
+            feature.addBehavior(enabled);
 
             feature.enable();
             feature.disable();
@@ -205,10 +209,10 @@ public class FeatureLifecycleTest {
         active.addModule(new RecordingModule(calls));
 
         assertEquals(Arrays.asList("attach", "init:load", "enable", "init:enable"), calls);
-        RecordingModule added = active.getBehavior(RecordingModule.class);
+        RecordingModule added = active.getModule(RecordingModule.class);
         active.removeModule(added);
         assertEquals(Arrays.asList("attach", "init:load", "enable", "init:enable",
-          "disable", "detach"), calls);
+                "disable", "detach"), calls);
         assertNull(added.getFeature());
     }
 
@@ -258,31 +262,30 @@ public class FeatureLifecycleTest {
         }
 
         @Override
-        protected void onInitialize() {
+        protected void onInitialize(FeatureModuleAttachContext context) {
             calls.add("attach");
             loadBinding = new RecordingBinding("load", calls);
-            getFeature().getLoadScope().registerBinding(loadBinding);
+            context.getScope().registerBinding(loadBinding);
         }
 
         @Override
-        protected void onEnable() {
+        protected void onEnable(FeatureModuleEnableContext context) {
             calls.add("enable");
             enableBinding = new RecordingBinding("enable", calls);
-            getFeature().getEnableScope().registerBinding(enableBinding);
+            context.getScope().registerBinding(enableBinding);
         }
 
         @Override
-        protected void onDisable() {
-            assertSame(getFeature().getEnableScope(), enableBinding.getContext().getScope());
+        protected void onDisable(FeatureModuleDisableContext context) {
+            assertSame(context.getScope(), enableBinding.getContext().getScope());
             assertEquals(0, enableBinding.getClosures());
             calls.add("disable");
         }
 
         @Override
-        public void onDetach(Feature feature) {
-            assertSame(feature.getLoadScope(), loadBinding.getContext().getScope());
+        protected void onUninitialize(FeatureModuleDetachContext context) {
+            assertSame(context.getScope(), loadBinding.getContext().getScope());
             assertEquals(0, loadBinding.getClosures());
-            super.onDetach(feature);
             calls.add("detach");
         }
     }
@@ -293,9 +296,9 @@ public class FeatureLifecycleTest {
         }
 
         @Override
-        protected void onInitialize() {
-            super.onInitialize();
-            getFeature().enable();
+        protected void onInitialize(FeatureModuleAttachContext context) {
+            super.onInitialize(context);
+            context.getFeature().enable();
         }
     }
 }

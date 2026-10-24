@@ -4,7 +4,6 @@ import me.bobulo.mine.pdam.binding.context.BindingContext;
 import me.bobulo.mine.pdam.binding.registry.BindingRegistry;
 import me.bobulo.mine.pdam.scope.Scope;
 import me.bobulo.mine.pdam.support.RecordingBinding;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -78,7 +77,7 @@ public class BindingRegistryTest {
     @Test
     public void ca02RejectsRemovingAnUnregisteredClass() {
         assertThrows(IllegalArgumentException.class,
-          () -> registry.unregisterBinding(RecordingBinding.class));
+                () -> registry.unregisterBinding(RecordingBinding.class));
     }
 
     @Test
@@ -98,7 +97,7 @@ public class BindingRegistryTest {
         FailingBinding binding = new FailingBinding(failure);
 
         assertSame(failure,
-          assertThrows(IllegalStateException.class, () -> registry.registerBinding(binding)));
+                assertThrows(IllegalStateException.class, () -> registry.registerBinding(binding)));
         assertTrue(registry.getBindings().isEmpty());
     }
 
@@ -109,7 +108,7 @@ public class BindingRegistryTest {
         registry.registerBinding(binding);
 
         assertSame(failure,
-          assertThrows(IllegalStateException.class, () -> registry.unregisterBinding(binding)));
+                assertThrows(IllegalStateException.class, () -> registry.unregisterBinding(binding)));
         assertTrue(registry.getBindings().isEmpty());
     }
 
@@ -143,7 +142,7 @@ public class BindingRegistryTest {
         }
 
         @Override
-        public void init(@NotNull BindingContext context) {
+        public void init(BindingContext context) {
         }
 
         @Override

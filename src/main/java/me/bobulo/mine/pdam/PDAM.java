@@ -1,9 +1,13 @@
 package me.bobulo.mine.pdam;
 
+import me.bobulo.mine.pdam.binding.ForgeListenerBinding;
+import me.bobulo.mine.pdam.binding.ImGuiListenerBinding;
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
 import me.bobulo.mine.pdam.config.ConfigService;
 import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
+import me.bobulo.mine.pdam.feature.behavior.CallbackFeatureBehavior;
+import me.bobulo.mine.pdam.feature.behavior.EnabledFeatureBehavior;
 import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypass;
 import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypassConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
@@ -30,10 +34,6 @@ import me.bobulo.mine.pdam.feature.inventoryslot.SlotInspectorConfigImGuiRender;
 import me.bobulo.mine.pdam.feature.itemname.AdvancedItemTooltipsListener;
 import me.bobulo.mine.pdam.feature.itemname.ItemNameDebug;
 import me.bobulo.mine.pdam.feature.itemname.ItemNameMapperConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
-import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
-import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
-import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitor;
 import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureModule;
 import me.bobulo.mine.pdam.feature.player.CoordinatesWindow;
@@ -141,34 +141,33 @@ public final class PDAM {
     private void registerFeatures() {
         featureService.registerFeature(FeatureImpl.builder()
           .id("sound_debug")
-          .module(new EnabledFeatureModule(true))
+          .behavior(new EnabledFeatureBehavior(true))
           .module(new SoundDebugFeatureModule())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("nbt_tooltip")
-          .module(new EnabledFeatureModule(true))
-          .module(ForgerListenerFeatureModule.of(new NBTTagTooltipListener()))
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ForgeListenerBinding.of(new NBTTagTooltipListener()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("show_invisible_entities")
-          .module(new EnabledFeatureModule(true))
-          .module(CallbackFeatureModule.of(
+          .behavior(new EnabledFeatureBehavior(true))
+          .behavior(CallbackFeatureBehavior.of(
             () -> ShowInvisibleEntities.showInvisibleEntities = true,
-            () -> ShowInvisibleEntities.showInvisibleEntities = false)
-          ).build());
+            () -> ShowInvisibleEntities.showInvisibleEntities = false)).build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("entity_info_overlay")
-          .module(new EnabledFeatureModule(true))
-          .module(ForgerListenerFeatureModule.of(new EntityOverlayInfoListener()))
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ForgeListenerBinding.of(new EntityOverlayInfoListener()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("skin_extraction")
-          .module(new EnabledFeatureModule(false))
-          .module(ForgerListenerFeatureModule.of(
+          .behavior(new EnabledFeatureBehavior(false))
+          .enableBindings(ForgeListenerBinding.of(
             new PlayerSkinExtractionListener(),
             new HeadWorldSkinExtractionListener(),
             new HotBarSkinExtractionListener()
@@ -177,167 +176,143 @@ public final class PDAM {
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(PacketMonitor.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            new PacketMonitorFeatureModule()
-          )
+          .behavior(new EnabledFeatureBehavior(true))
+          .module(new PacketMonitorFeatureModule())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("scoreboard_inspector")
-          .module(new EnabledFeatureModule(true))
-          .module(ImGuiListenerFeatureModule.of(new ScoreboardInspectorWindow()))
-          .module(new FeatureToolbarMenuImGuiRender())
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ImGuiListenerBinding.of(new ScoreboardInspectorWindow()))
+          .behavior(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("server_info")
-          .module(new EnabledFeatureModule(true))
-          .module(ImGuiListenerFeatureModule.of(new ServerInfoWindow()))
-          .module(new FeatureToolbarMenuImGuiRender())
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ImGuiListenerBinding.of(new ServerInfoWindow()))
+          .behavior(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("fly_booster")
-          .module(new EnabledFeatureModule(false))
-          .module(ImGuiListenerFeatureModule.of(new FlyBoosterWindow()))
-          .module(new FeatureToolbarMenuImGuiRender())
+          .behavior(new EnabledFeatureBehavior(false))
+          .enableBindings(ImGuiListenerBinding.of(new FlyBoosterWindow()))
+          .behavior(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("messaging_utilities")
-          .module(new EnabledFeatureModule(true))
-          .module(ImGuiListenerFeatureModule.of(
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ImGuiListenerBinding.of(
             new SendChatMessageWindow()
           ))
-          .module(new FeatureToolbarMenuImGuiRender())
-          .module(ForgerListenerFeatureModule.of(new ChatCopyListener()))
+          .behavior(new FeatureToolbarMenuImGuiRender())
+          .enableBindings(ForgeListenerBinding.of(new ChatCopyListener()))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(SignEditor.FEATURE_ID)
-          .module(new EnabledFeatureModule(true))
-          .module(ForgerListenerFeatureModule.of(new SignEditorListener()))
-          .module(new SignConfigImGuiRender())
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ForgeListenerBinding.of(new SignEditorListener()))
+          .behavior(new SignConfigImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(DesignTools.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            ImGuiListenerFeatureModule.of(
-              new CharacterMapWindow(),
-              new MessageFormatterWindow(),
-              new TitleVisualizerWindow(),
-              new ActionBarVisualizerWindow(),
-              new HologramMockupWindow(),
-              new PlaySoundWindow(),
-              new ItemBuilderWindow(),
-              new SpawnParticleWindow()
-            ),
-            new DesignToolsMenuImguiRender()
-          )
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ImGuiListenerBinding.of(
+            new CharacterMapWindow(),
+            new MessageFormatterWindow(),
+            new TitleVisualizerWindow(),
+            new ActionBarVisualizerWindow(),
+            new HologramMockupWindow(),
+            new PlaySoundWindow(),
+            new ItemBuilderWindow(),
+            new SpawnParticleWindow()
+          ))
+          .behavior(new DesignToolsMenuImguiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(InventorySlotInspector.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            new SlotInspectorConfigImGuiRender(),
-            new ConfigMenuImGuiRender(true)
-          )
+          .behavior(new EnabledFeatureBehavior(true))
+          .behavior(new SlotInspectorConfigImGuiRender())
+          .behavior(new ConfigMenuImGuiRender(true))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(ExpandedCreativeInventory.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            new CreativeTabInjectorModule()
-          )
+          .behavior(new EnabledFeatureBehavior(true))
+          .module(new CreativeTabInjectorModule())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("player_utilities")
-          .modules(
-            new EnabledFeatureModule(true),
-            ImGuiListenerFeatureModule.of(
-              new CoordinatesWindow()
-            )
-          )
-          .module(new FeatureToolbarMenuImGuiRender())
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ImGuiListenerBinding.of(
+            new CoordinatesWindow()
+          ))
+          .behavior(new FeatureToolbarMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(ItemNameDebug.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            ForgerListenerFeatureModule.of(new AdvancedItemTooltipsListener()),
-            new ItemNameMapperConfigImGuiRender()
-          )
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ForgeListenerBinding.of(new AdvancedItemTooltipsListener()))
+          .behavior(new ItemNameMapperConfigImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(WorldTime.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(false),
-            new WorldTimeConfigImGuiRender(),
-            new ConfigMenuImGuiRender(true)
-          )
+          .behavior(new EnabledFeatureBehavior(false))
+          .behavior(new WorldTimeConfigImGuiRender())
+          .behavior(new ConfigMenuImGuiRender(true))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(BungeeBypass.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(false),
-            new BungeeBypassConfigImGuiRender(),
-            new ConfigMenuImGuiRender(true)
-          )
+          .behavior(new EnabledFeatureBehavior(false))
+          .behavior(new BungeeBypassConfigImGuiRender())
+          .behavior(new ConfigMenuImGuiRender(true))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id("sign_finder")
-          .modules(
-            new EnabledFeatureModule(true),
-            ImGuiListenerFeatureModule.of(
-              new SignFinderWindow()
-            ),
-            new FeatureToolbarMenuImGuiRender(),
-            ForgerListenerFeatureModule.of(
-              new SignESP()
-            )
-          )
+          .behavior(new EnabledFeatureBehavior(true))
+          .enableBindings(ImGuiListenerBinding.of(
+            new SignFinderWindow()
+          ))
+          .behavior(new FeatureToolbarMenuImGuiRender())
+          .enableBindings(ForgeListenerBinding.of(
+            new SignESP()
+          ))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(HitBoxes.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(false),
-            ForgerListenerFeatureModule.of(
-              new HitboxesListener()
-            ),
-            new HitBoxesConfigImGuiRender(),
-            new ConfigMenuImGuiRender(true)
-          )
+          .behavior(new EnabledFeatureBehavior(false))
+          .enableBindings(ForgeListenerBinding.of(
+            new HitboxesListener()
+          ))
+          .behavior(new HitBoxesConfigImGuiRender())
+          .behavior(new ConfigMenuImGuiRender(true))
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(ChunkViewer.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(false),
-            ForgerListenerFeatureModule.of(
-              new ChunkBoundaryListener()
-            ),
-            new ChunkConfigImGuiRender(),
-            new ToggleEnabledMenuImGuiRender()
-          )
+          .behavior(new EnabledFeatureBehavior(false))
+          .enableBindings(ForgeListenerBinding.of(
+            new ChunkBoundaryListener()
+          ))
+          .behavior(new ChunkConfigImGuiRender())
+          .behavior(new ToggleEnabledMenuImGuiRender())
           .build());
 
         featureService.registerFeature(FeatureImpl.builder()
           .id(Update.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            new UpdateFeatureModule()
-          )
+          .behavior(new EnabledFeatureBehavior(true))
+          .module(new UpdateFeatureModule())
           .build());
     }
 

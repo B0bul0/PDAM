@@ -1,19 +1,18 @@
 package me.bobulo.mine.pdam.feature.update;
 
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.net.URI;
-import java.util.concurrent.CompletableFuture;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.disableIf;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
-public final class UpdateConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class UpdateConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
     private static final Logger log = LogManager.getLogger(UpdateConfigImGuiRender.class);
     private final UpdateChecker updateChecker;

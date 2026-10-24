@@ -1,14 +1,14 @@
 package me.bobulo.mine.pdam.feature.world;
 
 import imgui.flag.ImGuiSliderFlags;
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import net.minecraft.client.Minecraft;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
-public final class WorldTimeConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class WorldTimeConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
     private final int[] timeOffsetCache = new int[]{WorldTime.WORLD_TIME.get()};
 
