@@ -60,6 +60,19 @@ public interface Feature extends Attributable {
     Scope getEnableScope();
 
     /**
+     * Returns a snapshot of assignable bound values from load, then the current enable scope.
+     * For example, {@code feature.getBoundValues(Listener.class)} retrieves registered listeners.
+     */
+    default <T> List<T> getBoundValues(@NotNull Class<T> type) {
+        List<T> result = getLoadScope().gets(type);
+        Scope enableScope = getEnableScope();
+        if (enableScope != null) {
+            result.addAll(enableScope.gets(type));
+        }
+        return result;
+    }
+
+    /**
      * Checks if the feature is currently enabled.
      *
      * @return {@code true} if the feature is enabled, {@code false} otherwise.

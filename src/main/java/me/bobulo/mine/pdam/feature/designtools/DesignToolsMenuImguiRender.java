@@ -23,10 +23,7 @@ public final class DesignToolsMenuImguiRender extends AbstractFeatureBehavior im
 
     @Override
     protected void onEnable(@NotNull FeatureBehaviorEnableContext context) {
-        this.registeredWindows = context.getFeature().getLoadScope().gets(ToolbarItemWindow.class);
-        if (context.getFeature().getEnableScope() != null) {
-            this.registeredWindows.addAll(context.getScope().gets(ToolbarItemWindow.class));
-        }
+        this.registeredWindows = context.getFeature().getBoundValues(ToolbarItemWindow.class);
     }
 
     @Override
