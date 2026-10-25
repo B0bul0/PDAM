@@ -1,6 +1,6 @@
 package me.bobulo.mine.pdam.mixin;
 
-import me.bobulo.mine.pdam.feature.world.WorldTime;
+import me.bobulo.mine.pdam.feature.world.WorldTimeFeature;
 import net.minecraft.client.multiplayer.WorldClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,13 +12,13 @@ public class MixinWorldClient {
 
     @Inject(method = "setWorldTime", at = @At("HEAD"), cancellable = true)
     private void overrideUpdateTime(long time, CallbackInfo ci) {
-        if (!WorldTime.isFeatureEnabled()) {
+        if (!WorldTimeFeature.isFeatureEnabled()) {
             return;
         }
 
         WorldClient self = (WorldClient) (Object) this;
 
-        self.provider.setWorldTime(WorldTime.WORLD_TIME.get());
+        self.provider.setWorldTime(WorldTimeFeature.WORLD_TIME.get());
 
         ci.cancel();
     }

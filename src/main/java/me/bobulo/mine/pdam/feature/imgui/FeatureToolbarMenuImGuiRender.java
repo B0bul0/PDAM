@@ -1,34 +1,29 @@
 package me.bobulo.mine.pdam.feature.imgui;
 
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
-import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
+import me.bobulo.mine.pdam.feature.behavior.context.FeatureBehaviorDisableContext;
+import me.bobulo.mine.pdam.feature.behavior.context.FeatureBehaviorEnableContext;
 import me.bobulo.mine.pdam.imgui.toolbar.ToolbarItemWindow;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static imgui.ImGui.menuItem;
 
 /**
  * Renders toolbar item windows in the menu.
  */
-public final class FeatureToolbarMenuImGuiRender extends AbstractFeatureModule implements MenuImGuiRender {
+public final class FeatureToolbarMenuImGuiRender extends AbstractFeatureBehavior implements MenuImGuiRender {
 
     private List<ToolbarItemWindow> registeredWindows;
 
     @Override
-    protected void onEnable() {
-        this.registeredWindows = getFeature().getBehaviors(ImGuiListenerFeatureModule.class)
-          .stream()
-          .map(ImGuiListenerFeatureModule::getListeners)
-          .flatMap(List::stream)
-          .filter(ToolbarItemWindow.class::isInstance)
-          .map(ToolbarItemWindow.class::cast)
-          .collect(Collectors.toList());
+    protected void onEnable(@NotNull FeatureBehaviorEnableContext context) {
+        this.registeredWindows = context.getFeature().getBoundValues(ToolbarItemWindow.class);
     }
 
     @Override
-    protected void onDisable() {
+    protected void onDisable(@NotNull FeatureBehaviorDisableContext context) {
         this.registeredWindows = null;
     }
 

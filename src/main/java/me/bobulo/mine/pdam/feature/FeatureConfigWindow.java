@@ -3,8 +3,8 @@ package me.bobulo.mine.pdam.feature;
 import imgui.ImGuiTextFilter;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
+import me.bobulo.mine.pdam.feature.behavior.EnabledFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
 import me.bobulo.mine.pdam.imgui.util.ImGuiNotificationDrawer;
 import me.bobulo.mine.pdam.imgui.window.AbstractRenderItemWindow;
 import org.apache.logging.log4j.LogManager;
@@ -83,20 +83,15 @@ public final class FeatureConfigWindow extends AbstractRenderItemWindow {
         }
         spacing();
 
-        boolean separatorNeeded = false;
-
         // Enabled toggle
-        EnabledFeatureModule enabledFeatureModule = feature.getBehavior(EnabledFeatureModule.class);
-        if (enabledFeatureModule != null) {
+        if (feature.hasBehavior(EnabledFeatureBehavior.class)) {
             if (checkbox("Enabled", feature.isEnabled())) {
                 try {
-                    enabledFeatureModule.getEnabledConfig().set(!feature.isEnabled());
+                    feature.toggleEnabled();
                 } catch (Exception exception) {
                     log.error("Failed to toggle feature {}.", feature.getName(), exception);
                     notificationDrawer.error("Failed to toggle feature " + feature.getName() + ".");
                 }
-
-                separatorNeeded = true;
             }
         }
 
@@ -108,10 +103,6 @@ public final class FeatureConfigWindow extends AbstractRenderItemWindow {
         if (configImGuiRenders != null) {
             for (FeatureConfigImGuiRender configImGuiRender : configImGuiRenders) {
                 try {
-                    if (separatorNeeded) {
-                        separator();
-                    }
-
                     configImGuiRender.draw();
                 } catch (Exception exception) {
                     log.error("Failed to render config ImGui for feature {}.", feature.getName(), exception);

@@ -17,6 +17,7 @@ val mixinGroup = "$baseGroup.mixin"
 val modid: String by project
 val transformerFile = file("src/main/resources/accesstransformer.cfg")
 val imguiVersion = "1.92.0"
+val testJavaVersion = JavaLanguageVersion.of(17)
 
 // Toolchains:
 java {
@@ -89,12 +90,31 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok:1.18.42")
     annotationProcessor("org.projectlombok:lombok:1.18.42")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
+    testImplementation("org.mockito:mockito-core:5.24.0")
 }
 
 // Tasks:
 
 tasks.withType(JavaCompile::class) {
     options.encoding = "UTF-8"
+}
+
+tasks.compileTestJava {
+    javaCompiler.set(javaToolchains.compilerFor {
+        languageVersion.set(testJavaVersion)
+    })
+    options.release.set(testJavaVersion.asInt())
+}
+
+tasks.test {
+    useJUnitPlatform()
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(testJavaVersion)
+    })
 }
 
 tasks.withType(org.gradle.jvm.tasks.Jar::class) {

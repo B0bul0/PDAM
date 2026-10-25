@@ -1,19 +1,18 @@
 package me.bobulo.mine.pdam.feature.update;
 
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.net.URI;
-import java.util.concurrent.CompletableFuture;
 
 import static imgui.ImGui.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.disableIf;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
-public final class UpdateConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class UpdateConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
     private static final Logger log = LogManager.getLogger(UpdateConfigImGuiRender.class);
     private final UpdateChecker updateChecker;
@@ -31,8 +30,8 @@ public final class UpdateConfigImGuiRender extends AbstractFeatureModule impleme
             return;
         }
 
-        if (checkbox("Enable Chat Warning", Update.CHAT_WARNING.get())) {
-            Update.CHAT_WARNING.set(!Update.CHAT_WARNING.get());
+        if (checkbox("Enable Chat Warning", UpdateFeature.CHAT_WARNING.get())) {
+            UpdateFeature.CHAT_WARNING.set(!UpdateFeature.CHAT_WARNING.get());
         }
         tooltip("Show a warning in chat when an update is available.");
 
@@ -62,7 +61,7 @@ public final class UpdateConfigImGuiRender extends AbstractFeatureModule impleme
         sameLine();
 
         disableIf(isBrowserSupported(), () -> {
-            String url = String.format(Update.GITHUB_URL_DOWNLOAD, Update.GITHUB_USER, Update.GITHUB_REPO);
+            String url = String.format(UpdateFeature.GITHUB_URL_DOWNLOAD, UpdateFeature.GITHUB_USER, UpdateFeature.GITHUB_REPO);
             if (button("Open Download Page")) {
                 openUrl(url);
             }

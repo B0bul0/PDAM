@@ -12,7 +12,7 @@ import net.minecraft.inventory.Slot;
 public class InventorySlotRender {
 
     public static void render(GuiScreen gui) {
-        if (!PDAM.getFeatureService().isFeatureEnabled(InventorySlotInspector.FEATURE_ID)) {
+        if (!PDAM.getFeatureService().isFeatureEnabled(InventorySlotInspectorFeature.FEATURE_ID)) {
             return;
         }
 
@@ -25,7 +25,7 @@ public class InventorySlotRender {
             GuiContainer container = (GuiContainer) gui;
             FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
-            boolean onlyBackground = InventorySlotInspector.OVERLAY_PRIORITY.get() == 0;
+            boolean onlyBackground = InventorySlotInspectorFeature.OVERLAY_PRIORITY.get() == 0;
 
             GlStateManager.pushMatrix();
 
@@ -52,7 +52,7 @@ public class InventorySlotRender {
                   text,
                   x + 8.5F - (textWidth / 2F),
                   y + 4F,
-                  InventorySlotInspector.COLOR.get(), false
+                  InventorySlotInspectorFeature.COLOR.get(), false
                 );
             }
 

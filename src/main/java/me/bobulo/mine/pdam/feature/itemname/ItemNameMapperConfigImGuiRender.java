@@ -1,14 +1,14 @@
 package me.bobulo.mine.pdam.feature.itemname;
 
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.feature.itemname.ItemNameDebug.MAPPER_CONFIG;
-import static me.bobulo.mine.pdam.feature.itemname.ItemNameDebug.OVERRIDE_ITEM_NAME;
+import static me.bobulo.mine.pdam.feature.itemname.ItemNameDebugFeature.MAPPER_CONFIG;
+import static me.bobulo.mine.pdam.feature.itemname.ItemNameDebugFeature.OVERRIDE_ITEM_NAME;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
-public final class ItemNameMapperConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class ItemNameMapperConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
     private static final String[] mapperConfigOptions = new String[]{
       "VANILLA",

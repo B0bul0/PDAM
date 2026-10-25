@@ -2,58 +2,29 @@ package me.bobulo.mine.pdam;
 
 import me.bobulo.mine.pdam.command.CopyToClipboardCommand;
 import me.bobulo.mine.pdam.config.ConfigService;
-import me.bobulo.mine.pdam.feature.FeatureImpl;
 import me.bobulo.mine.pdam.feature.FeatureService;
-import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypass;
-import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypassConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.chat.ChatCopyListener;
-import me.bobulo.mine.pdam.feature.chat.window.SendChatMessageWindow;
-import me.bobulo.mine.pdam.feature.chunk.ChunkBoundaryListener;
-import me.bobulo.mine.pdam.feature.chunk.ChunkConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.chunk.ChunkViewer;
-import me.bobulo.mine.pdam.feature.creative.CreativeTabInjectorModule;
-import me.bobulo.mine.pdam.feature.creative.ExpandedCreativeInventory;
-import me.bobulo.mine.pdam.feature.designtools.*;
-import me.bobulo.mine.pdam.feature.designtools.charactermap.CharacterMapWindow;
-import me.bobulo.mine.pdam.feature.designtools.hologram.HologramMockupWindow;
-import me.bobulo.mine.pdam.feature.designtools.item.window.ItemBuilderWindow;
-import me.bobulo.mine.pdam.feature.entity.EntityOverlayInfoListener;
-import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
-import me.bobulo.mine.pdam.feature.hitbox.HitBoxes;
-import me.bobulo.mine.pdam.feature.hitbox.HitBoxesConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.hitbox.HitboxesListener;
-import me.bobulo.mine.pdam.feature.imgui.ConfigMenuImGuiRender;
-import me.bobulo.mine.pdam.feature.imgui.FeatureToolbarMenuImGuiRender;
-import me.bobulo.mine.pdam.feature.imgui.ToggleEnabledMenuImGuiRender;
-import me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector;
-import me.bobulo.mine.pdam.feature.inventoryslot.SlotInspectorConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.itemname.AdvancedItemTooltipsListener;
-import me.bobulo.mine.pdam.feature.itemname.ItemNameDebug;
-import me.bobulo.mine.pdam.feature.itemname.ItemNameMapperConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.CallbackFeatureModule;
-import me.bobulo.mine.pdam.feature.module.EnabledFeatureModule;
-import me.bobulo.mine.pdam.feature.module.ForgerListenerFeatureModule;
-import me.bobulo.mine.pdam.feature.module.ImGuiListenerFeatureModule;
-import me.bobulo.mine.pdam.feature.packet.PacketMonitor;
-import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureModule;
-import me.bobulo.mine.pdam.feature.player.CoordinatesWindow;
-import me.bobulo.mine.pdam.feature.player.FlyBoosterWindow;
-import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorWindow;
-import me.bobulo.mine.pdam.feature.server.ServerInfoWindow;
-import me.bobulo.mine.pdam.feature.sign.SignConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.sign.SignEditor;
-import me.bobulo.mine.pdam.feature.sign.SignEditorListener;
-import me.bobulo.mine.pdam.feature.signfinder.SignESP;
-import me.bobulo.mine.pdam.feature.signfinder.SignFinderWindow;
-import me.bobulo.mine.pdam.feature.skin.HeadWorldSkinExtractionListener;
-import me.bobulo.mine.pdam.feature.skin.HotBarSkinExtractionListener;
-import me.bobulo.mine.pdam.feature.skin.PlayerSkinExtractionListener;
-import me.bobulo.mine.pdam.feature.sound.SoundDebugFeatureModule;
-import me.bobulo.mine.pdam.feature.tooltip.NBTTagTooltipListener;
-import me.bobulo.mine.pdam.feature.update.Update;
-import me.bobulo.mine.pdam.feature.update.UpdateFeatureModule;
-import me.bobulo.mine.pdam.feature.world.WorldTime;
-import me.bobulo.mine.pdam.feature.world.WorldTimeConfigImGuiRender;
+import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypassFeature;
+import me.bobulo.mine.pdam.feature.chat.MessagingUtilitiesFeature;
+import me.bobulo.mine.pdam.feature.chunk.ChunkViewerFeature;
+import me.bobulo.mine.pdam.feature.creative.ExpandedCreativeInventoryFeature;
+import me.bobulo.mine.pdam.feature.designtools.DesignToolsFeature;
+import me.bobulo.mine.pdam.feature.entity.EntityInfoOverlayFeature;
+import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntitiesFeature;
+import me.bobulo.mine.pdam.feature.hitbox.HitBoxesFeature;
+import me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspectorFeature;
+import me.bobulo.mine.pdam.feature.itemname.ItemNameDebugFeature;
+import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeature;
+import me.bobulo.mine.pdam.feature.player.FlyBoosterFeature;
+import me.bobulo.mine.pdam.feature.player.PlayerUtilitiesFeature;
+import me.bobulo.mine.pdam.feature.scoreboard.ScoreboardInspectorFeature;
+import me.bobulo.mine.pdam.feature.server.ServerInfoFeature;
+import me.bobulo.mine.pdam.feature.sign.SignEditorFeature;
+import me.bobulo.mine.pdam.feature.signfinder.SignFinderFeature;
+import me.bobulo.mine.pdam.feature.skin.SkinExtractionFeature;
+import me.bobulo.mine.pdam.feature.sound.SoundDebugFeature;
+import me.bobulo.mine.pdam.feature.tooltip.NBTTooltipFeature;
+import me.bobulo.mine.pdam.feature.update.UpdateFeature;
+import me.bobulo.mine.pdam.feature.world.WorldTimeFeature;
 import me.bobulo.mine.pdam.imgui.ImGuiRenderer;
 import me.bobulo.mine.pdam.notification.NotificationDisplayElement;
 import me.bobulo.mine.pdam.ui.UIManager;
@@ -139,206 +110,28 @@ public final class PDAM {
     }
 
     private void registerFeatures() {
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("sound_debug")
-          .module(new EnabledFeatureModule(true))
-          .module(new SoundDebugFeatureModule())
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("nbt_tooltip")
-          .module(new EnabledFeatureModule(true))
-          .module(ForgerListenerFeatureModule.of(new NBTTagTooltipListener()))
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("show_invisible_entities")
-          .module(new EnabledFeatureModule(true))
-          .module(CallbackFeatureModule.of(
-            () -> ShowInvisibleEntities.showInvisibleEntities = true,
-            () -> ShowInvisibleEntities.showInvisibleEntities = false)
-          ).build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("entity_info_overlay")
-          .module(new EnabledFeatureModule(true))
-          .module(ForgerListenerFeatureModule.of(new EntityOverlayInfoListener()))
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("skin_extraction")
-          .module(new EnabledFeatureModule(false))
-          .module(ForgerListenerFeatureModule.of(
-            new PlayerSkinExtractionListener(),
-            new HeadWorldSkinExtractionListener(),
-            new HotBarSkinExtractionListener()
-          ))
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(PacketMonitor.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            new PacketMonitorFeatureModule()
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("scoreboard_inspector")
-          .module(new EnabledFeatureModule(true))
-          .module(ImGuiListenerFeatureModule.of(new ScoreboardInspectorWindow()))
-          .module(new FeatureToolbarMenuImGuiRender())
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("server_info")
-          .module(new EnabledFeatureModule(true))
-          .module(ImGuiListenerFeatureModule.of(new ServerInfoWindow()))
-          .module(new FeatureToolbarMenuImGuiRender())
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("fly_booster")
-          .module(new EnabledFeatureModule(false))
-          .module(ImGuiListenerFeatureModule.of(new FlyBoosterWindow()))
-          .module(new FeatureToolbarMenuImGuiRender())
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("messaging_utilities")
-          .module(new EnabledFeatureModule(true))
-          .module(ImGuiListenerFeatureModule.of(
-            new SendChatMessageWindow()
-          ))
-          .module(new FeatureToolbarMenuImGuiRender())
-          .module(ForgerListenerFeatureModule.of(new ChatCopyListener()))
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(SignEditor.FEATURE_ID)
-          .module(new EnabledFeatureModule(true))
-          .module(ForgerListenerFeatureModule.of(new SignEditorListener()))
-          .module(new SignConfigImGuiRender())
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(DesignTools.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            ImGuiListenerFeatureModule.of(
-              new CharacterMapWindow(),
-              new MessageFormatterWindow(),
-              new TitleVisualizerWindow(),
-              new ActionBarVisualizerWindow(),
-              new HologramMockupWindow(),
-              new PlaySoundWindow(),
-              new ItemBuilderWindow(),
-              new SpawnParticleWindow()
-            ),
-            new DesignToolsMenuImguiRender()
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(InventorySlotInspector.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            new SlotInspectorConfigImGuiRender(),
-            new ConfigMenuImGuiRender(true)
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(ExpandedCreativeInventory.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            new CreativeTabInjectorModule()
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("player_utilities")
-          .modules(
-            new EnabledFeatureModule(true),
-            ImGuiListenerFeatureModule.of(
-              new CoordinatesWindow()
-            )
-          )
-          .module(new FeatureToolbarMenuImGuiRender())
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(ItemNameDebug.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            ForgerListenerFeatureModule.of(new AdvancedItemTooltipsListener()),
-            new ItemNameMapperConfigImGuiRender()
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(WorldTime.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(false),
-            new WorldTimeConfigImGuiRender(),
-            new ConfigMenuImGuiRender(true)
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(BungeeBypass.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(false),
-            new BungeeBypassConfigImGuiRender(),
-            new ConfigMenuImGuiRender(true)
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id("sign_finder")
-          .modules(
-            new EnabledFeatureModule(true),
-            ImGuiListenerFeatureModule.of(
-              new SignFinderWindow()
-            ),
-            new FeatureToolbarMenuImGuiRender(),
-            ForgerListenerFeatureModule.of(
-              new SignESP()
-            )
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(HitBoxes.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(false),
-            ForgerListenerFeatureModule.of(
-              new HitboxesListener()
-            ),
-            new HitBoxesConfigImGuiRender(),
-            new ConfigMenuImGuiRender(true)
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(ChunkViewer.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(false),
-            ForgerListenerFeatureModule.of(
-              new ChunkBoundaryListener()
-            ),
-            new ChunkConfigImGuiRender(),
-            new ToggleEnabledMenuImGuiRender()
-          )
-          .build());
-
-        featureService.registerFeature(FeatureImpl.builder()
-          .id(Update.FEATURE_ID)
-          .modules(
-            new EnabledFeatureModule(true),
-            new UpdateFeatureModule()
-          )
-          .build());
+        featureService.registerFeature(new SoundDebugFeature());
+        featureService.registerFeature(new NBTTooltipFeature());
+        featureService.registerFeature(new ShowInvisibleEntitiesFeature());
+        featureService.registerFeature(new EntityInfoOverlayFeature());
+        featureService.registerFeature(new SkinExtractionFeature());
+        featureService.registerFeature(new PacketMonitorFeature());
+        featureService.registerFeature(new ScoreboardInspectorFeature());
+        featureService.registerFeature(new ServerInfoFeature());
+        featureService.registerFeature(new FlyBoosterFeature());
+        featureService.registerFeature(new MessagingUtilitiesFeature());
+        featureService.registerFeature(new SignEditorFeature());
+        featureService.registerFeature(new DesignToolsFeature());
+        featureService.registerFeature(new InventorySlotInspectorFeature());
+        featureService.registerFeature(new ExpandedCreativeInventoryFeature());
+        featureService.registerFeature(new PlayerUtilitiesFeature());
+        featureService.registerFeature(new ItemNameDebugFeature());
+        featureService.registerFeature(new WorldTimeFeature());
+        featureService.registerFeature(new BungeeBypassFeature());
+        featureService.registerFeature(new SignFinderFeature());
+        featureService.registerFeature(new HitBoxesFeature());
+        featureService.registerFeature(new ChunkViewerFeature());
+        featureService.registerFeature(new UpdateFeature());
     }
 
 }

@@ -39,23 +39,23 @@ public class HitboxesListener {
                 continue;
             }
 
-            if (!HitBoxes.SHOW_INVISIBLE.get() && entity.isInvisible()) {
+            if (!HitBoxesFeature.SHOW_INVISIBLE.get() && entity.isInvisible()) {
                 continue;
             }
 
-            int color = HitBoxes.COLOR.get(); // default color
+            int color = HitBoxesFeature.COLOR.get(); // default color
 
-            if (HitBoxes.ENABLE_ENTITY_TYPES.get()) {
+            if (HitBoxesFeature.ENABLE_ENTITY_TYPES.get()) {
                 String entityNameId = EntityList.getEntityString(entity);
                 if (entityNameId == null && entity instanceof EntityPlayer) {
                     entityNameId = "Player";
                 }
 
-                if (entityNameId != null && !HitBoxes.isEnabledForEntity(entityNameId)) {
+                if (entityNameId != null && !HitBoxesFeature.isEnabledForEntity(entityNameId)) {
                     continue;
                 }
 
-                color = HitBoxes.getByEntity(entityNameId).color.get();
+                color = HitBoxesFeature.getByEntity(entityNameId).color.get();
             }
 
             MovingObjectPosition objectMouseOver = mc.objectMouseOver;
@@ -63,7 +63,7 @@ public class HitboxesListener {
             if (objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && objectMouseOver.entityHit == entity) {
                 // red
                 color = Color.RED.getRGB();
-            } else if (HitBoxes.ONLY_TARGET.get()) {
+            } else if (HitBoxesFeature.ONLY_TARGET.get()) {
                 continue;
             }
 
@@ -73,7 +73,7 @@ public class HitboxesListener {
 
             AxisAlignedBB realBox = entity.getEntityBoundingBox();
 
-            if (HitBoxes.SHOW_EXPANDED.get()) {
+            if (HitBoxesFeature.SHOW_EXPANDED.get()) {
                 float bordaExtra = entity.getCollisionBorderSize();
                 realBox = realBox.expand(bordaExtra, bordaExtra, bordaExtra);
             }

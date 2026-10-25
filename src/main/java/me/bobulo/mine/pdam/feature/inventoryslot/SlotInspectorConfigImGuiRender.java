@@ -2,14 +2,14 @@ package me.bobulo.mine.pdam.feature.inventoryslot;
 
 import imgui.flag.ImGuiColorEditFlags;
 import imgui.type.ImInt;
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import me.bobulo.mine.pdam.util.ColorUtil;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector.*;
+import static me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspectorFeature.*;
 
-public final class SlotInspectorConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class SlotInspectorConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
     private static final String[] OVERLAY_PRIORITY_OPTIONS = new String[]{
       "Background",

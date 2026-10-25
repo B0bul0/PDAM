@@ -4,19 +4,19 @@ import imgui.flag.ImGuiColorEditFlags;
 import imgui.type.ImFloat;
 import imgui.type.ImInt;
 import me.bobulo.mine.pdam.config.ConfigValue;
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
 import me.bobulo.mine.pdam.util.ColorUtil;
 import me.bobulo.mine.pdam.util.MathUtil;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.feature.chunk.ChunkViewer.*;
+import static me.bobulo.mine.pdam.feature.chunk.ChunkViewerFeature.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.*;
 
 /**
  * Renders the ImGui configuration menu for the ChunkViewer feature.
  */
-public final class ChunkConfigImGuiRender extends AbstractFeatureModule implements FeatureConfigImGuiRender {
+public final class ChunkConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
     private final float[] highlightColor = ColorUtil.toRgba(HIGHLIGHT_COLOR.get());
     private final float[] surroundingColor = ColorUtil.toRgba(SURROUNDING_COLOR.get());

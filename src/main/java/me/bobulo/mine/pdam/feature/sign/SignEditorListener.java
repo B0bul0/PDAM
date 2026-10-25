@@ -30,7 +30,7 @@ public final class SignEditorListener {
             return;
         }
 
-        if (!SignEditor.VIEW_GUI.get()) { // config check
+        if (!SignEditorFeature.VIEW_GUI.get()) { // config check
             return;
         }
 

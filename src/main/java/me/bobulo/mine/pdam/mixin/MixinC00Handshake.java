@@ -1,6 +1,6 @@
 package me.bobulo.mine.pdam.mixin;
 
-import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypass;
+import me.bobulo.mine.pdam.feature.bungeebypass.BungeeBypassFeature;
 import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.handshake.client.C00Handshake;
@@ -32,12 +32,12 @@ public class MixinC00Handshake {
      */
     @Overwrite
     public void writePacketData(PacketBuffer buf) {
-        if (BungeeBypass.isFeatureEnabled()) {
+        if (BungeeBypassFeature.isFeatureEnabled()) {
             buf.writeVarIntToBuffer(this.protocolVersion);
 
-            String spoofedIp = BungeeBypass.SPOOFED_IP.get();
-            String spoofedUuid = BungeeBypass.SPOOFED_UUID.get();
-            String injectHost = BungeeBypass.INJECTED_HOST.get();
+            String spoofedIp = BungeeBypassFeature.SPOOFED_IP.get();
+            String spoofedUuid = BungeeBypassFeature.SPOOFED_UUID.get();
+            String injectHost = BungeeBypassFeature.INJECTED_HOST.get();
 
             String bungeePayload = injectHost + "\00" + spoofedIp + "\00" + spoofedUuid;
 

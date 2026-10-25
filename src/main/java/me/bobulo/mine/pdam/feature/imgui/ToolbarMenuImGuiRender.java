@@ -1,6 +1,6 @@
 package me.bobulo.mine.pdam.feature.imgui;
 
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
+import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.imgui.toolbar.ToolbarItemWindow;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import static imgui.ImGui.menuItem;
 /**
  * Renders toolbar item windows in the menu.
  */
-public final class ToolbarMenuImGuiRender extends AbstractFeatureModule implements MenuImGuiRender {
+public final class ToolbarMenuImGuiRender extends AbstractFeatureBehavior implements MenuImGuiRender {
 
     private final List<ToolbarItemWindow> registeredWindows;
 

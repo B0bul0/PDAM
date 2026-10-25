@@ -1,6 +1,6 @@
 package me.bobulo.mine.pdam.mixin;
 
-import me.bobulo.mine.pdam.feature.sign.SignEditor;
+import me.bobulo.mine.pdam.feature.sign.SignEditorFeature;
 import me.bobulo.mine.pdam.feature.sign.window.SignEditorWindow;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.tileentity.TileEntitySign;
@@ -16,7 +16,7 @@ public class MixinEntityPlayerSP {
     private void onOpenEditSign(TileEntitySign signTile, CallbackInfo cir) {
         EntityPlayerSP self = (EntityPlayerSP) (Object) this;
 
-        if (SignEditor.isFeatureEnabled() && SignEditor.OVERRIDE_SIGN_GUI.get()) {
+        if (SignEditorFeature.isFeatureEnabled() && SignEditorFeature.OVERRIDE_SIGN_GUI.get()) {
             cir.cancel();
             SignEditorWindow.openSignEditor(signTile);
         }
