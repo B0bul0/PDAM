@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mockStatic;
 class ModuleLifecycleContextTest {
     private MockedStatic<ThreadUtils> threads;
     private MockedStatic<EventUtils> events;
-    private final FeatureImpl feature = new FeatureImpl("module_contexts");
+    private final TestFeature feature = TestFeature.of("module_contexts");
     private final List<String> calls = new ArrayList<>();
 
     @BeforeEach

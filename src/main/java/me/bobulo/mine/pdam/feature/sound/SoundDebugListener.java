@@ -8,10 +8,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SoundDebugListener {
 
-    private final SoundDebugFeatureModule soundDebugFeatureComponent;
+    private final SoundDebugFeature soundDebugFeature;
 
-    public SoundDebugListener(SoundDebugFeatureModule soundDebugFeatureComponent) {
-        this.soundDebugFeatureComponent = soundDebugFeatureComponent;
+    public SoundDebugListener(SoundDebugFeature soundDebugFeature) {
+        this.soundDebugFeature = soundDebugFeature;
     }
 
     @SideOnly(Side.CLIENT)
@@ -21,7 +21,7 @@ public class SoundDebugListener {
         float pitch = event.sound.getPitch();
         float volume = event.sound.getVolume();
 
-        soundDebugFeatureComponent.logSound(new SoundLogEntry(
+        soundDebugFeature.logSound(new SoundLogEntry(
             soundName, volume, pitch,
           event.sound.getXPosF(), event.sound.getYPosF(), event.sound.getZPosF()
         ));

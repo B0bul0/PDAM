@@ -39,13 +39,13 @@ public final class ChunkBoundaryListener {
 
         this.playerSectionY = ((playerY >> 4) << 4);
 
-        int radius = ChunkViewer.SURROUNDING_RADIUS.get();
-        int verticalSections = ChunkViewer.VERTICAL_SECTIONS.get();
+        int radius = ChunkViewerFeature.SURROUNDING_RADIUS.get();
+        int verticalSections = ChunkViewerFeature.VERTICAL_SECTIONS.get();
 
         this.minY = Math.max(0, ((playerY >> 4) << 4) - (verticalSections * 16));
         this.maxY = Math.min(256, ((playerY >> 4) << 4) + ((verticalSections + 1) * 16));
 
-        this.lineWidth = ChunkViewer.LINE_WIDTH.getOrDefault(1.0F);
+        this.lineWidth = ChunkViewerFeature.LINE_WIDTH.getOrDefault(1.0F);
 
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -58,7 +58,7 @@ public final class ChunkBoundaryListener {
         GL11.glDepthMask(false);
         GL11.glLineWidth(lineWidth);
 
-        if (ChunkViewer.SHOW_SURROUNDING.get()) {
+        if (ChunkViewerFeature.SHOW_SURROUNDING.get()) {
             renderSurroundingChunks(playerChunkX, playerChunkZ, radius);
         }
 
@@ -95,7 +95,7 @@ public final class ChunkBoundaryListener {
 
         for (int i = 0; i <= 16; i += 16) {
             for (int j = 0; j <= 16; j += 16) {
-                float[] color = ColorUtil.toRgba(ChunkViewer.SURROUNDING_COLOR.get());
+                float[] color = ColorUtil.toRgba(ChunkViewerFeature.SURROUNDING_COLOR.get());
                 worldrenderer.pos(chunkX + i, minY, chunkZ + j).color(color[0], color[1], color[2], color[3]).endVertex();
                 worldrenderer.pos(chunkX + i, maxY, chunkZ + j).color(color[0], color[1], color[2], color[3]).endVertex();
             }
@@ -108,8 +108,8 @@ public final class ChunkBoundaryListener {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
-        boolean showSections = ChunkViewer.SHOW_SECTIONS.get();
-        boolean showCurrentChunk = ChunkViewer.SHOW_CURRENT_CHUNK.get();
+        boolean showSections = ChunkViewerFeature.SHOW_SECTIONS.get();
+        boolean showCurrentChunk = ChunkViewerFeature.SHOW_CURRENT_CHUNK.get();
 
         worldrenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
@@ -117,7 +117,7 @@ public final class ChunkBoundaryListener {
         if (showCurrentChunk) {
             for (int i = 0; i <= 16; i += 16) {
                 for (int j = 0; j <= 16; j += 16) {
-                    float[] color = ColorUtil.toRgba(ChunkViewer.CURRENT_CHUNK_COLOR.get());
+                    float[] color = ColorUtil.toRgba(ChunkViewerFeature.CURRENT_CHUNK_COLOR.get());
                     worldrenderer.pos(chunkX + i, minY, chunkZ + j).color(color[0], color[1], color[2], color[3]).endVertex();
                     worldrenderer.pos(chunkX + i, maxY, chunkZ + j).color(color[0], color[1], color[2], color[3]).endVertex();
                 }
@@ -136,7 +136,7 @@ public final class ChunkBoundaryListener {
                 continue;
             }
 
-            float[] color = ColorUtil.toRgba(ChunkViewer.SECTION_COLOR.get());
+            float[] color = ColorUtil.toRgba(ChunkViewerFeature.SECTION_COLOR.get());
 
             worldrenderer.pos(chunkX, y, chunkZ).color(color[0], color[1], color[2], color[3]).endVertex();
             worldrenderer.pos(chunkX + chunkSize, y, chunkZ).color(color[0], color[1], color[2], color[3]).endVertex();
@@ -157,14 +157,14 @@ public final class ChunkBoundaryListener {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
-        if (ChunkViewer.HIGHLIGHT_CURRENT_SECTION.get()) {
+        if (ChunkViewerFeature.HIGHLIGHT_CURRENT_SECTION.get()) {
             GL11.glLineWidth(lineWidth * 2); // Line width
             GL11.glDisable(GL11.GL_DEPTH_TEST); // Allow lines to be drawn on top of everything else
         }
 
         worldrenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
         int chunkSize = 16;
-        float[] color = ColorUtil.toRgba(ChunkViewer.HIGHLIGHT_COLOR.get());
+        float[] color = ColorUtil.toRgba(ChunkViewerFeature.HIGHLIGHT_COLOR.get());
 
         for (int i = 0; i <= 16; i += 16) {
             for (int j = 0; j <= 16; j += 16) {

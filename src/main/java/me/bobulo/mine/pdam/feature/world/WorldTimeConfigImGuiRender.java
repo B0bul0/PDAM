@@ -10,7 +10,7 @@ import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
 public final class WorldTimeConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 
-    private final int[] timeOffsetCache = new int[]{WorldTime.WORLD_TIME.get()};
+    private final int[] timeOffsetCache = new int[]{WorldTimeFeature.WORLD_TIME.get()};
 
     @Override
     public void draw() {
@@ -18,7 +18,7 @@ public final class WorldTimeConfigImGuiRender extends AbstractFeatureBehavior im
           ? Minecraft.getMinecraft().theWorld.getWorldTime() : "N/A"));
 
         if (sliderInt("World Time", timeOffsetCache, 0, 24000, ImGuiSliderFlags.AlwaysClamp)) {
-            WorldTime.WORLD_TIME.set(timeOffsetCache[0]);
+            WorldTimeFeature.WORLD_TIME.set(timeOffsetCache[0]);
             updateTime();
         }
 
@@ -45,12 +45,12 @@ public final class WorldTimeConfigImGuiRender extends AbstractFeatureBehavior im
 
     private void setWorldTime(int time) {
         timeOffsetCache[0] = time;
-        WorldTime.WORLD_TIME.set(time);
+        WorldTimeFeature.WORLD_TIME.set(time);
         updateTime();
     }
 
     private void updateTime() {
-        if (!WorldTime.isFeatureEnabled()) {
+        if (!WorldTimeFeature.isFeatureEnabled()) {
             return;
         }
 

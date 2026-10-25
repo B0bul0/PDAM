@@ -30,7 +30,7 @@ public class FeatureLifecycleTest {
     private MockedStatic<ThreadUtils> threads;
     private MockedStatic<EventUtils> events;
     private final List<String> calls = new ArrayList<>();
-    private final FeatureImpl feature = new FeatureImpl("lifecycle_test");
+    private final TestFeature feature = TestFeature.of("lifecycle_test");
     private final RecordingModule module = new RecordingModule(calls);
 
     @BeforeEach
@@ -74,10 +74,8 @@ public class FeatureLifecycleTest {
 
     @Test
     public void ca03AutomaticEnableWaitsForTheModuleToFinishAttaching() {
-        FeatureImpl automatic = FeatureImpl.builder()
-                .id("automatic")
-                .module(new AutomaticEnableModule(calls))
-                .build();
+        TestFeature automatic = TestFeature.initialized("automatic",
+                scope -> scope.registerModule(new AutomaticEnableModule(calls)), scope -> {});
 
         assertTrue(automatic.isEnabled());
         assertEquals(Arrays.asList("attach", "init:load", "enable", "init:enable"), calls);
@@ -90,11 +88,10 @@ public class FeatureLifecycleTest {
 
         try (MockedStatic<PDAM> application = mockStatic(PDAM.class)) {
             application.when(PDAM::getConfigService).thenReturn(configuration);
-            FeatureImpl configured = FeatureImpl.builder()
-                    .id("configured")
-                    .behavior(new EnabledFeatureBehavior(true))
-                    .module(new RecordingModule(calls))
-                    .build();
+            TestFeature configured = TestFeature.initialized("configured", scope -> {
+                scope.registerBehavior(new EnabledFeatureBehavior(true));
+                scope.registerModule(new RecordingModule(calls));
+            }, scope -> {});
 
             assertTrue(configured.isEnabled());
             assertEquals(Arrays.asList("attach", "init:load", "enable", "init:enable"), calls);
@@ -188,7 +185,7 @@ public class FeatureLifecycleTest {
     @Test
     public void ca05UnregisterAllDetachesEveryRegisteredFeature() {
         FeatureService service = new FeatureService();
-        FeatureImpl other = new FeatureImpl("other");
+        TestFeature other = TestFeature.of("other");
         service.registerFeature(feature);
         service.registerFeature(other);
 
@@ -203,7 +200,7 @@ public class FeatureLifecycleTest {
 
     @Test
     public void ca06AddedModuleAttachesThenEnablesAndRemovalDisablesThenDetaches() {
-        FeatureImpl active = new FeatureImpl("active");
+        TestFeature active = TestFeature.of("active");
         active.enable();
 
         active.addModule(new RecordingModule(calls));
@@ -218,7 +215,7 @@ public class FeatureLifecycleTest {
 
     @Test
     public void ca06DisabledFeatureOnlyAttachesAndDetachesTheModule() {
-        FeatureImpl disabled = new FeatureImpl("disabled");
+        TestFeature disabled = TestFeature.of("disabled");
         RecordingModule added = new RecordingModule(calls);
 
         disabled.addModule(added);

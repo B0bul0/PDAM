@@ -7,7 +7,7 @@ import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
 import me.bobulo.mine.pdam.util.ColorUtil;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspector.*;
+import static me.bobulo.mine.pdam.feature.inventoryslot.InventorySlotInspectorFeature.*;
 
 public final class SlotInspectorConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {
 

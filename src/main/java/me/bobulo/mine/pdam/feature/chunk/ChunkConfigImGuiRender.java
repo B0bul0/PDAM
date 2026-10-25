@@ -10,7 +10,7 @@ import me.bobulo.mine.pdam.util.ColorUtil;
 import me.bobulo.mine.pdam.util.MathUtil;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.feature.chunk.ChunkViewer.*;
+import static me.bobulo.mine.pdam.feature.chunk.ChunkViewerFeature.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.*;
 
 /**

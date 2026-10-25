@@ -1,6 +1,6 @@
 package me.bobulo.mine.pdam.mixin;
 
-import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntities;
+import me.bobulo.mine.pdam.feature.entity.ShowInvisibleEntitiesFeature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +21,7 @@ public class MixinEntity {
         }
 
         // force show invisible entities
-        if (ShowInvisibleEntities.showInvisibleEntities) {
+        if (ShowInvisibleEntitiesFeature.showInvisibleEntities) {
             cir.setReturnValue(false);
             cir.cancel();
         }

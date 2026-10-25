@@ -4,8 +4,8 @@ import me.bobulo.mine.pdam.feature.behavior.AbstractFeatureBehavior;
 import me.bobulo.mine.pdam.feature.imgui.FeatureConfigImGuiRender;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.feature.itemname.ItemNameDebug.MAPPER_CONFIG;
-import static me.bobulo.mine.pdam.feature.itemname.ItemNameDebug.OVERRIDE_ITEM_NAME;
+import static me.bobulo.mine.pdam.feature.itemname.ItemNameDebugFeature.MAPPER_CONFIG;
+import static me.bobulo.mine.pdam.feature.itemname.ItemNameDebugFeature.OVERRIDE_ITEM_NAME;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
 public final class ItemNameMapperConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mockStatic;
 class DetachLifecycleTest {
     private MockedStatic<ThreadUtils> threads;
     private MockedStatic<EventUtils> events;
-    private final FeatureImpl feature = new FeatureImpl("detach_hooks");
+    private final TestFeature feature = TestFeature.of("detach_hooks");
 
     @BeforeEach
     void simulateGame() {

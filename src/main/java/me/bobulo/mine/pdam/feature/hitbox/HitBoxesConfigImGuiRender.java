@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static imgui.ImGui.*;
-import static me.bobulo.mine.pdam.feature.hitbox.HitBoxes.*;
+import static me.bobulo.mine.pdam.feature.hitbox.HitBoxesFeature.*;
 import static me.bobulo.mine.pdam.imgui.util.ImGuiHelper.tooltip;
 
 public final class HitBoxesConfigImGuiRender extends AbstractFeatureBehavior implements FeatureConfigImGuiRender {

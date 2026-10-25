@@ -1,7 +1,7 @@
 package me.bobulo.mine.pdam.feature.packet.interceptor;
 
 import me.bobulo.mine.pdam.feature.packet.PacketDirection;
-import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeatureModule;
+import me.bobulo.mine.pdam.feature.packet.PacketMonitorFeature;
 import me.bobulo.mine.pdam.feature.packet.data.PacketCodecRegistry;
 import me.bobulo.mine.pdam.feature.packet.data.PacketData;
 import me.bobulo.mine.pdam.feature.packet.data.PacketDataBuffer;
@@ -20,9 +20,9 @@ import java.time.Instant;
 public class PacketDataInterceptor {
 
     private static final Logger log = LogManager.getLogger(PacketDataInterceptor.class);
-    private final PacketMonitorFeatureModule packetMonitor;
+    private final PacketMonitorFeature packetMonitor;
 
-    public PacketDataInterceptor(PacketMonitorFeatureModule packetMonitor) {
+    public PacketDataInterceptor(PacketMonitorFeature packetMonitor) {
         this.packetMonitor = packetMonitor;
     }
 

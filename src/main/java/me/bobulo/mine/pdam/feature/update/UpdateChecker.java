@@ -49,7 +49,7 @@ public final class UpdateChecker {
         try {
             log.debug("Checking for updates...");
 
-            String urlString = String.format(GITHUB_API_URL, Update.GITHUB_USER, Update.GITHUB_REPO);
+            String urlString = String.format(GITHUB_API_URL, UpdateFeature.GITHUB_USER, UpdateFeature.GITHUB_REPO);
 
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

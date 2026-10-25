@@ -23,12 +23,12 @@ public final class ChatUpdateWarning {
             return;
         }
 
-        if (!updateChecker.isUpdateAvailable() || !Update.CHAT_WARNING.get()) {
+        if (!updateChecker.isUpdateAvailable() || !UpdateFeature.CHAT_WARNING.get()) {
             return;
         }
 
         String latestVersion = updateChecker.getLatestVersion();
-        String url = String.format(Update.GITHUB_URL_DOWNLOAD, Update.GITHUB_USER, Update.GITHUB_REPO);
+        String url = String.format(UpdateFeature.GITHUB_URL_DOWNLOAD, UpdateFeature.GITHUB_USER, UpdateFeature.GITHUB_REPO);
 
         ChatStyle style = new ChatStyle();
         style.setColor(EnumChatFormatting.AQUA);

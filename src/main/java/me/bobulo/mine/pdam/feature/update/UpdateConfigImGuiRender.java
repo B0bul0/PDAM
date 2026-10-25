@@ -30,8 +30,8 @@ public final class UpdateConfigImGuiRender extends AbstractFeatureBehavior imple
             return;
         }
 
-        if (checkbox("Enable Chat Warning", Update.CHAT_WARNING.get())) {
-            Update.CHAT_WARNING.set(!Update.CHAT_WARNING.get());
+        if (checkbox("Enable Chat Warning", UpdateFeature.CHAT_WARNING.get())) {
+            UpdateFeature.CHAT_WARNING.set(!UpdateFeature.CHAT_WARNING.get());
         }
         tooltip("Show a warning in chat when an update is available.");
 
@@ -61,7 +61,7 @@ public final class UpdateConfigImGuiRender extends AbstractFeatureBehavior imple
         sameLine();
 
         disableIf(isBrowserSupported(), () -> {
-            String url = String.format(Update.GITHUB_URL_DOWNLOAD, Update.GITHUB_USER, Update.GITHUB_REPO);
+            String url = String.format(UpdateFeature.GITHUB_URL_DOWNLOAD, UpdateFeature.GITHUB_USER, UpdateFeature.GITHUB_REPO);
             if (button("Open Download Page")) {
                 openUrl(url);
             }

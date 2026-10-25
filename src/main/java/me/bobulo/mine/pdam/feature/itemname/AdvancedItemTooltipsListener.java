@@ -19,7 +19,7 @@ public final class AdvancedItemTooltipsListener {
             return;
         }
 
-        ItemMapper itemMapper = ItemNameDebug.getItemMapper();
+        ItemMapper itemMapper = ItemNameDebugFeature.getItemMapper();
         if (itemMapper == null) {
             return;
         }
@@ -33,7 +33,7 @@ public final class AdvancedItemTooltipsListener {
 
         int index = findItemNameLineIndex(toolTip, itemStack);
 
-        if (ItemNameDebug.OVERRIDE_ITEM_NAME.get()) {
+        if (ItemNameDebugFeature.OVERRIDE_ITEM_NAME.get()) {
             if (index != -1) {
                 toolTip.set(index, "§8" + itemName);
             }

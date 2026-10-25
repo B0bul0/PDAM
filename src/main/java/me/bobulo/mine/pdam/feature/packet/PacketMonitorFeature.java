@@ -3,12 +3,12 @@ package me.bobulo.mine.pdam.feature.packet;
 import com.google.common.collect.ImmutableList;
 import me.bobulo.mine.pdam.binding.ForgeListenerBinding;
 import me.bobulo.mine.pdam.binding.ImGuiListenerBinding;
+import me.bobulo.mine.pdam.feature.AbstractFeature;
+import me.bobulo.mine.pdam.feature.behavior.EnabledFeatureBehavior;
+import me.bobulo.mine.pdam.feature.context.FeatureDisableContext;
+import me.bobulo.mine.pdam.feature.context.FeatureEnableContext;
+import me.bobulo.mine.pdam.feature.context.FeatureInitializeContext;
 import me.bobulo.mine.pdam.feature.imgui.ToolbarMenuImGuiRender;
-import me.bobulo.mine.pdam.feature.module.AbstractFeatureModule;
-import me.bobulo.mine.pdam.feature.module.context.FeatureModuleAttachContext;
-import me.bobulo.mine.pdam.feature.module.context.FeatureModuleDetachContext;
-import me.bobulo.mine.pdam.feature.module.context.FeatureModuleDisableContext;
-import me.bobulo.mine.pdam.feature.module.context.FeatureModuleEnableContext;
 import me.bobulo.mine.pdam.feature.packet.interceptor.PacketDataInterceptor;
 import me.bobulo.mine.pdam.feature.packet.log.DisplayPacketLogEntry;
 import me.bobulo.mine.pdam.feature.packet.log.PacketLogEntry;
@@ -18,7 +18,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
-public final class PacketMonitorFeatureModule extends AbstractFeatureModule {
+public final class PacketMonitorFeature extends AbstractFeature {
+
+    public static final String FEATURE_ID = "packet_monitor";
 
     private LogHistory<DisplayPacketLogEntry> packetEntries;
 
@@ -26,38 +28,46 @@ public final class PacketMonitorFeatureModule extends AbstractFeatureModule {
     private PacketRateTracker rateTrackerClient;
 
     private PacketLogWindow logWindow;
-    private ToolbarMenuImGuiRender menu;
     private ForgeListenerBinding listenerBinding;
     private ImGuiListenerBinding windowBinding;
 
+    public PacketMonitorFeature() {
+        super(FEATURE_ID);
+    }
+
     @Override
-    protected void onInitialize(@NotNull FeatureModuleAttachContext context) {
+    protected void onInitialize(@NotNull FeatureInitializeContext context) {
+        context.getScope().registerBehavior(new EnabledFeatureBehavior(true));
         this.packetEntries = new LogHistory<>();
         this.rateTrackerServer = new PacketRateTracker(1, TimeUnit.SECONDS);
         this.rateTrackerClient = new PacketRateTracker(1, TimeUnit.SECONDS);
 
         this.logWindow = new PacketLogWindow(packetEntries, rateTrackerServer, rateTrackerClient);
-        this.menu = new ToolbarMenuImGuiRender(ImmutableList.of(logWindow));
+        ToolbarMenuImGuiRender menu = new ToolbarMenuImGuiRender(ImmutableList.of(logWindow));
         context.getScope().registerBehavior(menu);
     }
 
     @Override
-    protected void onEnable(@NotNull FeatureModuleEnableContext context) {
+    protected void onEnable(@NotNull FeatureEnableContext context) {
         listenerBinding = new ForgeListenerBinding(new PacketDataInterceptor(this));
         windowBinding = new ImGuiListenerBinding(logWindow);
         context.getScope().registerBindings(listenerBinding, windowBinding);
     }
 
     @Override
-    protected void onUninitialize(@NotNull FeatureModuleDetachContext context) {
-        context.getScope().unregisterBehavior(menu);
-    }
-
-    @Override
-    protected void onDisable(@NotNull FeatureModuleDisableContext context) {
-        context.getScope().unregisterBinding(listenerBinding);
-        context.getScope().unregisterBinding(windowBinding);
-        this.packetEntries.clear();
+    protected void onDisable(@NotNull FeatureDisableContext context) {
+        try {
+            if (context.getScope().getBindings().contains(listenerBinding)) {
+                context.getScope().unregisterBinding(listenerBinding);
+            }
+            if (context.getScope().getBindings().contains(windowBinding)) {
+                context.getScope().unregisterBinding(windowBinding);
+            }
+        } finally {
+            listenerBinding = null;
+            windowBinding = null;
+            packetEntries.clear();
+        }
     }
 
     public void addPacketEntry(@NotNull PacketLogEntry packetLogEntry) {

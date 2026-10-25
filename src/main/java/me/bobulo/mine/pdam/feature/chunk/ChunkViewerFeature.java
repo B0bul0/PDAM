@@ -1,14 +1,21 @@
 package me.bobulo.mine.pdam.feature.chunk;
 
+import me.bobulo.mine.pdam.binding.ForgeListenerBinding;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
+import me.bobulo.mine.pdam.feature.AbstractFeature;
+import me.bobulo.mine.pdam.feature.behavior.EnabledFeatureBehavior;
+import me.bobulo.mine.pdam.feature.context.FeatureEnableContext;
+import me.bobulo.mine.pdam.feature.context.FeatureInitializeContext;
+import me.bobulo.mine.pdam.feature.imgui.ToggleEnabledMenuImGuiRender;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
 /**
  * Feature for visualizing chunk boundaries and sections in the Minecraft world.
  */
-public final class ChunkViewer {
+public final class ChunkViewerFeature extends AbstractFeature {
 
     public static final String FEATURE_ID = "chunk_viewer";
 
@@ -33,7 +40,24 @@ public final class ChunkViewer {
     public static final ConfigValue<Integer> VERTICAL_SECTIONS = ConfigProperty.of(FEATURE_ID + ".section.vertical_sections", 16);
     public static final ConfigValue<Integer> SECTION_COLOR = ConfigProperty.of(FEATURE_ID + ".section.color", Color.YELLOW.getRGB());
 
-    private ChunkViewer() {
+    private ForgeListenerBinding[] listeners;
+
+    public ChunkViewerFeature() {
+        super(FEATURE_ID);
     }
 
+    @Override
+    protected void onInitialize(@NotNull FeatureInitializeContext context) {
+        listeners = ForgeListenerBinding.of(
+          new ChunkBoundaryListener()
+        );
+        context.getScope().registerBehavior(new EnabledFeatureBehavior(false));
+        context.getScope().registerBehavior(new ChunkConfigImGuiRender());
+        context.getScope().registerBehavior(new ToggleEnabledMenuImGuiRender());
+    }
+
+    @Override
+    protected void onEnable(@NotNull FeatureEnableContext context) {
+        context.getScope().registerBindings(listeners);
+    }
 }

@@ -1,7 +1,6 @@
 package me.bobulo.mine.pdam.attribute;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an object that can store and retrieve typed attributes dynamically.
@@ -24,7 +23,6 @@ public interface Attributable {
      * @param <T> The type of the value.
      * @return The value associated with the key, or null if not present.
      */
-    @Nullable
     <T> T get(@NotNull AttributeKey<T> key);
 
     /**

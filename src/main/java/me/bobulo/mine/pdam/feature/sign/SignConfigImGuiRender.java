@@ -10,14 +10,14 @@ public final class SignConfigImGuiRender extends AbstractFeatureBehavior impleme
 
     @Override
     public void draw() {
-        if (checkbox("Override Sign Gui", SignEditor.OVERRIDE_SIGN_GUI.get())) {
-            SignEditor.OVERRIDE_SIGN_GUI.set(!SignEditor.OVERRIDE_SIGN_GUI.get());
+        if (checkbox("Override Sign Gui", SignEditorFeature.OVERRIDE_SIGN_GUI.get())) {
+            SignEditorFeature.OVERRIDE_SIGN_GUI.set(!SignEditorFeature.OVERRIDE_SIGN_GUI.get());
         }
 
         tooltip("Override the default sign editing GUI with a custom one.");
 
-        if (checkbox("Enable Sign Viewer", SignEditor.VIEW_GUI.get())) {
-            SignEditor.VIEW_GUI.set(!SignEditor.VIEW_GUI.get());
+        if (checkbox("Enable Sign Viewer", SignEditorFeature.VIEW_GUI.get())) {
+            SignEditorFeature.VIEW_GUI.set(!SignEditorFeature.VIEW_GUI.get());
         }
 
         tooltip("Enable viewing of raw sign text when right-clicking with shift.");

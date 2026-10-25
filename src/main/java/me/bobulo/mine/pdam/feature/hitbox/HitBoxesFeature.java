@@ -1,13 +1,20 @@
 package me.bobulo.mine.pdam.feature.hitbox;
 
+import me.bobulo.mine.pdam.binding.ForgeListenerBinding;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
+import me.bobulo.mine.pdam.feature.AbstractFeature;
+import me.bobulo.mine.pdam.feature.behavior.EnabledFeatureBehavior;
+import me.bobulo.mine.pdam.feature.context.FeatureEnableContext;
+import me.bobulo.mine.pdam.feature.context.FeatureInitializeContext;
+import me.bobulo.mine.pdam.feature.imgui.ConfigMenuImGuiRender;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class HitBoxes {
+public final class HitBoxesFeature extends AbstractFeature {
 
     public static final String FEATURE_ID = "hitboxes";
 
@@ -36,8 +43,6 @@ public final class HitBoxes {
         return ENABLE_ENTITY_TYPES.get() && getByEntity(entityType).enabled.get();
     }
 
-    private HitBoxes() {}
-
     public static class EntityConfig {
         private final String entityType;
         public final ConfigValue<Boolean> enabled;
@@ -50,4 +55,24 @@ public final class HitBoxes {
         }
     }
 
+    private ForgeListenerBinding[] listeners;
+
+    public HitBoxesFeature() {
+        super(FEATURE_ID);
+    }
+
+    @Override
+    protected void onInitialize(@NotNull FeatureInitializeContext context) {
+        listeners = ForgeListenerBinding.of(
+          new HitboxesListener()
+        );
+        context.getScope().registerBehavior(new EnabledFeatureBehavior(false));
+        context.getScope().registerBehavior(new HitBoxesConfigImGuiRender());
+        context.getScope().registerBehavior(new ConfigMenuImGuiRender(true));
+    }
+
+    @Override
+    protected void onEnable(@NotNull FeatureEnableContext context) {
+        context.getScope().registerBindings(listeners);
+    }
 }

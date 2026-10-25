@@ -3,6 +3,7 @@ package me.bobulo.mine.pdam.binding;
 import me.bobulo.mine.pdam.binding.context.BindingContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -40,7 +41,7 @@ public final class ForgeListenerBinding implements Binding<Object> {
     }
 
     @Override
-    public void init(BindingContext context) {
+    public void init(@NotNull BindingContext context) {
         Objects.requireNonNull(context, "Binding context");
         if (registered) {
             throw new IllegalStateException("Listener already registered: " + listener);

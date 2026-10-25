@@ -31,7 +31,7 @@ import static org.mockito.Mockito.mockStatic;
 class ScopeRegistriesTest {
     private MockedStatic<ThreadUtils> threads;
     private MockedStatic<EventUtils> events;
-    private final FeatureImpl feature = new FeatureImpl("registries");
+    private final TestFeature feature = TestFeature.of("registries");
     private final List<String> calls = new ArrayList<>();
 
     @BeforeEach
@@ -155,9 +155,9 @@ class ScopeRegistriesTest {
     }
 
     @Test
-    void ca10BuilderReinitializesBindingsInFreshScopesOnEveryEnable() {
+    void ca10FeatureReinitializesBindingsInFreshScopesOnEveryEnable() {
         RecordingBinding binding = new RecordingBinding("listener", calls);
-        FeatureImpl built = FeatureImpl.builder().id("bound").enableBindings(binding).build();
+        TestFeature built = TestFeature.initialized("bound", scope -> {}, scope -> scope.registerBinding(binding));
         assertEquals(0, binding.getInitializations());
         built.enable();
         Scope previous = built.getEnableScope();
@@ -172,9 +172,10 @@ class ScopeRegistriesTest {
     @Test
     void ca10BindingsAreReadyBeforeAutomaticEnableAndBehaviorActivation() {
         RecordingBinding binding = new RecordingBinding("listener", calls);
-        FeatureImpl built = FeatureImpl.builder().id("ready")
-          .behavior(CallbackFeatureBehavior.enableOnly(context -> assertEquals("listener", context.getScope().get(String.class))))
-          .enableBindings(binding).build();
+        TestFeature built = TestFeature.initialized("ready",
+          scope -> scope.registerBehavior(CallbackFeatureBehavior.enableOnly(
+            context -> assertEquals("listener", context.getScope().get(String.class)))),
+          scope -> scope.registerBinding(binding));
         built.enable();
         assertEquals(1, binding.getInitializations());
     }
@@ -196,8 +197,9 @@ class ScopeRegistriesTest {
     void ca11FailedActivationReleasesItsScopeAndCanBeRetried() {
         IllegalStateException failure = new IllegalStateException("enable failed");
         RecordingBinding binding = new RecordingBinding("resource", calls);
-        FeatureImpl built = FeatureImpl.builder().id("failed").enableBindings(binding)
-          .behavior(CallbackFeatureBehavior.enableOnly(() -> {throw failure;})).build();
+        TestFeature built = TestFeature.initialized("failed",
+          scope -> scope.registerBehavior(CallbackFeatureBehavior.enableOnly(() -> {throw failure;})),
+          scope -> scope.registerBinding(binding));
         assertSame(failure, assertThrows(IllegalStateException.class, built::enable));
         assertFalse(built.isEnabled());
         assertNull(built.getEnableScope());
@@ -282,12 +284,15 @@ class ScopeRegistriesTest {
     }
 
     @Test
-    void ca11BuilderFailureCleansEarlierRegistrations() {
+    void ca11InitializationFailureCleansEarlierRegistrations() {
         UniqueModule first = new UniqueModule();
         IllegalStateException failure = new IllegalStateException("builder failed");
         FailingAttachBehavior second = new FailingAttachBehavior(failure);
         assertSame(failure, assertThrows(IllegalStateException.class,
-          () -> FeatureImpl.builder().id("builder").module(first).behavior(second).build()));
+          () -> TestFeature.initialized("initialization", scope -> {
+              scope.registerModule(first);
+              scope.registerBehavior(second);
+          }, scope -> {})));
         assertNull(first.getFeature());
         assertNull(second.getFeature());
     }

@@ -4,7 +4,6 @@ import me.bobulo.mine.pdam.attribute.Attributable;
 import me.bobulo.mine.pdam.feature.module.FeatureModule;
 import me.bobulo.mine.pdam.scope.Scope;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,7 +57,7 @@ public interface Feature extends Attributable {
      * Returns the scope of the current activation, or {@code null} while disabled.
      * For example, register activation bindings in {@code feature.getEnableScope()} during enable.
      */
-    @Nullable Scope getEnableScope();
+    Scope getEnableScope();
 
     /**
      * Checks if the feature is currently enabled.
@@ -66,6 +65,17 @@ public interface Feature extends Attributable {
      * @return {@code true} if the feature is enabled, {@code false} otherwise.
      */
     boolean isEnabled();
+
+    /**
+     * Initializes the feature's persistent resources before registration completes.
+     * Repeated initialization has no effect; for example, the service calls this on registration.
+     */
+    void initialize();
+
+    /**
+     * Disables the feature and releases its hooks and scopes, e.g. when the service removes it.
+     */
+    void uninitialize();
 
     /**
      * Enables the feature.

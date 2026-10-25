@@ -1,13 +1,19 @@
 package me.bobulo.mine.pdam.feature.itemname;
 
+import me.bobulo.mine.pdam.binding.ForgeListenerBinding;
 import me.bobulo.mine.pdam.config.ConfigProperty;
 import me.bobulo.mine.pdam.config.ConfigValue;
+import me.bobulo.mine.pdam.feature.AbstractFeature;
+import me.bobulo.mine.pdam.feature.behavior.EnabledFeatureBehavior;
+import me.bobulo.mine.pdam.feature.context.FeatureEnableContext;
+import me.bobulo.mine.pdam.feature.context.FeatureInitializeContext;
 import me.bobulo.mine.pdam.feature.itemname.mapper.ItemMapper;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Feature for mapping Minecraft item names using different mappers.
  */
-public final class ItemNameDebug {
+public final class ItemNameDebugFeature extends AbstractFeature {
 
     public static final String FEATURE_ID = "item_name_debug";
 
@@ -41,4 +47,21 @@ public final class ItemNameDebug {
         }
     }
 
+    private ForgeListenerBinding[] listeners;
+
+    public ItemNameDebugFeature() {
+        super(FEATURE_ID);
+    }
+
+    @Override
+    protected void onInitialize(@NotNull FeatureInitializeContext context) {
+        listeners = ForgeListenerBinding.of(new AdvancedItemTooltipsListener());
+        context.getScope().registerBehavior(new EnabledFeatureBehavior(true));
+        context.getScope().registerBehavior(new ItemNameMapperConfigImGuiRender());
+    }
+
+    @Override
+    protected void onEnable(@NotNull FeatureEnableContext context) {
+        context.getScope().registerBindings(listeners);
+    }
 }

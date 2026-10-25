@@ -1,6 +1,5 @@
 package me.bobulo.mine.pdam.feature;
 
-import me.bobulo.mine.pdam.scope.LifecycleCleanup;
 import me.bobulo.mine.pdam.util.ThreadUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -25,16 +24,19 @@ public final class FeatureService {
     private final Map<String, Feature> features = new ConcurrentHashMap<>();
 
     /**
-     * Registers a new feature with the service. Modules attach when added to the feature.
+     * Initializes and registers a feature, e.g. {@code registerFeature(new SoundDebugFeature())}.
+     * Failed initialization releases its scopes and leaves no registration behind.
      *
      * @param feature The feature to register. Must not be null, and its ID must not be blank.
      * @throws IllegalArgumentException if a feature with the same ID is already registered.
      */
     public void registerFeature(Feature feature) {
+        Validate.isTrue(ThreadUtils.isMainThread(), "Features can only be registered from the main thread");
         Validate.notNull(feature, "Feature cannot be null");
         Validate.notBlank(feature.getId(), "Feature id cannot be null");
         Validate.isTrue(!features.containsKey(feature.getId()), "Feature with id " + feature.getId() + " is already registered");
 
+        feature.initialize();
         features.put(feature.getId(), feature);
         log.debug("Registered feature: {}", feature.getId());
     }
@@ -49,7 +51,7 @@ public final class FeatureService {
         if (feature != null) {
             Validate.isTrue(ThreadUtils.isMainThread(), "Features can only be removed from the main thread");
             try {
-                LifecycleCleanup.run(feature::disable, feature.getLoadScope()::cleanup);
+                feature.uninitialize();
             } finally {
                 features.remove(id);
             }
