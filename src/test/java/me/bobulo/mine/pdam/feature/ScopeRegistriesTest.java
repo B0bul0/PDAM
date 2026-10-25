@@ -99,9 +99,31 @@ class ScopeRegistriesTest {
         RecordingBehavior second = new RecordingBehavior("second", calls);
         feature.addBehavior(first);
         feature.addBehavior(second);
-        assertEquals(Arrays.asList(first, second), feature.getBehavior(RecordingBehavior.class));
+        assertEquals(Arrays.asList(first, second), feature.getBehaviors(RecordingBehavior.class));
         assertEquals(Arrays.asList(first, second), feature.getBehaviors(FeatureBehavior.class));
         assertTrue(feature.hasBehavior(RecordingBehavior.class));
+    }
+
+    @Test
+    void ca09BehaviorQueriesPreserveScopeAndRegistrationOrder() {
+        RecordingBehavior persistent = new RecordingBehavior("persistent", calls);
+        RecordingBehavior first = new RecordingBehavior("first", calls);
+        RecordingBehavior second = new RecordingBehavior("second", calls);
+        feature.addBehavior(persistent);
+        feature.enable();
+        Scope activation = feature.getEnableScope();
+        activation.registerBehavior(first);
+        activation.registerBehavior(second);
+
+        assertEquals(Arrays.asList(persistent, first, second), feature.getBehaviors(FeatureBehavior.class));
+        assertEquals(Arrays.asList(first, second), activation.getBehaviors(RecordingBehavior.class));
+        assertEquals(Arrays.asList(first, second), activation.getBehaviorRegistry().getBehaviors(FeatureBehavior.class));
+        assertTrue(activation.getBehaviorRegistry().getBehaviors(EqualBehavior.class).isEmpty());
+
+        feature.disable();
+
+        assertEquals(Collections.singletonList(persistent), feature.getBehaviors(RecordingBehavior.class));
+        assertTrue(activation.getBehaviors(FeatureBehavior.class).isEmpty());
     }
 
     @Test
@@ -112,7 +134,7 @@ class ScopeRegistriesTest {
         feature.addBehavior(second);
         assertThrows(IllegalArgumentException.class, () -> feature.addBehavior(first));
         feature.removeBehavior(first);
-        assertEquals(Collections.singletonList(second), feature.getBehavior(RecordingBehavior.class));
+        assertEquals(Collections.singletonList(second), feature.getBehaviors(RecordingBehavior.class));
         assertNull(first.getFeature());
         assertThrows(IllegalArgumentException.class, () -> feature.removeBehavior(first));
     }
@@ -135,7 +157,7 @@ class ScopeRegistriesTest {
         RecordingBehavior behavior = new RecordingBehavior("temporary", calls);
         Scope activation = feature.getEnableScope();
         activation.registerBehavior(behavior);
-        assertEquals(Collections.singletonList(behavior), feature.getBehavior(RecordingBehavior.class));
+        assertEquals(Collections.singletonList(behavior), feature.getBehaviors(RecordingBehavior.class));
         feature.disable();
         assertNull(behavior.getFeature());
         assertTrue(activation.getBehaviorRegistry().getBehaviors().isEmpty());
@@ -151,7 +173,7 @@ class ScopeRegistriesTest {
         service.registerFeature(feature);
         assertEquals(2, service.getAllBehaviors(RecordingBehavior.class).size());
         service.unregisterAll();
-        assertTrue(feature.getBehavior(RecordingBehavior.class).isEmpty());
+        assertTrue(feature.getBehaviors(RecordingBehavior.class).isEmpty());
     }
 
     @Test
@@ -231,8 +253,8 @@ class ScopeRegistriesTest {
         feature.addBehavior(first);
         feature.addBehavior(second);
         feature.removeBehavior(second);
-        assertSame(first, feature.getBehavior(EqualBehavior.class).get(0));
-        assertEquals(1, feature.getBehavior(EqualBehavior.class).size());
+        assertSame(first, feature.getBehaviors(EqualBehavior.class).get(0));
+        assertEquals(1, feature.getBehaviors(EqualBehavior.class).size());
         assertSame(feature, first.getFeature());
         assertNull(second.getFeature());
     }
@@ -267,7 +289,7 @@ class ScopeRegistriesTest {
         assertNull(behavior.getFeature());
         feature.addBehavior(behavior);
         assertSame(feature, behavior.getFeature());
-        assertEquals(1, feature.getBehavior(FailingAttachBehavior.class).size());
+        assertEquals(1, feature.getBehaviors(FailingAttachBehavior.class).size());
     }
 
     @Test

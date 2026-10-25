@@ -98,9 +98,9 @@ public final class BehaviorRegistry {
     }
 
     /**
-     * Returns every assignable behavior in registration order, e.g. getBehavior(MyBehavior.class).
+     * Returns every assignable behavior in registration order, e.g. getBehaviors(MyBehavior.class).
      */
-    public <T extends FeatureBehavior> List<T> getBehavior(Class<T> type) {
+    public <T extends FeatureBehavior> List<T> getBehaviors(Class<T> type) {
         List<T> result = new ArrayList<>();
         collectBehaviors(type, result);
         return result;
@@ -117,13 +117,6 @@ public final class BehaviorRegistry {
                 result.add(type.cast(behavior));
             }
         }
-    }
-
-    /**
-     * Alias for the multiple-instance lookup, e.g. registry.get(MyBehavior.class).
-     */
-    public <T extends FeatureBehavior> List<T> get(Class<T> type) {
-        return getBehavior(type);
     }
 
     /**

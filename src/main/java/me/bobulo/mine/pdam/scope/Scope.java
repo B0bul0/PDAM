@@ -38,14 +38,14 @@ public final class Scope {
     }
 
     /**
-     * Returns the module registry, e.g. scope.getModuleRegistry().get(MyModule.class).
+     * Returns the module registry, e.g. scope.getModuleRegistry().getModule(MyModule.class).
      */
     public ModuleRegistry getModuleRegistry() {
         return moduleRegistry;
     }
 
     /**
-     * Returns the behavior registry, e.g. scope.getBehaviorRegistry().get(MyBehavior.class).
+     * Returns the behavior registry, e.g. scope.getBehaviorRegistry().getBehaviors(MyBehavior.class).
      */
     public BehaviorRegistry getBehaviorRegistry() {
         return behaviorRegistry;
@@ -129,10 +129,10 @@ public final class Scope {
     }
 
     /**
-     * Looks up every behavior of a type, e.g. scope.getBehavior(MyBehavior.class).
+     * Looks up every behavior of a type, e.g. scope.getBehaviors(MyBehavior.class).
      */
-    public <T extends FeatureBehavior> List<T> getBehavior(Class<T> type) {
-        return behaviorRegistry.get(type);
+    public <T extends FeatureBehavior> List<T> getBehaviors(Class<T> type) {
+        return behaviorRegistry.getBehaviors(type);
     }
 
     /**

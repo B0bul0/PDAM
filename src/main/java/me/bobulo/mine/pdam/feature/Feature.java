@@ -162,22 +162,15 @@ public interface Feature extends Attributable {
     }
 
     /**
-     * Returns all matching behaviors, e.g. feature.getBehavior(MenuImGuiRender.class).
+     * Returns all matching behaviors, e.g. feature.getBehaviors(MenuImGuiRender.class).
      */
-    default <T extends FeatureBehavior> List<T> getBehavior(@NotNull Class<T> type) {
+    default <T extends FeatureBehavior> List<T> getBehaviors(@NotNull Class<T> type) {
         List<T> result = new ArrayList<>();
         getLoadScope().getBehaviorRegistry().collectBehaviors(type, result);
         if (getEnableScope() != null) {
             getEnableScope().getBehaviorRegistry().collectBehaviors(type, result);
         }
         return result;
-    }
-
-    /**
-     * Alias for the multiple-instance query, e.g. feature.getBehaviors(MenuImGuiRender.class).
-     */
-    default <T extends FeatureBehavior> List<T> getBehaviors(@NotNull Class<T> type) {
-        return getBehavior(type);
     }
 
     /**

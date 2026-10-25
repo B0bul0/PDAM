@@ -28,7 +28,7 @@ public final class ConfigMenuImGuiRender extends AbstractFeatureBehavior impleme
 
     @Override
     public void draw() {
-        List<FeatureConfigImGuiRender> configs = getFeature().getBehavior(FeatureConfigImGuiRender.class);
+        List<FeatureConfigImGuiRender> configs = getFeature().getBehaviors(FeatureConfigImGuiRender.class);
         if (!includeEnableToggle && configs.isEmpty()) {
             return; // Nothing to render
         }
