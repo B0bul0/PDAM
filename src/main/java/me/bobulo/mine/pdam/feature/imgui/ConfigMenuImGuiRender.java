@@ -37,11 +37,13 @@ public final class ConfigMenuImGuiRender extends AbstractFeatureBehavior impleme
 
             if (includeEnableToggle) {
                 // Enabled toggle
-                if (getFeature().hasBehavior(EnabledFeatureBehavior.class) && checkbox("Enabled", getFeature().isEnabled())) {
-                    try {
-                        getFeature().toggleEnabled();
-                    } catch (Exception exception) {
-                        log.error("Failed to toggle feature {}.", getFeature().getName(), exception);
+                if (getFeature().hasBehavior(EnabledFeatureBehavior.class)) {
+                    if (checkbox("Enabled", getFeature().isEnabled())) {
+                        try {
+                            getFeature().toggleEnabled();
+                        } catch (Exception exception) {
+                            log.error("Failed to toggle feature {}.", getFeature().getName(), exception);
+                        }
                     }
 
                     separator();
