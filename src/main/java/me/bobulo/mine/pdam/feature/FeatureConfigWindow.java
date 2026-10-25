@@ -83,8 +83,6 @@ public final class FeatureConfigWindow extends AbstractRenderItemWindow {
         }
         spacing();
 
-        boolean separatorNeeded = false;
-
         // Enabled toggle
         if (feature.hasBehavior(EnabledFeatureBehavior.class)) {
             if (checkbox("Enabled", feature.isEnabled())) {
@@ -94,8 +92,6 @@ public final class FeatureConfigWindow extends AbstractRenderItemWindow {
                     log.error("Failed to toggle feature {}.", feature.getName(), exception);
                     notificationDrawer.error("Failed to toggle feature " + feature.getName() + ".");
                 }
-
-                separatorNeeded = true;
             }
         }
 
@@ -107,10 +103,6 @@ public final class FeatureConfigWindow extends AbstractRenderItemWindow {
         if (configImGuiRenders != null) {
             for (FeatureConfigImGuiRender configImGuiRender : configImGuiRenders) {
                 try {
-                    if (separatorNeeded) {
-                        separator();
-                    }
-
                     configImGuiRender.draw();
                 } catch (Exception exception) {
                     log.error("Failed to render config ImGui for feature {}.", feature.getName(), exception);
